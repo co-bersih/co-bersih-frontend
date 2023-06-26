@@ -1,0 +1,42 @@
+{
+  "name": "co-bersih-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "check-types": "tsc --pretty --noEmit",
+    "check-format": "prettier --check .",
+    "check-lint": "eslint . --ext ts --ext tsx --ext js",
+    "format": "prettier --write .",
+    "test-all": "npm run format && npm run check-format && npm run check-lint && npm run check-types",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "@types/node": "20.3.1",
+    "@types/react": "18.2.14",
+    "@types/react-dom": "18.2.6",
+    "eslint": "8.43.0",
+    "eslint-config-next": "13.4.7",
+    "next": "13.4.7",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "5.1.3"
+  },
+  "devDependencies": {
+    "@tsconfig/next": "^1.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.60.0",
+    "@typescript-eslint/parser": "^5.60.0",
+    "autoprefixer": "^10.4.14",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-react": "^7.32.2",
+    "husky": "^8.0.0",
+    "next-stride": "^2.6.4",
+    "postcss": "^8.4.24",
+    "prettier": "^2.8.8",
+    "tailwindcss": "^3.3.2"
+  }
+}
