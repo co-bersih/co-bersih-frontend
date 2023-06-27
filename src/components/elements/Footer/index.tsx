@@ -1,7 +1,7 @@
 import React from 'react'
 import { CoBersihLogo } from '@icons'
 import { Footer as FooTer } from 'flowbite-react'
-import { BsFacebook, BsGithub, BsInstagram, BsTwitter } from 'react-icons/bs'
+import { BsGithub, BsInstagram, BsTwitter } from 'react-icons/bs'
 
 export const Footer: React.FC = () => {
   return (

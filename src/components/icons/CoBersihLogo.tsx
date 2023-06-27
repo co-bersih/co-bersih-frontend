@@ -21,8 +21,8 @@ export const CoBersihLogo: React.FC<IconProps> = ({
         fill="url(#paint0_linear_2035_8)"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M0.632253 39.6312C0.0155498 38.3302 -0.69366 35.3379 1.40313 33.7766C2.68797 35.2278 6.05935 38.07 9.26621 37.8298C8.75229 33.6766 10.4688 24.079 21.4461 18.9149C23.1893 18.0949 24.8803 17.3184 26.5104 16.5699C37.7121 11.4263 46.0434 7.60074 48.7352 0C56.0945 17.5027 55.3648 46.2365 23.4504 47.4374C20.6933 47.2942 15.6958 46.4802 12.3063 44.402C12.5301 44.4192 12.6956 44.4302 12.7848 44.435C31.0542 39.7186 43.1202 20.8528 46.8695 12.0095C38.2802 27.6327 20.6525 39.256 9.40477 41.2825C9.36189 41.2903 9.31936 41.298 9.2772 41.3057C9.27352 41.298 9.26985 41.2903 9.26621 41.2825C7.5702 41.3326 3.469 41.0724 0.632253 39.6312Z"
         fill="url(#paint1_linear_2035_8)"
       />
@@ -35,8 +35,8 @@ export const CoBersihLogo: React.FC<IconProps> = ({
           y2="40.74"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#87BE57" />
-          <stop offset="1" stop-color="#458549" />
+          <stop stopColor="#87BE57" />
+          <stop offset="1" stopColor="#458549" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_2035_8"
@@ -46,8 +46,8 @@ export const CoBersihLogo: React.FC<IconProps> = ({
           y2="42.2456"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#87BE57" />
-          <stop offset="1" stop-color="#458549" />
+          <stop stopColor="#87BE57" />
+          <stop offset="1" stopColor="#458549" />
         </linearGradient>
       </defs>
     </svg>

@@ -20,7 +20,7 @@ export const NavBar: React.FC = () => {
             variant={1}
             leftIcon={<RiHome2Line color="teal" size={16} />}
           >
-            <h3>Home</h3>
+            <h4>Home</h4>
           </Button>
         </Navbar.Link>
         <Navbar.Link href="#">
@@ -29,7 +29,7 @@ export const NavBar: React.FC = () => {
             variant={1}
             leftIcon={<RiEarthLine color="teal" size={16} />}
           >
-            <h3>Events</h3>
+            <h4>Events</h4>
           </Button>
         </Navbar.Link>
         <Navbar.Link href="#">
@@ -38,38 +38,38 @@ export const NavBar: React.FC = () => {
             variant={1}
             leftIcon={<RiArticleLine color="teal" size={16} />}
           >
-            <h3>Blogs</h3>
+            <h4>Blogs</h4>
           </Button>
         </Navbar.Link>
       </Navbar.Collapse>
       <Navbar.Collapse className="justify-end lg:block md:hidden hidden">
         <Navbar.Link href="#">
           <Button className={''} variant={2}>
-            <h3>Register</h3>
+            <h4>Register</h4>
           </Button>
         </Navbar.Link>
         <Navbar.Link href="#">
           <Button className={''} variant={3}>
-            <h3>Sign In</h3>
+            <h4>Sign In</h4>
           </Button>
         </Navbar.Link>
       </Navbar.Collapse>
       <Navbar.Toggle />
       <Navbar.Collapse className="lg:hidden">
         <Navbar.Link href="#">
-          <h3>Home</h3>
+          <h4>Home</h4>
         </Navbar.Link>
         <Navbar.Link href="#">
-          <h3>Events</h3>
+          <h4>Events</h4>
         </Navbar.Link>
         <Navbar.Link href="#">
-          <h3>Blogs</h3>
+          <h4>Blogs</h4>
         </Navbar.Link>
         <Navbar.Link href="#">
-          <h3>Register</h3>
+          <h4>Register</h4>
         </Navbar.Link>
         <Navbar.Link href="#">
-          <h3>Sign In</h3>
+          <h4>Sign In</h4>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
