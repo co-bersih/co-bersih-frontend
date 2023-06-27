@@ -1,1 +1,3 @@
-export * from './'
+export * from './Button'
+export * from './NavBar'
+export * from './Footer'
