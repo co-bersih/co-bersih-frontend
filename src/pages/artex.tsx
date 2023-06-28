@@ -5,28 +5,25 @@ export default function Artex() {
   return (
     <>
       <Button
-        className={''}
-        variant={1}
+        variant={'primary'}
         leftIcon={<RiHome2Line color="teal" size={16} />}
       >
         <h3>Home</h3>
       </Button>
-      <Button className={''} variant={2}>
+      <Button variant={'ghost'}>
         <h3>Login</h3>
       </Button>
-      <Button className={''} variant={3}>
+      <Button variant={'solid'}>
         <h3>Home</h3>
       </Button>
       <Button
-        className={''}
-        variant={4}
+        variant={'greeny'}
         rightIcon={<RiHome2Line color="white" size={16} />}
       >
         <h3>Home</h3>
       </Button>
       <Button
-        className={''}
-        variant={5}
+        variant={'deserted'}
         rightIcon={<RiHome2Line color="darkGreen" size={16} />}
       >
         <h3>Home</h3>

@@ -4,7 +4,7 @@ import { IRegisterData } from './interface'
 import { EMPTY_REGISTER_DATA } from './constant'
 import { TextInput, Spinner } from 'flowbite-react'
 import { Button } from '@elements'
-import { ToastContainer, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export const RegisterModule: React.FC = () => {
@@ -91,7 +91,7 @@ export const RegisterModule: React.FC = () => {
               <Button
                 onClick={onFormSubmit}
                 className={'w-full'}
-                variant={4}
+                variant={'greeny'}
                 disabled={isLoading}
               >
                 {' '}
