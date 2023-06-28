@@ -24,11 +24,16 @@ const dummy: IEvent = {
   total_participant: 502,
 }
 
-const dummyLoc:LatLngLiteral = {lat: 0, lng: 0} 
+const dummyLoc: LatLngLiteral = { lat: 0, lng: 0 }
 
 export const EventModule: React.FC = () => {
   const [mapData, setMapData] = useState<IEvent[]>([dummy])
-  const [catalogData, setCatalogData] = useState<IEvent[]>([dummy, dummy, dummy, dummy])
+  const [catalogData, setCatalogData] = useState<IEvent[]>([
+    dummy,
+    dummy,
+    dummy,
+    dummy,
+  ])
   const [loc, setLoc] = useState<LatLngLiteral | undefined>(dummyLoc)
   const [currentPage, setCurrentPage] = useState(1)
   const onPageChange = (page: number) => {
@@ -51,24 +56,31 @@ export const EventModule: React.FC = () => {
     navigator.geolocation.getCurrentPosition((geo) => {
       setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
     })
-  },[])
+  }, [])
 
   const DynamicMap = dynamic(() => import('../../elements/Map'), {
-    ssr: false
-  });
+    ssr: false,
+  })
 
   return (
     <>
       <div className="flex flex-col bg-white">
         <div className="relative min-h-[105vh] flex flex-col items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-mintGreen">
           <h1>Temukan event terdekat.</h1>
-          { loc?.lat && loc.lng ? <DynamicMap center={loc} events={mapData} /> : <p className=' bg-red-300 p-2 rounded-md'>Pastikan lokasi Anda menyala dan browser dapat menggunakan lokasi tersebut.</p> }
+          {loc?.lat && loc.lng ? (
+            <DynamicMap center={loc} events={mapData} />
+          ) : (
+            <p className=" bg-red-300 p-2 rounded-md">
+              Pastikan lokasi Anda menyala dan browser dapat menggunakan lokasi
+              tersebut.
+            </p>
+          )}
         </div>
         <div className="relative min-h-screen flex flex-col items-center py-8 lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] px-20">
           <p>search bar</p>
           <div className="grid grid-cols-2 gap-8">
             {catalogData.map((event, idx) => (
-                <EventCard {...event} key={idx}/>
+              <EventCard {...event} key={idx} />
             ))}
           </div>
           <br />

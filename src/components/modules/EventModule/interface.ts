@@ -1,1 +1,1 @@
-const VAR_NAME = '';
+const VAR_NAME = ''

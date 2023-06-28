@@ -1,4 +1,4 @@
-import { LatLngLiteral } from "leaflet";
+import { LatLngLiteral } from 'leaflet'
 
 export type MapProps = {
   center: LatLngLiteral
