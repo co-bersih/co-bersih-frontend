@@ -6,7 +6,7 @@ import { BsGithub, BsInstagram, BsTwitter } from 'react-icons/bs'
 export const Footer: React.FC = () => {
   return (
     <>
-      <FooTer container className="bg-mintGreen">
+      <FooTer container className="bg-mintGreen relative bottom-0">
         <div className="w-full mt-auto">
           <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
             <div>
