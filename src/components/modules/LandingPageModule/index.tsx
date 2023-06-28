@@ -1,6 +1,5 @@
 import React from 'react'
 import { HeroModule } from './sections/hero'
-import Image from 'next/image'
 import { ActionModule } from './sections/action'
 
 export const LandingPageModule: React.FC = () => {

@@ -1,2 +1,3 @@
 export * from './LandingPageModule'
-export * from './AuthModule'
+export * from './AuthModule/login'
+export * from './AuthModule/register'

@@ -1,7 +1,7 @@
 import React from 'react'
-import { AuthModule } from '@modules'
+import { LoginModule } from '@modules'
 import type { NextPage } from 'next'
 
-const Auth: NextPage = () => <AuthModule />
+const Auth: NextPage = () => <LoginModule />
 
 export default Auth

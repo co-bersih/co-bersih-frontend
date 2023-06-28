@@ -11,10 +11,10 @@ export const NavBar: React.FC = () => {
       className="flex justify-between fixed top-0 w-full bg-white z-50 py-4"
     >
       <Navbar.Brand href="#">
-        <CoBersihLogo size={'h-8'} />
+        <CoBersihLogo size={'h-8'} className="w-[120px] sm:w-auto" />
       </Navbar.Brand>
       <Navbar.Collapse className="justify-center lg:block md:hidden hidden">
-        <Navbar.Link href="#">
+        <Navbar.Link href="/landing">
           <Button
             className={''}
             variant={1}
@@ -48,9 +48,9 @@ export const NavBar: React.FC = () => {
             <h4>Register</h4>
           </Button>
         </Navbar.Link>
-        <Navbar.Link href="#">
+        <Navbar.Link href="/auth/login">
           <Button className={''} variant={3}>
-            <h4>Sign In</h4>
+            <h4>Log In</h4>
           </Button>
         </Navbar.Link>
       </Navbar.Collapse>
@@ -68,8 +68,8 @@ export const NavBar: React.FC = () => {
         <Navbar.Link href="#">
           <h4>Register</h4>
         </Navbar.Link>
-        <Navbar.Link href="#">
-          <h4>Sign In</h4>
+        <Navbar.Link href="/auth/login">
+          <h4>Log In</h4>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
