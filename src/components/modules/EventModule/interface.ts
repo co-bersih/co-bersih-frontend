@@ -1,1 +1,1 @@
-export interface Props {}
+const VAR_NAME = '';

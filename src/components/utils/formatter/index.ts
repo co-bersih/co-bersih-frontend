@@ -3,7 +3,7 @@ export namespace formatter {
     if (!limit) limit = 100
     return text.substring(0, Math.min((text.length, limit)))
   }
-  export const formatDateWIB = function (date: Date): string {
+  export const formatDateTimeWIB = function (date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
       day: 'numeric',
       month: 'short',
@@ -14,5 +14,14 @@ export namespace formatter {
     }
 
     return date.toLocaleString('en-US', options) + ' WIB'
+  }
+  export const formatDate = function (date: Date): string {
+    const options: Intl.DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }
+
+    return date.toLocaleString('en-US', options)
   }
 }

@@ -12,4 +12,5 @@ interface IEvent {
   end_date: Date
   panitia_ids: string[]
   support_ids: string[]
+  total_participant?: number
 }

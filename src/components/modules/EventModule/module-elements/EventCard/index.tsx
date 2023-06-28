@@ -23,8 +23,8 @@ const EventCard: React.FC<IEvent> = (event) => (
       <div className="flex flex-row gap-x-2">
         <Icon src={'/assets/icons/calendar.svg'} />
         <p>
-          {formatter.formatDateWIB(event.start_date)} -{' '}
-          {formatter.formatDateWIB(event.end_date)}
+          {formatter.formatDateTimeWIB(event.start_date)} -{' '}
+          {formatter.formatDateTimeWIB(event.end_date)}
         </p>
       </div>
       <br />
