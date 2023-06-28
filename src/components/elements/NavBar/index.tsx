@@ -10,11 +10,11 @@ export const NavBar: React.FC = () => {
       rounded
       className="flex justify-between fixed top-0 w-full bg-white z-50 py-4"
     >
-      <Navbar.Brand href="#">
+      <Navbar.Brand href="/">
         <CoBersihLogo size={'h-8'} className="w-[120px] sm:w-auto" />
       </Navbar.Brand>
       <Navbar.Collapse className="justify-center lg:block md:hidden hidden">
-        <Navbar.Link href="/landing">
+        <Navbar.Link href="/">
           <Button
             className={''}
             variant={1}
@@ -23,7 +23,7 @@ export const NavBar: React.FC = () => {
             <h4>Home</h4>
           </Button>
         </Navbar.Link>
-        <Navbar.Link href="#">
+        <Navbar.Link href="/events">
           <Button
             className={''}
             variant={1}
@@ -32,7 +32,7 @@ export const NavBar: React.FC = () => {
             <h4>Events</h4>
           </Button>
         </Navbar.Link>
-        <Navbar.Link href="#">
+        <Navbar.Link href="/blogs">
           <Button
             className={''}
             variant={1}

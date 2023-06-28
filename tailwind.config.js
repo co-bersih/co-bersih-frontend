@@ -18,6 +18,7 @@ module.exports = {
         seaGreen: '#5DC597',
         teal: '#62BB96',
         coral: '#EA8C60',
+        lightGray: '#D3D3D3',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
