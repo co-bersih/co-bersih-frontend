@@ -16,8 +16,7 @@ export const NavBar: React.FC = () => {
       <Navbar.Collapse className="justify-center lg:block md:hidden hidden">
         <Navbar.Link href="/">
           <Button
-            className={''}
-            variant={1}
+            variant={'primary'}
             leftIcon={<RiHome2Line color="teal" size={16} />}
           >
             <h4>Home</h4>
@@ -25,8 +24,7 @@ export const NavBar: React.FC = () => {
         </Navbar.Link>
         <Navbar.Link href="/events">
           <Button
-            className={''}
-            variant={1}
+            variant={'primary'}
             leftIcon={<RiEarthLine color="teal" size={16} />}
           >
             <h4>Events</h4>
@@ -34,8 +32,7 @@ export const NavBar: React.FC = () => {
         </Navbar.Link>
         <Navbar.Link href="/blogs">
           <Button
-            className={''}
-            variant={1}
+            variant={'primary'}
             leftIcon={<RiArticleLine color="teal" size={16} />}
           >
             <h4>Blogs</h4>
@@ -43,29 +40,29 @@ export const NavBar: React.FC = () => {
         </Navbar.Link>
       </Navbar.Collapse>
       <Navbar.Collapse className="justify-end lg:block md:hidden hidden">
-        <Navbar.Link href="#">
-          <Button className={''} variant={2}>
+        <Navbar.Link href="/auth/register">
+          <Button variant={'ghost'}>
             <h4>Register</h4>
           </Button>
         </Navbar.Link>
         <Navbar.Link href="/auth/login">
-          <Button className={''} variant={3}>
+          <Button variant={'solid'}>
             <h4>Log In</h4>
           </Button>
         </Navbar.Link>
       </Navbar.Collapse>
       <Navbar.Toggle />
       <Navbar.Collapse className="lg:hidden">
-        <Navbar.Link href="#">
+        <Navbar.Link href="/landing">
           <h4>Home</h4>
         </Navbar.Link>
-        <Navbar.Link href="#">
+        <Navbar.Link href="/events">
           <h4>Events</h4>
         </Navbar.Link>
-        <Navbar.Link href="#">
+        <Navbar.Link href="/blogs">
           <h4>Blogs</h4>
         </Navbar.Link>
-        <Navbar.Link href="#">
+        <Navbar.Link href="/auth/register">
           <h4>Register</h4>
         </Navbar.Link>
         <Navbar.Link href="/auth/login">

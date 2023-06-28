@@ -91,7 +91,7 @@ export const RegisterModule: React.FC = () => {
               <Button
                 onClick={onFormSubmit}
                 className={'w-full'}
-                variant={4}
+                variant={'greeny'}
                 disabled={isLoading}
               >
                 {' '}
