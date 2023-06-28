@@ -13,25 +13,25 @@ const EventCard: React.FC<IEvent> = (event) => (
       className="h-[200px] w-[120px] object-cover rounded-2xl"
     />
     <div>
-      <h3 className='mb-2'>{event.name}</h3>
+      <h3 className="mb-2">{event.name}</h3>
       <p>{formatter.trimLongText(event.description)}...</p>
       <br />
       <div className="flex flex-row gap-x-2">
-        <Icon src={"/assets/icons/participate.svg"}/>
+        <Icon src={'/assets/icons/participate.svg'} />
         <p>{1231231} peserta</p>
       </div>
       <div className="flex flex-row gap-x-2">
-        <Icon src={"/assets/icons/calendar.svg"}/>
+        <Icon src={'/assets/icons/calendar.svg'} />
         <p>
           {formatter.formatDateWIB(event.start_date)} -{' '}
           {formatter.formatDateWIB(event.end_date)}
         </p>
       </div>
-      <br/>
-      <div className='flex justify-end'>
+      <br />
+      <div className="flex justify-end">
         <Button className={''} variant={4}>
           View Detail
-          <Icon src={"/assets/icons/external.svg"}/>
+          <Icon src={'/assets/icons/external.svg'} />
         </Button>
       </div>
     </div>

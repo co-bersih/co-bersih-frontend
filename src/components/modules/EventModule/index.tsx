@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import EventCard from './module-elements/EventCard'
-import { Pagination } from 'flowbite-react';
-import axios from 'axios';
+import { Pagination } from 'flowbite-react'
+import axios from 'axios'
 
 const dummy: IEvent = {
   id: 'xxxx-xxxxx-xxxxx-xxxxx',
@@ -22,17 +22,18 @@ const dummy: IEvent = {
 }
 
 export const EventModule: React.FC = () => {
-  const [data, setData] = useState<IEvent[]>([dummy, dummy, dummy, dummy]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState<IEvent[]>([dummy, dummy, dummy, dummy])
+  const [currentPage, setCurrentPage] = useState(1)
   const onPageChange = (page: number) => {
     // TODO: re-fetch on new page
     setCurrentPage(page)
-  };
+  }
 
   function fetchEvents() {
-    axios.get(`/events?page=${currentPage}`)
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err))
+    axios
+      .get(`/events?page=${currentPage}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
   }
 
   return (
@@ -45,18 +46,20 @@ export const EventModule: React.FC = () => {
         <div className="relative min-h-screen flex flex-col items-center py-8 lg:rounded-b-[200px] md:rounded-b-[150px] rounded-b-[50px] px-20">
           <p>search bar</p>
           <div className="grid grid-cols-2 gap-8">
-            { data.map((event, idx) => (
+            {data.map((event, idx) => (
               <>
-                <EventCard {...event}/>
+                <EventCard {...event} />
               </>
             ))}
           </div>
-          <br/>
+          <br />
           <Pagination
             currentPage={currentPage}
-            onPageChange={page=>{setCurrentPage(page)}}
+            onPageChange={(page) => {
+              setCurrentPage(page)
+            }}
             totalPages={100}
-            className=' text-sm'
+            className=" text-sm"
           />
         </div>
       </div>

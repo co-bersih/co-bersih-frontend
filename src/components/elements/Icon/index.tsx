@@ -5,11 +5,11 @@ import { IconProps } from './interface'
 export const Icon: React.FC<IconProps> = ({ src, className, size }) => {
   let sizeNum: number
   switch (size) {
-    case "S":
+    case 'S':
       sizeNum = 12
-    case "M":
+    case 'M':
       sizeNum = 18
-    case "L":
+    case 'L':
       sizeNum = 24
     default:
       sizeNum = 18
@@ -20,7 +20,7 @@ export const Icon: React.FC<IconProps> = ({ src, className, size }) => {
       src={src}
       height={sizeNum}
       width={sizeNum}
-      alt={src.split(".", 1)[0]}
+      alt={src.split('.', 1)[0]}
       className={` ${className}`}
     />
   )
