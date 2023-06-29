@@ -25,7 +25,7 @@ const EventPopup: React.FC<EventPopupProps> = (props: EventPopupProps) => (
         <span>Starts on {formatter.formatDate(props.event.start_date)}</span>
       </div>
       <div className="flex flex-row justify-end">
-        <Button className={'w-fit'} variant={4}>
+        <Button className={'w-fit'} variant={'greeny'}>
           View
           <Icon src="assets/icons/external.svg" />
         </Button>

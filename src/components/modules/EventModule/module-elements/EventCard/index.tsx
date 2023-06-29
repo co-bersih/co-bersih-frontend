@@ -29,7 +29,7 @@ const EventCard: React.FC<IEvent> = (event) => (
       </div>
       <br />
       <div className="flex justify-end">
-        <Button className={''} variant={4}>
+        <Button className={''} variant={'greeny'}>
           View Detail
           <Icon src={'/assets/icons/external.svg'} />
         </Button>
