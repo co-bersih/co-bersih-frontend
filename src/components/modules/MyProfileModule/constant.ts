@@ -1,1 +1,1 @@
-export const VAR_NAME = ''
+export const TAB_OPTIONS = ['Events Joined', 'Events Organized']
