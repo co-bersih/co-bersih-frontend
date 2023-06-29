@@ -47,7 +47,7 @@ export const LoginModule: React.FC = () => {
                 </div>
               </div>
 
-              <Button className={'w-full'} variant={4}>
+              <Button className={'w-full'} variant={'greeny'}>
                 <h4>Log In</h4>
               </Button>
             </div>

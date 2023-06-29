@@ -1,10 +1,10 @@
 import { ReactNode } from 'react'
 
 export interface ButtonProps {
-  className: string
+  className?: string
   rightIcon?: any
   leftIcon?: any
-  variant: number
+  variant: string
   children?: ReactNode
   onClick?: () => void
   disabled?: boolean
