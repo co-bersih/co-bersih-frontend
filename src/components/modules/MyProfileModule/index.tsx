@@ -4,10 +4,11 @@ import { RiLockPasswordFill } from 'react-icons/ri'
 import { AiTwotoneEdit } from 'react-icons/ai'
 import Image from 'next/image'
 import { TAB_OPTIONS } from './constant'
-// import {HeroSection, FAQSection} from './sections
-// import {} from './module-elements'
+import { useAuthContext } from '@contexts'
 
 export const MyProfileModule: React.FC = () => {
+  const { user } = useAuthContext()
+
   const [tab, setTab] = useState<number>(0)
   const updateData = () => {}
 
@@ -17,11 +18,14 @@ export const MyProfileModule: React.FC = () => {
       <div className="bg-mintGreen">
         <div className="rounded-b-[200px] lg:h-64 h-60 bg-white"></div>
       </div>
-      {/* photo */}
       <div className="flex lg:flex-row flex-col items-center lg:space-x-12 lg:mx-[230px] -mt-28">
         <Image
-          src={'/assets/images/hero/Hero1.png'}
-          alt={''}
+          src={
+            user?.profileImage
+              ? user.profileImage
+              : '/assets/images/hero/Hero1.png'
+          }
+          alt=""
           width={250}
           height={250}
           className="w-48 h-48 border-4 border-white rounded-full"
@@ -29,8 +33,8 @@ export const MyProfileModule: React.FC = () => {
         <div className="flex flex-col lg:space-y-12 space-y-6 mx-5">
           <div className="flex lg:flex-row flex-col lg:justify-between justify-center lg:space-y-0 space-y-5">
             <div className="flex flex-col space-y-2 lg:items-start items-center">
-              <h1>michael</h1>
-              <h2>michael@gmail.com</h2>
+              <h1>{user?.name}</h1>
+              <h2>{user?.email}</h2>
             </div>
 
             <div className="flex flex-col lg:items-start space-y-2">
@@ -52,14 +56,7 @@ export const MyProfileModule: React.FC = () => {
               </Button>
             </div>
           </div>
-          <p>
-            Hi this is my bio! Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Lobortis elementum nibh tellus molestie nunc
-            non blandit massa enim. Nunc sed blandit libero volutpat sed cras
-            ornare. Nunc consequat interdum varius sit amet mattis vulputate
-            enim. Sit amet nulla facilisi morbi tempus iaculis urna id.
-          </p>
+          <p>{user?.bio}</p>
         </div>
       </div>
       <Tabs

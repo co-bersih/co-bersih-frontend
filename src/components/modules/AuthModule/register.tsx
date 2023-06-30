@@ -6,10 +6,13 @@ import { TextInput, Spinner } from 'flowbite-react'
 import { Button } from '@elements'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import axios from 'axios'
+import { useRouter } from 'next/router'
 
 export const RegisterModule: React.FC = () => {
   const [data, setData] = useState<IRegisterData>(EMPTY_REGISTER_DATA)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const router = useRouter()
 
   function onFormChange(target: any) {
     setData(() => ({ ...data, [target.id]: target.value }))
@@ -18,10 +21,50 @@ export const RegisterModule: React.FC = () => {
   function onFormSubmit() {
     setIsLoading(true)
     if (data.password !== data.password2) {
-      // Passwords do not match
       toast.error(<p>Password tidak sama!</p>, {
         position: toast.POSITION.TOP_CENTER,
       })
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 2000)
+    } else {
+      const formData = new FormData()
+      formData.append('email', data.email)
+      formData.append('password', data.password)
+      formData.append('name', data.name)
+
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/user/register/`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          }
+        )
+        .then((res) => {
+          toast.success('Successfully registered user. Please log in...', {
+            position: toast.POSITION.TOP_CENTER,
+          })
+
+          setTimeout(() => {
+            router.push('/auth/login')
+          }, 2000)
+        })
+        .catch((err) => {
+          if (err.response && err.response.data) {
+            const errorMessage = JSON.stringify(err.response.data)
+            toast.error(<p>{errorMessage}</p>, {
+              position: toast.POSITION.TOP_CENTER,
+            })
+          } else {
+            toast.error('An error occurred during register.', {
+              position: toast.POSITION.TOP_CENTER,
+            })
+          }
+        })
+        .finally(() => setIsLoading(false))
     }
   }
 
@@ -94,7 +137,6 @@ export const RegisterModule: React.FC = () => {
                 variant={'greeny'}
                 disabled={isLoading}
               >
-                {' '}
                 {isLoading ? <Spinner /> : <h4>Register</h4>}
               </Button>
             </div>
