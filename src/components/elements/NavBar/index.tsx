@@ -1,10 +1,13 @@
 import React from 'react'
-import { Navbar } from 'flowbite-react'
+import { Avatar, Dropdown, Navbar } from 'flowbite-react'
 import { CoBersihLogo } from '@icons'
 import { RiArticleLine, RiEarthLine, RiHome2Line } from 'react-icons/ri'
 import { Button } from '../Button'
+import { useAuthContext } from '@contexts'
 
 export const NavBar: React.FC = () => {
+  const { user } = useAuthContext()
+
   return (
     <Navbar
       rounded
@@ -39,19 +42,61 @@ export const NavBar: React.FC = () => {
           </Button>
         </Navbar.Link>
       </Navbar.Collapse>
-      <Navbar.Collapse className="justify-end lg:block md:hidden hidden">
-        <Navbar.Link href="/auth/register">
-          <Button variant={'ghost'}>
-            <h4>Register</h4>
-          </Button>
-        </Navbar.Link>
-        <Navbar.Link href="/auth/login">
-          <Button variant={'solid'}>
-            <h4>Log In</h4>
-          </Button>
-        </Navbar.Link>
-      </Navbar.Collapse>
-      <Navbar.Toggle />
+
+      {user ? (
+        <div className="flex justify-end space-x-2">
+          <Dropdown
+            inline
+            label={
+              <Avatar
+                alt="User settings"
+                img={
+                  user?.profileImage
+                    ? user.profileImage
+                    : '/assets/images/hero/Hero1.png'
+                }
+                rounded
+              />
+            }
+          >
+            <Dropdown.Header>
+              <span className="block text-sm">{user.name}</span>
+              <span className="block truncate text-sm font-medium">
+                {user.email}
+              </span>
+            </Dropdown.Header>
+            <Dropdown.Item>
+              <Navbar.Link href="/my-profile">
+                <h4>My Profile</h4>
+              </Navbar.Link>
+            </Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item>
+              <Navbar.Link href="/auth/logout">
+                <h4>Log Out</h4>
+              </Navbar.Link>
+            </Dropdown.Item>
+          </Dropdown>
+          <Navbar.Toggle />
+        </div>
+      ) : (
+        <div>
+          <Navbar.Collapse className="justify-end lg:block md:hidden hidden">
+            <Navbar.Link href="/auth/register">
+              <Button variant={'ghost'}>
+                <h4>Register</h4>
+              </Button>
+            </Navbar.Link>
+            <Navbar.Link href="/auth/login">
+              <Button variant={'solid'}>
+                <h4>Log In</h4>
+              </Button>
+            </Navbar.Link>
+          </Navbar.Collapse>
+          <Navbar.Toggle />
+        </div>
+      )}
+
       <Navbar.Collapse className="lg:hidden">
         <Navbar.Link href="/landing">
           <h4>Home</h4>
@@ -62,12 +107,18 @@ export const NavBar: React.FC = () => {
         <Navbar.Link href="/blogs">
           <h4>Blogs</h4>
         </Navbar.Link>
-        <Navbar.Link href="/auth/register">
-          <h4>Register</h4>
-        </Navbar.Link>
-        <Navbar.Link href="/auth/login">
-          <h4>Log In</h4>
-        </Navbar.Link>
+        {user ? (
+          <div></div>
+        ) : (
+          <>
+            <Navbar.Link href="/auth/register">
+              <h4>Register</h4>
+            </Navbar.Link>
+            <Navbar.Link href="/auth/login">
+              <h4>Log In</h4>
+            </Navbar.Link>
+          </>
+        )}
       </Navbar.Collapse>
     </Navbar>
   )

@@ -1,7 +1,11 @@
 import { Button } from '@elements'
+import { TextInput } from 'flowbite-react'
+import { useState } from 'react'
 import { RiHome2Line } from 'react-icons/ri'
 
 export default function Artex() {
+  const [name, setName] = useState('')
+
   return (
     <>
       <Button
@@ -28,6 +32,14 @@ export default function Artex() {
       >
         <h3>Home</h3>
       </Button>
+      <TextInput
+        required
+        type="text"
+        value={name}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setName(e.target.value)
+        }
+      />
     </>
   )
 }

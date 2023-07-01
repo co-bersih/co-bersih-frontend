@@ -2,14 +2,43 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { ILoginData } from './interface'
 import { EMPTY_LOGIN_DATA } from './constant'
-import { TextInput } from 'flowbite-react'
+import { Spinner, TextInput } from 'flowbite-react'
 import { Button } from '@elements'
+import axios from 'axios'
+import { useAuthContext } from '@contexts'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { useRouter } from 'next/router'
 
 export const LoginModule: React.FC = () => {
   const [data, setData] = useState<ILoginData>(EMPTY_LOGIN_DATA)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { saveTokens } = useAuthContext()
+  const router = useRouter()
 
   function onFormChange(target: any) {
     setData(() => ({ ...data, [target.id]: target.value }))
+  }
+
+  function handleLogin() {
+    setIsLoading(true)
+    axios
+      .post(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/user/login/`, data)
+      .then((response) => {
+        toast.success('Successfully log in.', {
+          position: toast.POSITION.TOP_CENTER,
+        })
+        saveTokens(response.data.refresh, response.data.access)
+        setTimeout(() => {
+          router.push('/')
+        }, 1000)
+      })
+      .catch((error) => {
+        toast.error(`${error.response.data}`, {
+          position: toast.POSITION.TOP_CENTER,
+        })
+      })
+      .finally(() => setIsLoading(false))
   }
 
   return (
@@ -17,7 +46,7 @@ export const LoginModule: React.FC = () => {
       <div className="login flex h-screen bg-gray-100 flex-row">
         <div className="lg:m-0 m-auto bg-white shadow text-gray-900 p-8 flex flex-col items-center justify-center rounded-md lg:w-1/2 lg:space-y-5 space-y-2">
           <h2>Login</h2>
-          <form method="POST" action="" className="flex w-full justify-center">
+          <form className="flex w-full justify-center">
             <div className="pt-5 w-full lg:w-auto lg:space-y-5 space-y-2">
               <div className="flex flex-col w-full lg:w-auto">
                 <h4>Email</h4>
@@ -47,8 +76,13 @@ export const LoginModule: React.FC = () => {
                 </div>
               </div>
 
-              <Button className={'w-full'} variant={'greeny'}>
-                <h4>Log In</h4>
+              <Button
+                className={'w-full'}
+                variant={'greeny'}
+                onClick={handleLogin}
+                disabled={isLoading}
+              >
+                {isLoading ? <Spinner /> : <h4>Log In</h4>}
               </Button>
             </div>
           </form>
