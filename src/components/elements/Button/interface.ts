@@ -9,4 +9,5 @@ export interface ButtonProps {
   onClick?: () => void
   disabled?: boolean
   isLoading?: boolean
+  type?: 'button' | 'submit' | 'reset'
 }

@@ -10,14 +10,14 @@ export const Button: React.FC<ButtonProps> = ({
   rightIcon,
   disabled,
   isLoading,
+  type,
 }) => {
-  // TODO: Write element's logic
-
   return (
     <>
       <button
         onClick={onClick}
         disabled={disabled || isLoading}
+        type={type}
         className={`${className} flex h-fit select-none items-center justify-center gap-1 rounded-full tracking-wider transition-all p-1
         ${
           variant == 'primary' &&
