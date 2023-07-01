@@ -59,7 +59,11 @@ export const EventModule: React.FC = () => {
         <div className="relative min-h-[105vh] flex flex-col items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-mintGreen py-4">
           <h1>Temukan event terdekat.</h1>
           {loc?.lat && loc.lng ? (
-            <DynamicMap center={loc} events={mapData} className='min-w-[90vw] min-h-[500px] md:w-[80vw] lg:w-[65vw] rounded-3xl'/>
+            <DynamicMap
+              center={loc}
+              events={mapData}
+              className="min-w-[90vw] min-h-[500px] md:w-[80vw] lg:w-[65vw] rounded-3xl"
+            />
           ) : (
             <p className=" bg-red-300 p-2 rounded-md">
               Pastikan lokasi Anda menyala dan browser dapat menggunakan lokasi

@@ -27,43 +27,51 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
       dragend() {
         const marker = markerRef.current
         if (marker != null) {
-          props.draggable?.setLocationState(marker.getLatLng())
+          props.draggable?.setLocationState((marker as any).getLatLng())
         }
       },
     }),
-    [],
+    []
   )
-  
-  return (<MapContainer
-    center={props.center}
-    zoom={11}
-    scrollWheelZoom={true}
-    className={`z-20 ${props.className}`}
-  >
-    <TileLayer
-      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    />
-    {props.events?.map((event, idx) => (
-      <Marker
-        position={{ lat: event.latitude, lng: event.longitude }}
-        icon={eventIcon}
-        key={idx}
-      >
-        <EventPopup event={event} {...options} />
-      </Marker>
-    ))}
-    { props.draggable ?
-      <Marker
-        position={{ lat: props.draggable.locationState.lat, lng: props.draggable.locationState.lng }}
-        icon={defaultIcon}
-        draggable={true}
-        eventHandlers={eventHandler}
-        ref={markerRef}
-      >
-        <Popup>Your location is here!</Popup>
-      </Marker> : <></> }
-  </MapContainer>)
+
+  return (
+    <MapContainer
+      center={props.center}
+      zoom={11}
+      scrollWheelZoom={true}
+      className={`z-20 ${props.className}`}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {props.events?.map((event, idx) => (
+        <Marker
+          position={{ lat: event.latitude, lng: event.longitude }}
+          icon={eventIcon}
+          key={idx}
+        >
+          <EventPopup event={event} {...options} />
+        </Marker>
+      ))}
+      {props.draggable ? (
+        <Marker
+          position={{
+            lat: props.draggable.locationState.lat,
+            lng: props.draggable.locationState.lng,
+          }}
+          icon={defaultIcon}
+          draggable={true}
+          eventHandlers={eventHandler}
+          ref={markerRef}
+        >
+          <Popup>Your location is here!</Popup>
+        </Marker>
+      ) : (
+        <></>
+      )}
+    </MapContainer>
+  )
 }
 
 export default Map

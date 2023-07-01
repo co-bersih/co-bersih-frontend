@@ -5,7 +5,7 @@ export type MapProps = {
   events?: IEvent[]
   draggable?: {
     locationState: LatLngLiteral
-    setLocationState: React.Dispatch<React.SetStateAction<any>> 
+    setLocationState: React.Dispatch<React.SetStateAction<any>>
   }
   // reports?: ...
   className?: string
