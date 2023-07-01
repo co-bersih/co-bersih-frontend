@@ -5,8 +5,10 @@ import { Modal, TextInput } from 'flowbite-react'
 import { editProfileModalProps } from './interface'
 import { AiFillSave, AiOutlineCloseCircle } from 'react-icons/ai'
 import { Button } from '@elements'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-const EditProfileModal: React.FC<editProfileModalProps> = ({
+export const EditProfileModal: React.FC<editProfileModalProps> = ({
   user,
   onClose,
   showModal,
@@ -78,9 +80,23 @@ const EditProfileModal: React.FC<editProfileModalProps> = ({
         data: formData,
       }
 
-      await axios.request(config)
-      onClose()
-      window.location.reload()
+      await axios
+        .request(config)
+        .then((response) => {
+          toast.success('Successfully edit profile.', {
+            position: toast.POSITION.TOP_CENTER,
+          })
+          onClose()
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000)
+        })
+        .catch((error) => {
+          const errorMessage = JSON.stringify(error.response.data)
+          toast.error(`${errorMessage}`, {
+            position: toast.POSITION.TOP_CENTER,
+          })
+        })
     } catch (error) {
       console.log(error)
     }
@@ -95,7 +111,7 @@ const EditProfileModal: React.FC<editProfileModalProps> = ({
           className="h-screen"
         >
           <div className="flex justify-between px-6 pt-5 items-center">
-            <h3>Edit Profile</h3>
+            <h2>Edit Profile</h2>
             <AiOutlineCloseCircle
               size="28"
               className="cursor-pointer"
@@ -165,5 +181,3 @@ const EditProfileModal: React.FC<editProfileModalProps> = ({
     </>
   )
 }
-
-export default EditProfileModal

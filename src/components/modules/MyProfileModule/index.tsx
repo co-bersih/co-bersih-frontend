@@ -5,17 +5,17 @@ import { AiTwotoneEdit } from 'react-icons/ai'
 import Image from 'next/image'
 import { TAB_OPTIONS } from './constant'
 import { useAuthContext } from '@contexts'
-import EditProfileModal from './module-elements/EditProfileModal'
+import { EditProfileModal } from './module-elements/EditProfileModal'
+import { ChangePasswordModal } from './module-elements/ChangePasswordModal'
 
 export const MyProfileModule: React.FC = () => {
   const { user } = useAuthContext()
 
   const [tab, setTab] = useState<number>(0)
-  const [isEditModalDisplayed, setIsEditModalDisplayed] =
+  const [isEditProfileModalDisplayed, setIsEditProfileModalDisplayed] =
     useState<boolean>(false)
-  const updateData = () => {
-    setIsEditModalDisplayed(true)
-  }
+  const [isChangePasswordModalDisplayed, setIsChangePasswordModalDisplayed] =
+    useState<boolean>(false)
 
   const setChangePasswordModal = () => {}
   return (
@@ -45,7 +45,7 @@ export const MyProfileModule: React.FC = () => {
             <div className="flex flex-col lg:items-start space-y-2">
               <Button
                 variant={'greeny'}
-                onClick={updateData}
+                onClick={() => setIsEditProfileModalDisplayed(true)}
                 rightIcon={<AiTwotoneEdit />}
               >
                 Edit Profile
@@ -53,7 +53,7 @@ export const MyProfileModule: React.FC = () => {
               <Button
                 variant={'greeny'}
                 onClick={() => {
-                  setChangePasswordModal
+                  setIsChangePasswordModalDisplayed(true)
                 }}
                 rightIcon={<RiLockPasswordFill />}
               >
@@ -73,8 +73,12 @@ export const MyProfileModule: React.FC = () => {
       <div className="bg-white relative"></div>
       <EditProfileModal
         user={user}
-        showModal={isEditModalDisplayed}
-        onClose={() => setIsEditModalDisplayed(false)}
+        showModal={isEditProfileModalDisplayed}
+        onClose={() => setIsEditProfileModalDisplayed(false)}
+      />
+      <ChangePasswordModal
+        showModal={isChangePasswordModalDisplayed}
+        onClose={() => setIsChangePasswordModalDisplayed(false)}
       />
     </div>
   )
