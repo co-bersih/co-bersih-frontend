@@ -21,9 +21,9 @@ const Map: React.FC<MapProps> = (props: MapProps) => (
     zoom={11}
     scrollWheelZoom={true}
     className="
-    min-w-[90vw] min-h-[250px] 
-    md:w-[80vw] md:min-h-[400px]
-    lg:w-[65vw] lg:min-h-[500px]
+    min-w-[90vw] min-h-[500px] 
+    md:w-[80vw]
+    lg:w-[65vw]
     z-20 rounded-3xl"
   >
     <TileLayer
