@@ -1,4 +1,5 @@
 import { Button, Icon } from '@elements'
+import { Calendar, External, Participant } from '@icons'
 import { formatter } from '@utils'
 import Image from 'next/image'
 import { format } from 'path'
@@ -18,11 +19,11 @@ const EventCard: React.FC<IEvent> = (event) => (
         {formatter.trimLongText(event.description)}...
       </p>
       <div className="flex flex-row gap-x-2 mb-2">
-        <Icon src={'/assets/icons/participate.svg'} />
+        <Participant size={''} />
         <p>{1231231} peserta</p>
       </div>
       <div className="flex flex-row gap-x-2 md:mb-4 lg:mb-8">
-        <Icon src={'/assets/icons/calendar.svg'} />
+        <Calendar size={''} />
         <p>
           Starts {formatter.formatDateTimeWIB(event.start_date)}
           {/* -{' '}
@@ -32,7 +33,7 @@ const EventCard: React.FC<IEvent> = (event) => (
       <div className="flex justify-end">
         <Button className={''} variant={'greeny'}>
           <h4>View Detail</h4>
-          <Icon src={'/assets/icons/external.svg'} />
+          <External size={''} />
         </Button>
       </div>
     </div>

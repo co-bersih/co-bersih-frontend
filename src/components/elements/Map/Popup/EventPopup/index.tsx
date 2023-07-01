@@ -3,6 +3,7 @@ import { formatter } from '@utils'
 import { Popup } from 'react-leaflet'
 import Image from 'next/image'
 import { EventPopupProps } from '../interface'
+import { Calendar, External, Participant } from '@icons'
 
 const EventPopup: React.FC<EventPopupProps> = (props: EventPopupProps) => (
   <Popup maxWidth={props.maxWidth} minWidth={props.minWidth}>
@@ -17,17 +18,17 @@ const EventPopup: React.FC<EventPopupProps> = (props: EventPopupProps) => (
       />
       <h3>{props.event.name}</h3>
       <div className="flex gap-x-2">
-        <Icon src="assets/icons/participate.svg" />
+        <Participant size={''} />
         <span>{props.event.total_participant} participants</span>
       </div>
       <div className="flex gap-x-1">
-        <Icon src="assets/icons/calendar.svg" />
+        <Calendar size={''} />
         <span>Starts on {formatter.formatDate(props.event.start_date)}</span>
       </div>
       <div className="flex flex-row justify-end">
         <Button className={'w-fit'} variant={'greeny'}>
           View
-          <Icon src="assets/icons/external.svg" />
+          <External size={''} />
         </Button>
       </div>
     </div>
