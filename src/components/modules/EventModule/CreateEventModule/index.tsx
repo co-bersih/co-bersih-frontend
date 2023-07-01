@@ -2,10 +2,10 @@ import {
   FileInput,
   Label,
   Pagination,
+  Spinner,
   TextInput,
   Textarea,
 } from 'flowbite-react'
-import router from 'next/router'
 import React, { useEffect, useState } from 'react'
 import EventCard from '../module-elements/EventCard'
 import { LatLngLiteral } from 'leaflet'
@@ -14,6 +14,11 @@ import { CreateEventForm } from './interface'
 import { useForm } from 'react-hook-form'
 import { Button } from '@elements'
 import dynamic from 'next/dynamic'
+import axios, { AxiosRequestConfig } from 'axios'
+import { cfg } from 'src/config'
+import { useAuthContext } from '@contexts'
+import { ToastContainer, toast } from 'react-toastify'
+import { useRouter } from 'next/router'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -27,6 +32,9 @@ export const CreateEventModule: React.FC = () => {
     formState: { errors },
   } = useForm<CreateEventForm>()
   const [loc, setLoc] = useState<LatLngLiteral | undefined>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const router = useRouter()
+  const { tokens } = useAuthContext()
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((geo) => {
@@ -35,30 +43,53 @@ export const CreateEventModule: React.FC = () => {
   }, [])
 
   const onSubmit = async (data: CreateEventForm) => {
+    setIsLoading(true)
+
     data.latitude = loc?.lat || 0
     data.longitude = loc?.lng || 0
     const formData = new FormData()
     formData.append('name', data.name)
     formData.append('description', data.description)
     formData.append('preparation', data.preparation)
-    formData.append(
-      'start_date',
-      new Date(data.start_date).toISOString().split('T')[0] || data.start_date
-    )
-    formData.append(
-      'end_date',
-      new Date(data.end_date).toISOString().split('T')[0] || data.end_date
-    )
+    formData.append('start_date', data.start_date)
+    formData.append('end_date', data.end_date)
     formData.append('image', data.image[0])
     formData.append('latitude', String(data.latitude))
     formData.append('longitude', String(data.longitude))
 
-    alert('submitting')
-    // TODO
+    const options: AxiosRequestConfig = {
+      headers: {
+        Authorization: `Bearer ${tokens?.access}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+
+    axios
+      .post(`${cfg.API}/api/v1/events/`, formData, options)
+      .then((res) => {
+        toast.success('Anda berhasil membuat event.')
+        router.push(`/events/${res.data.id}`)
+      })
+      .catch((err) => {
+        console.log(err.response.data)
+        if (err.response?.status === 401) {
+          toast.error('Mohon untuk me-refresh halaman ini.')
+        } else if (err.response.data.errors.length > 0) {
+          toast.error(
+            `${err.response.data.errors[0].attr} error: ${err.response.data.errors[0].detail}`
+          )
+        } else {
+          toast.error('Telah terjadi kesalahan.')
+        }
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-col bg-white">
         <div className="relative min-h-screen flex flex-col items-center py-8 lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] px-4 sm:px-12 md:px-32 lg:px-40">
           <h1>Data Event Baru.</h1>
@@ -146,11 +177,11 @@ export const CreateEventModule: React.FC = () => {
               )}
 
               <div className="flex col-span-5 w-[100%] mx-auto justify-end gap-x-4">
-                <Button variant={'deserted'}>
+                <Button variant={'deserted'} isLoading={isLoading}>
                   <h4>Batalkan</h4>
                 </Button>
-                <Button variant={'greeny'}>
-                  <h4>Ajukan</h4>
+                <Button variant={'greeny'} isLoading={isLoading}>
+                  <h4>Ajukan Event</h4>
                 </Button>
               </div>
             </div>

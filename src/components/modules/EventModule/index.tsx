@@ -1,33 +1,31 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import EventCard from './module-elements/EventCard'
 import { Pagination, TextInput } from 'flowbite-react'
-import axios from 'axios'
 import { LatLngLiteral, map } from 'leaflet'
 import dynamic from 'next/dynamic'
-import { MagnifyingGlass, Plus } from '@icons'
 import { dummyEvent, dummyEvent2, dummyLoc } from './constant'
 import { Button } from '@elements'
 import { useRouter } from 'next/router'
+import { cfg } from 'src/config'
+import { useAuthContext } from '@contexts'
+import axios from 'axios'
+import { Pages } from './interface'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
 })
 
 export const EventModule: React.FC = () => {
+  const { tokens } = useAuthContext()
   const [searchQuery, setSearchQuery] = useState<string>('')
   const router = useRouter()
-  const [mapData, setMapData] = useState<IEvent[]>([dummyEvent, dummyEvent2])
-  const [catalogData, setCatalogData] = useState<IEvent[]>([
-    dummyEvent,
-    dummyEvent,
-    dummyEvent2,
-    dummyEvent2,
-  ])
+  const [mapData, setMapData] = useState<IEvent[]>([dummyEvent, dummyEvent2]) // TODO
+  const [catalogData, setCatalogData] = useState<IEvent[]>([])
   const [loc, setLoc] = useState<LatLngLiteral | undefined>(dummyLoc)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [pages, setPages] = useState<Pages>({})
+
   const onPageChange = (page: number) => {
-    // TODO: re-fetch catalog on new page
-    setCurrentPage(page)
+    setPages((prev) => ({ ...prev, current: page }))
   }
 
   const onScrollOut = () => {
@@ -36,10 +34,24 @@ export const EventModule: React.FC = () => {
 
   function fetchEvents() {
     axios
-      .get(`/events?page=${currentPage}`)
-      .then((res) => console.log(res))
+      .get(`${cfg.API}/api/v1/events/`, {
+        params: { page: pages.current },
+      })
+      .then((res) => {
+        setPages((prev) => ({
+          count: res.data.count,
+          next: res.data.next,
+          previous: res.data.previous,
+          current: prev.current,
+        }))
+        setCatalogData(res.data.results)
+      })
       .catch((err) => console.log(err))
   }
+
+  useEffect(() => {
+    fetchEvents()
+  }, [pages.current, tokens])
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((geo) => {
@@ -97,11 +109,9 @@ export const EventModule: React.FC = () => {
 
           {/* https://www.flowbite-react.com/docs/components/pagination */}
           <Pagination
-            currentPage={currentPage}
-            onPageChange={(page) => {
-              setCurrentPage(page)
-            }}
-            totalPages={100}
+            currentPage={pages.current || 1}
+            onPageChange={onPageChange}
+            totalPages={Math.ceil(pages.count! / 10) || 1}
             className="text-sm"
           />
         </div>
