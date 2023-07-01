@@ -24,7 +24,7 @@ export const LogoutModule: React.FC = () => {
           show={true}
           size="xl"
           popup
-          className="items-center justify-center"
+          className="items-center justify-center h-screen"
         >
           <Modal.Body>
             <div className="text-center mt-6">

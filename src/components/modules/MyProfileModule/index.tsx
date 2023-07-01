@@ -5,12 +5,17 @@ import { AiTwotoneEdit } from 'react-icons/ai'
 import Image from 'next/image'
 import { TAB_OPTIONS } from './constant'
 import { useAuthContext } from '@contexts'
+import EditProfileModal from './module-elements/EditProfileModal'
 
 export const MyProfileModule: React.FC = () => {
   const { user } = useAuthContext()
 
   const [tab, setTab] = useState<number>(0)
-  const updateData = () => {}
+  const [isEditModalDisplayed, setIsEditModalDisplayed] =
+    useState<boolean>(false)
+  const updateData = () => {
+    setIsEditModalDisplayed(true)
+  }
 
   const setChangePasswordModal = () => {}
   return (
@@ -18,7 +23,7 @@ export const MyProfileModule: React.FC = () => {
       <div className="bg-mintGreen">
         <div className="rounded-b-[200px] lg:h-64 h-60 bg-white"></div>
       </div>
-      <div className="flex lg:flex-row flex-col items-center lg:space-x-12 lg:mx-[230px] -mt-28">
+      <div className="flex lg:flex-row flex-col lg:items-start items-center lg:space-x-12 lg:space-y-0 space-y-6 lg:mx-[230px] -mt-24 mx-6 ">
         <Image
           src={
             user?.profileImage
@@ -30,8 +35,8 @@ export const MyProfileModule: React.FC = () => {
           height={250}
           className="w-48 h-48 border-4 border-white rounded-full"
         />
-        <div className="flex flex-col lg:space-y-12 space-y-6 mx-5">
-          <div className="flex lg:flex-row flex-col lg:justify-between justify-center lg:space-y-0 space-y-5">
+        <div className="flex flex-col w-full">
+          <div className="flex lg:flex-row flex-col lg:justify-between justify-center lg:mb-6 lg:space-y-0 space-y-3">
             <div className="flex flex-col space-y-2 lg:items-start items-center">
               <h1>{user?.name}</h1>
               <h2>{user?.email}</h2>
@@ -66,6 +71,11 @@ export const MyProfileModule: React.FC = () => {
         items={TAB_OPTIONS}
       />
       <div className="bg-white relative"></div>
+      <EditProfileModal
+        user={user}
+        showModal={isEditModalDisplayed}
+        onClose={() => setIsEditModalDisplayed(false)}
+      />
     </div>
   )
 }
