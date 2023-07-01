@@ -2,20 +2,40 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuthContext } from '@contexts'
 import { Modal } from 'flowbite-react'
+import axios from 'axios'
 
 export const LogoutModule: React.FC = () => {
   const router = useRouter()
-  const { setUser, setTokens } = useAuthContext()
+  const { setUser, setTokens, tokens } = useAuthContext()
 
   useEffect(() => {
-    setUser(null)
-    setTokens(null)
-    localStorage.removeItem('refreshToken')
-    localStorage.removeItem('accessToken')
-    setTimeout(() => {
-      router.replace('/')
-    }, 2000)
-  }, [])
+    const logout = async () => {
+      if (tokens) {
+        try {
+          await axios.post(
+            `${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/token/blacklist/`,
+            { refresh: tokens.refresh },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          setUser(null)
+          setTokens(null)
+          localStorage.removeItem('refreshToken')
+          localStorage.removeItem('accessToken')
+          setTimeout(() => {
+            router.replace('/')
+          }, 3000)
+        } catch (error) {
+          router.replace('/')
+        }
+      }
+    }
+
+    logout()
+  }, [tokens, router, setUser, setTokens])
 
   return (
     <>
