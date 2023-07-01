@@ -1,4 +1,5 @@
 export * from './Button'
 export * from './NavBar'
 export * from './Footer'
+export * from './Tabs'
 export * from './Icon'
