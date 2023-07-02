@@ -18,6 +18,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 }) => {
   const [user, setUser] = useState<UserInterface | null>(null)
   const [tokens, setTokens] = useState<TokensInterface | null>(null)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   function saveTokens(refresh: string, access: string) {
@@ -33,6 +34,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     if (storedRefreshToken && storedAccessToken) {
       setTokens({ refresh: storedRefreshToken, access: storedAccessToken })
     }
+    setLoading(false)
   }, [])
 
   const getUser = async () => {
@@ -109,6 +111,8 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     tokens,
     setTokens,
     saveTokens,
+    loading,
+    setLoading,
   }
 
   return (

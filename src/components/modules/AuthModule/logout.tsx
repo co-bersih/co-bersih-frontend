@@ -27,7 +27,7 @@ export const LogoutModule: React.FC = () => {
           localStorage.removeItem('accessToken')
           setTimeout(() => {
             router.replace('/')
-          }, 3000)
+          }, 2000)
         } catch (error) {
           router.replace('/')
         }

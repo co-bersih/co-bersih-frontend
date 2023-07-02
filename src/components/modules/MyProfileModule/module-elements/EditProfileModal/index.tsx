@@ -20,6 +20,7 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
   const [previewImage, setPreviewImage] = useState(user?.profileImage || '')
   const rootRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef(null)
+  const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -45,6 +46,16 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
     setBio(event.target.value)
   }
 
+  const removeProfilePicture = () => {
+    setProfileImage(null)
+    setPreviewImage('')
+    if (fileInputRef.current) {
+      // @ts-ignore
+      fileInputRef.current.value = ''
+      setIsEditing(true)
+    }
+  }
+
   const addImageToForm = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     setProfileImage(file || null)
@@ -60,6 +71,8 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
     if (file) {
       reader.readAsDataURL(file)
     }
+
+    setIsEditing(true)
   }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -67,8 +80,8 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
     const formData = new FormData()
     formData.append('name', name || '')
     formData.append('bio', bio || '')
-    if (profileImage) {
-      formData.append('profile_image', profileImage)
+    if (isEditing) {
+      formData.append('profile_image', profileImage || '')
     }
     try {
       const config = {
@@ -128,27 +141,18 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
                 onChange={handleNameChange}
               />
               <h3>Bio</h3>
-              <TextInput
-                required
-                type="text"
-                value={bio}
-                onChange={handleBioChange}
-              />
+              <TextInput type="text" value={bio} onChange={handleBioChange} />
               <h3>Profile Image</h3>
               <div className="w-full space-y-2 pb-5">
                 <div className="relative flex justify-center items-center">
                   <div
-                    className="absolute flex items-center justify-center pr-48 top-1 hover-animation w-9 h-9"
-                    onClick={() => {
-                      setProfileImage(null)
-                      setPreviewImage(user?.profileImage || '')
-                      if (fileInputRef.current) {
-                        // @ts-ignore
-                        fileInputRef.current.value = ''
-                      }
-                    }}
+                    className="absolute items-center justify-center top-0 hover-animation -w-1/2"
+                    onClick={removeProfilePicture}
                   >
-                    <AiOutlineCloseCircle size="16" className="px-12 z-50" />
+                    <AiOutlineCloseCircle
+                      size="18"
+                      className="lg:ml-44 ml-28"
+                    />
                   </div>
                   <img
                     src={

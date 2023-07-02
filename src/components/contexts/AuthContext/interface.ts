@@ -10,6 +10,8 @@ export interface AuthContextInterface {
   tokens: TokensInterface | null
   setTokens: React.Dispatch<React.SetStateAction<TokensInterface | null>>
   saveTokens: (refresh: string, access: string) => void
+  loading: boolean
+  setLoading: React.Dispatch<any>
 }
 
 export interface TokensInterface {
