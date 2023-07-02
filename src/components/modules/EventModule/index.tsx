@@ -10,6 +10,7 @@ import { cfg } from 'src/config'
 import { useAuthContext } from '@contexts'
 import axios from 'axios'
 import { Pages } from './interface'
+import IEvent from './module-elements/EventCard/interface'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
