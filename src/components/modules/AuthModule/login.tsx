@@ -13,6 +13,8 @@ import { useRouter } from 'next/router'
 export const LoginModule: React.FC = () => {
   const [data, setData] = useState<ILoginData>(EMPTY_LOGIN_DATA)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [emailError, setEmailError] = useState<string>('')
+  const [passwordError, setPasswordError] = useState<string>('')
   const { saveTokens } = useAuthContext()
   const router = useRouter()
 
@@ -34,11 +36,25 @@ export const LoginModule: React.FC = () => {
         }, 1000)
       })
       .catch((error) => {
-        toast.error(`${error.response.data}`, {
-          position: toast.POSITION.TOP_CENTER,
-        })
+        if (error.response.data && Array.isArray(error.response.data.errors)) {
+          error.response.data.errors.forEach((err: any) => {
+            if (err.attr === 'email') {
+              setEmailError(err.detail)
+            } else if (err.attr === 'password') {
+              setPasswordError(err.detail)
+            } else {
+              toast.error(err.detail, {
+                position: toast.POSITION.TOP_CENTER,
+              })
+            }
+          })
+        } else {
+          toast.error('An error occurred during login.', {
+            position: toast.POSITION.TOP_CENTER,
+          })
+        }
+        setIsLoading(false)
       })
-      .finally(() => setIsLoading(false))
   }
 
   return (
@@ -55,10 +71,16 @@ export const LoginModule: React.FC = () => {
                     id="email"
                     type="email"
                     placeholder="Email"
-                    onChange={(e) => onFormChange(e.target)}
+                    onChange={(e) => {
+                      onFormChange(e.target)
+                      setEmailError('')
+                    }}
                     value={data.email}
                     required={true}
                   />
+                  {emailError && (
+                    <p className="text-red-500 pt-2">{emailError}</p>
+                  )}
                 </div>
               </div>
 
@@ -69,13 +91,18 @@ export const LoginModule: React.FC = () => {
                     id="password"
                     type="password"
                     placeholder="Password"
-                    onChange={(e) => onFormChange(e.target)}
+                    onChange={(e) => {
+                      onFormChange(e.target)
+                      setPasswordError('') // Clear the error message when the input changes
+                    }}
                     value={data.password}
                     required={true}
                   />
+                  {passwordError && (
+                    <p className="text-red-500 pt-2">{passwordError}</p>
+                  )}
                 </div>
               </div>
-
               <Button
                 className={'w-full'}
                 variant={'greeny'}

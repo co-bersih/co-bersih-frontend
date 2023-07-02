@@ -12,21 +12,28 @@ import { useRouter } from 'next/router'
 export const RegisterModule: React.FC = () => {
   const [data, setData] = useState<IRegisterData>(EMPTY_REGISTER_DATA)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [emailError, setEmailError] = useState<string>('')
+  const [nameError, setNameError] = useState<string>('')
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([])
+  const [repeatPassError, setRepeatPassError] = useState<string>('')
   const router = useRouter()
 
   function onFormChange(target: any) {
     setData(() => ({ ...data, [target.id]: target.value }))
   }
 
-  function onFormSubmit() {
+  function handleRegister() {
     setIsLoading(true)
-    if (data.password !== data.password2) {
-      toast.error(<p>Password tidak sama!</p>, {
-        position: toast.POSITION.TOP_CENTER,
-      })
+    if (data.password2 == '') {
+      setRepeatPassError('This field may not blank')
       setTimeout(() => {
         setIsLoading(false)
-      }, 2000)
+      }, 5)
+    } else if (data.password !== data.password2) {
+      setRepeatPassError('Password is not match')
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 5)
     } else {
       const formData = new FormData()
       formData.append('email', data.email)
@@ -52,25 +59,42 @@ export const RegisterModule: React.FC = () => {
             router.push('/auth/login')
           }, 2000)
         })
-        .catch((err) => {
-          if (err.response && err.response.data) {
-            const errorMessage = JSON.stringify(err.response.data)
-            toast.error(<p>{errorMessage}</p>, {
-              position: toast.POSITION.TOP_CENTER,
+        .catch((error) => {
+          console.log(error.response.data)
+          if (
+            error.response.data &&
+            Array.isArray(error.response.data.errors)
+          ) {
+            const errors = error.response.data.errors
+            const passwordErrorMessages = errors
+              .filter((err: any) => err.attr === 'password')
+              .map((err: any) => err.detail)
+            setPasswordErrors(passwordErrorMessages)
+            errors.forEach((err: any) => {
+              if (err.attr === 'email') {
+                setEmailError(err.detail)
+              } else if (err.attr === 'name') {
+                setNameError(err.detail)
+              } else if (err.attr === 'password') {
+              } else {
+                toast.error(err.detail, {
+                  position: toast.POSITION.TOP_CENTER,
+                })
+              }
             })
           } else {
             toast.error('An error occurred during register.', {
               position: toast.POSITION.TOP_CENTER,
             })
           }
+          setIsLoading(false)
         })
-        .finally(() => setIsLoading(false))
     }
   }
 
   return (
     <>
-      <div className="login flex h-screen bg-gray-100 flex-row">
+      <div className="login flex h-screen bg-gray-100 flex-row overflow-y-scroll">
         <div className="lg:m-0 m-auto bg-white shadow text-gray-900 p-8 flex flex-col items-center justify-center rounded-md lg:w-1/2 lg:space-y-5 space-y-2">
           <h2>Register</h2>
           <form className="flex w-full justify-center">
@@ -82,10 +106,16 @@ export const RegisterModule: React.FC = () => {
                     id="email"
                     type="email"
                     placeholder="Email"
-                    onChange={(e) => onFormChange(e.target)}
+                    onChange={(e) => {
+                      onFormChange(e.target)
+                      setEmailError('')
+                    }}
                     value={data.email}
                     required={true}
                   />
+                  {emailError && (
+                    <p className="text-red-500 pt-2">{emailError}</p>
+                  )}
                 </div>
               </div>
 
@@ -96,10 +126,16 @@ export const RegisterModule: React.FC = () => {
                     id="name"
                     type="text"
                     placeholder="Name"
-                    onChange={(e) => onFormChange(e.target)}
+                    onChange={(e) => {
+                      onFormChange(e.target)
+                      setNameError('')
+                    }}
                     value={data.name}
                     required={true}
                   />
+                  {nameError && (
+                    <p className="text-red-500 pt-2">{nameError}</p>
+                  )}
                 </div>
               </div>
 
@@ -110,10 +146,18 @@ export const RegisterModule: React.FC = () => {
                     id="password"
                     type="password"
                     placeholder="Password"
-                    onChange={(e) => onFormChange(e.target)}
+                    onChange={(e) => {
+                      onFormChange(e.target)
+                      setPasswordErrors([])
+                    }}
                     value={data.password}
                     required={true}
                   />
+                  {passwordErrors.map((error, index) => (
+                    <p key={index} className="text-red-500 pt-2">
+                      {error}
+                    </p>
+                  ))}
                 </div>
               </div>
 
@@ -124,15 +168,21 @@ export const RegisterModule: React.FC = () => {
                     id="password2"
                     type="password"
                     placeholder="Password"
-                    onChange={(e) => onFormChange(e.target)}
+                    onChange={(e) => {
+                      onFormChange(e.target)
+                      setRepeatPassError('')
+                    }}
                     value={data.password2}
                     required={true}
                   />
+                  {repeatPassError && (
+                    <p className="text-red-500 pt-2">{repeatPassError}</p>
+                  )}
                 </div>
               </div>
 
               <Button
-                onClick={onFormSubmit}
+                onClick={handleRegister}
                 className={'w-full'}
                 variant={'greeny'}
                 disabled={isLoading}
