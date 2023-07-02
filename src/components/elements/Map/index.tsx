@@ -39,7 +39,7 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
       center={props.center}
       zoom={11}
       scrollWheelZoom={true}
-      className={`z-20 ${props.className}`}
+      className={`z-20 ${props.className} rounded-lg`}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -51,7 +51,11 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
           icon={eventIcon}
           key={idx}
         >
-          <EventPopup event={event} {...options} />
+          {props.disablePopup ? (
+            <></>
+          ) : (
+            <EventPopup event={event} {...options} />
+          )}
         </Marker>
       ))}
       {props.draggable ? (
@@ -65,7 +69,11 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
           eventHandlers={eventHandler}
           ref={markerRef}
         >
-          <Popup>Your location is here!</Popup>
+          {props.disablePopup ? (
+            <></>
+          ) : (
+            <Popup>Event akan dimulai disini!</Popup>
+          )}
         </Marker>
       ) : (
         <></>

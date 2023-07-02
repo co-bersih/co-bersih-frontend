@@ -114,3 +114,33 @@ p {
     transform: translateX(-100%);
   }
 }
+
+.skeleton {
+  background: #353e4e;
+  background: linear-gradient(110deg, #dfdfdf 8%, #353e4e 18%, #dfdfdf 33%);
+  background-size: 200% 100%;
+}
+
+.shiny {
+  animation: 1.5s shine linear infinite;
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
