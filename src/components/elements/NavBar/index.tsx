@@ -65,17 +65,18 @@ export const NavBar: React.FC = () => {
                 {user.email}
               </span>
             </Dropdown.Header>
-            <Dropdown.Item>
-              <Navbar.Link href="/my-profile">
+            <Navbar.Link href="/my-profile">
+              <Dropdown.Item>
                 <h4>My Profile</h4>
-              </Navbar.Link>
-            </Dropdown.Item>
+              </Dropdown.Item>
+            </Navbar.Link>
+
             <Dropdown.Divider />
-            <Dropdown.Item>
-              <Navbar.Link href="/auth/logout">
+            <Navbar.Link href="/auth/logout">
+              <Dropdown.Item>
                 <h4>Log Out</h4>
-              </Navbar.Link>
-            </Dropdown.Item>
+              </Dropdown.Item>
+            </Navbar.Link>
           </Dropdown>
           <Navbar.Toggle />
         </div>
