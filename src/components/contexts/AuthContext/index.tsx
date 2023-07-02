@@ -34,6 +34,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     if (storedRefreshToken && storedAccessToken) {
       setTokens({ refresh: storedRefreshToken, access: storedAccessToken })
     }
+    setLoading(false)
   }, [])
 
   const getUser = async () => {
@@ -68,7 +69,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   useEffect(() => {
     if (tokens) {
       getUser()
-      setLoading(false)
     }
   }, [tokens])
 

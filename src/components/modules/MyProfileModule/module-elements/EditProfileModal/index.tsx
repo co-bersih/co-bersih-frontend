@@ -27,7 +27,6 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
       setName(user.name || '')
       setBio(user.bio || '')
       setPreviewImage(user.profileImage || '')
-      console.log(user)
     }
   }, [user])
 
