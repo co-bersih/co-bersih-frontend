@@ -9,6 +9,8 @@ import { cfg } from 'src/config'
 import IEvent from '../module-elements/EventCard/interface'
 import dynamic from 'next/dynamic'
 import { MESSAGES } from './constant'
+import { useAuthContext } from '@contexts'
+import { AiOutlineEdit } from 'react-icons/ai'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -20,6 +22,7 @@ export const EventDetailModule: React.FC = () => {
   const [data, setData] = useState<IEvent>()
   const [tipMessage, setTipMessage] = useState<string>('')
   const { id } = router.query
+  const { user } = useAuthContext()
 
   useEffect(() => {
     if (id) {
@@ -44,6 +47,20 @@ export const EventDetailModule: React.FC = () => {
     <>
       <div className="flex flex-col bg-mintGreen">
         <div className="px-3 sm:px-8 md:px-32 lg:px-40 relative min-h-[105vh] flex flex-col gap-4 items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-white pt-28 pb-8">
+          {data?.host.email === user?.email ? (
+            <Button
+              variant="primary"
+              className="ml-auto px-4"
+              onClick={() => {
+                router.push(`/events/${id}/edit`)
+              }}
+              rightIcon={<AiOutlineEdit size="20" className="cursor-pointer" />}
+            >
+              Edit
+            </Button>
+          ) : (
+            <></>
+          )}
           {data ? <h2>{data?.name}</h2> : <Skeleton />}
           {data && tipMessage && (
             <TipCard type={'information'} content={tipMessage} />
@@ -51,7 +68,7 @@ export const EventDetailModule: React.FC = () => {
           <div className="flex gap-x-4 md:gap-x-12 w-full">
             {data ? (
               <Image
-                src={data?.image_url}
+                src={data?.image_url || '/assets/images/placeholder/image.png'}
                 height={400}
                 width={400}
                 alt={data?.name}
