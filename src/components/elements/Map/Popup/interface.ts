@@ -1,3 +1,5 @@
+import IEvent from 'src/components/modules/EventModule/module-elements/EventCard/interface'
+
 interface PopupProps {
   minWidth: number
   maxWidth: number
