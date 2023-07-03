@@ -10,7 +10,8 @@ export const dummyEvent: IEvent = {
     bio: 'guy@mail.com',
     profile_image: '',
     date_joined: '',
-  },  name: 'Dummy Event',
+  },
+  name: 'Dummy Event',
   description:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lobortis elementum nibh tellus molestie nunc non blandit massa enim. Nunc sed blandit libero volutpat sed cras ornare. Nunc consequat interdum varius sit amet mattis vulputate enim. Sit amet nulla facilisi morbi tempus iaculis urna id. Semper risus in hendrerit gravida rutrum quisque non. Aliquet lectus proin nibh nisl condimentum id. ',
   preparation:
@@ -35,7 +36,8 @@ export const dummyEvent2: IEvent = {
     bio: 'guy@mail.com',
     profile_image: '',
     date_joined: '',
-  },  name: 'Dummy Event 2 for Earth Day 2011',
+  },
+  name: 'Dummy Event 2 for Earth Day 2011',
   description:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lobortis elementum nibh tellus molestie nunc non blandit massa enim. Nunc sed blandit libero volutpat sed cras ornare. Nunc consequat interdum varius sit amet mattis vulputate enim. Sit amet nulla facilisi morbi tempus iaculis urna id. Semper risus in hendrerit gravida rutrum quisque non. Aliquet lectus proin nibh nisl condimentum id. ',
   preparation:
