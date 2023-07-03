@@ -8,10 +8,7 @@ export const FaqModule: React.FC = () => {
         <h1 className="items-start flex w-full pb-2 z-50">
           Butuh Bantuan? Baca FAQs
         </h1>
-        <Accordion
-          alwaysOpen={true}
-          className="w-full border-transparent focus:border-transparent focus:ring-0 "
-        >
+        <Accordion className="w-full border-transparent focus:border-transparent focus:ring-0 ">
           {faqs.map((item, index) => (
             <Accordion.Panel key={index}>
               <Accordion.Title className="text-black focus:bg-mintGreen border-transparent focus:border-transparent focus:ring-0 rounded-t-xl">
