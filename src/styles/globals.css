@@ -123,6 +123,7 @@ p {
 
 .shiny {
   animation: 1.5s shine linear infinite;
+  background-size: 200% 100%;
 }
 
 .pulse {
