@@ -93,7 +93,7 @@ export const LoginModule: React.FC = () => {
                     placeholder="Password"
                     onChange={(e) => {
                       onFormChange(e.target)
-                      setPasswordError('') // Clear the error message when the input changes
+                      setPasswordError('')
                     }}
                     value={data.password}
                     required={true}

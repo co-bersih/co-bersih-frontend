@@ -1,7 +1,8 @@
 import React from 'react'
-import { HeroModule } from './sections/hero'
-import { ActionModule } from './sections/action'
-import { WalkingText } from './sections/walking'
+import { ActionModule } from './sections/Action'
+import { HeroModule } from './sections/Hero'
+import { WalkingText } from './sections/Walking'
+import { FaqModule } from './sections/Faq'
 
 export const LandingPageModule: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ export const LandingPageModule: React.FC = () => {
         <HeroModule />
         <ActionModule />
         <WalkingText />
+        <FaqModule />
       </div>
     </>
   )
