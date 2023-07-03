@@ -34,7 +34,7 @@ export const CreateEventModule: React.FC = () => {
   const [loc, setLoc] = useState<LatLngLiteral | undefined>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
-  const { tokens } = useAuthContext()
+  const { tokens, user, loading: authLoading } = useAuthContext()
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((geo) => {
@@ -87,6 +87,13 @@ export const CreateEventModule: React.FC = () => {
       })
   }
 
+  useEffect(() => {
+    if (!authLoading && (!user || !user.email)) {
+      toast.error('Anda tidak bisa mengakses halaman tersebut')
+      router.push('/events')
+    }
+  }, [])
+
   return (
     <>
       <ToastContainer />
@@ -95,7 +102,7 @@ export const CreateEventModule: React.FC = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <h2>Data Event Baru</h2>
             <br />
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 justify-items-stretch w-full">
+            <div className="flex flex-col md:grid md:grid-cols-5 gap-4 justify-items-stretch w-full">
               <div className="col-span-2">
                 <h4>Judul Event</h4>
               </div>
