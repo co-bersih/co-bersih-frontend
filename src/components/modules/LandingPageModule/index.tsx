@@ -1,7 +1,7 @@
 import React from 'react'
-import { HeroModule } from './sections/Hero'
-import { ActionModule } from './sections/Action'
-import { WalkingText } from './sections/Walking'
+import { HeroModule } from './sections/hero'
+import { ActionModule } from './sections/action'
+import { WalkingText } from './sections/walking'
 import { FaqModule } from './sections/Faq'
 
 export const LandingPageModule: React.FC = () => {
