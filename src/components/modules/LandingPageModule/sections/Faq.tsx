@@ -15,9 +15,11 @@ export const FaqModule: React.FC = () => {
           {faqs.map((item, index) => (
             <Accordion.Panel key={index}>
               <Accordion.Title className="text-black focus:bg-mintGreen border-transparent focus:border-transparent focus:ring-0 rounded-t-xl">
-                <h4>{item.question}</h4>
+                <div>
+                  <h4> {item.question}</h4>
+                </div>
               </Accordion.Title>
-              <Accordion.Content className="bg-blue-light active:bg-mintGreen border-transparent focus:border-transparent focus:ring-0 rounded-b-xl">
+              <Accordion.Content className="active:bg-mintGreen border-transparent focus:border-transparent focus:ring-0 rounded-b-xl">
                 <p>{item.answer}</p>
               </Accordion.Content>
             </Accordion.Panel>
