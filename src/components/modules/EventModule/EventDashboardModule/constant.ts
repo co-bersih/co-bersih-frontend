@@ -1,5 +1,5 @@
 export enum DashboardTabs {
-  participants = "participants",
-  staff = "staff",
-  token = "token"
+  participants = 'participants',
+  staff = 'staff',
+  token = 'token',
 }
