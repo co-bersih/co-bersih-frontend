@@ -1,7 +1,7 @@
 export const TokenDashboardMenu: React.FC = () => {
-  return(
+  return (
     <>
       <h3>token</h3>
     </>
-  );
+  )
 }

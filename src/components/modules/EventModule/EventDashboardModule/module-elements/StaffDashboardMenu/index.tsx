@@ -1,6 +1,6 @@
-import { useAuthContext } from "@contexts";
-import { useState } from "react";
-import axios from "axios";
+import { useAuthContext } from '@contexts'
+import { useState } from 'react'
+import axios from 'axios'
 
 export const StaffDashboardMenu: React.FC = () => {
   const [staffs, setStaffs] = useState<string[] | null>(null) // existing
@@ -15,9 +15,9 @@ export const StaffDashboardMenu: React.FC = () => {
     // post to endpoint
   }
 
-  return(
+  return (
     <>
       <h3>staff</h3>
     </>
-  );
+  )
 }

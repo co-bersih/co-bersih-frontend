@@ -1,7 +1,7 @@
 export const ParticipantDashboardMenu: React.FC = () => {
-  return(
+  return (
     <>
       <h3>participants</h3>
     </>
-  );
+  )
 }
