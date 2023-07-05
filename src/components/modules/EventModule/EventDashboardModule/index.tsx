@@ -1,15 +1,48 @@
 import { Button } from '@elements'
-import React, { useState } from 'react'
-import { ToastContainer } from 'react-toastify'
+import React, { useEffect, useState } from 'react'
+import { ToastContainer, toast } from 'react-toastify'
 import { DashboardTabs } from './constant'
+import IEvent from 'src/components/modules/EventModule/module-elements/EventCard/interface'
 import {
   ParticipantDashboardMenu,
   StaffDashboardMenu,
   TokenDashboardMenu,
 } from './module-elements'
+import { useAuthContext } from '@contexts'
+import axios from 'axios'
+import { cfg } from 'src/config'
+import { useRouter } from 'next/router'
+import { Spinner } from 'flowbite-react'
 
 export const EventDashboardModule: React.FC = () => {
   const [tab, setTab] = useState<DashboardTabs>(DashboardTabs.participants)
+  const [data, setData] = useState<IEvent>()
+  const { tokens, loading: authLoading, user } = useAuthContext()
+
+  const router = useRouter()
+  const { id } = router.query
+
+  function fetchEvent() {
+    axios
+      .get(`${cfg.API}/api/v1/events/${id}/`)
+      .then((res) => {
+        setData(res.data)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  useEffect(() => {
+    if (!authLoading && router.isReady) {
+      fetchEvent()
+    }
+  }, [tokens, authLoading, router.isReady])
+
+  useEffect(() => {
+    if (data && data.host.id !== user?.id) {
+      toast.error('Anda tidak memiliki akses ke halaman tersebut.')
+      router.push('/events')
+    }
+  }, [data])
 
   return (
     <>
@@ -54,7 +87,15 @@ export const EventDashboardModule: React.FC = () => {
             ) : (
               <></>
             )}
-            {tab === DashboardTabs.staff ? <StaffDashboardMenu /> : <></>}
+            {tab === DashboardTabs.staff ? (
+              data ? (
+                <StaffDashboardMenu {...data} />
+              ) : (
+                <Spinner />
+              )
+            ) : (
+              <></>
+            )}
             {tab === DashboardTabs.token ? <TokenDashboardMenu /> : <></>}
           </div>
         </div>

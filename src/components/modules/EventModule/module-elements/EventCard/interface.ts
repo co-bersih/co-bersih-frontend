@@ -21,6 +21,7 @@ interface IEvent {
   panitia_ids: string[]
   support_ids: string[]
   total_participant?: number
+  staffs?: string[]
 }
 
 export default IEvent
