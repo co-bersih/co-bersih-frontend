@@ -88,9 +88,9 @@ export const CreateEventModule: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!authLoading && (!user || !user.email)) {
+    if (!authLoading && !user) {
       toast.error('Anda tidak bisa mengakses halaman tersebut')
-      router.push('/events')
+      router.push('/auth/login')
     }
   }, [])
 

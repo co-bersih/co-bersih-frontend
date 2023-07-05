@@ -15,13 +15,15 @@ import { BiSolidLeaf } from 'react-icons/bi'
 import { MdReport } from 'react-icons/md'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { RiGroupFill, RiHome2Line, RiTreasureMapFill } from 'react-icons/ri'
+import { CreateReportModal } from '../ReportModule/module-elements/CreateReportModal'
+import { LoginGuardModal } from '../AuthModule/module-elements'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
 })
 
 export const EventModule: React.FC = () => {
-  const { tokens } = useAuthContext()
+  const { tokens, loading, user } = useAuthContext()
   const [searchQuery, setSearchQuery] = useState<string>('')
   const router = useRouter()
   const [mapData, setMapData] = useState<IEvent[]>([dummyEvent, dummyEvent2]) // TODO
@@ -30,6 +32,8 @@ export const EventModule: React.FC = () => {
   const [pages, setPages] = useState<Pages>({})
   const [toggleValue, setToggleValue] = useState(0)
   const [searchValue, setSearchValue] = useState('')
+  const [isLoginGuardModal, setIsLoginGuardModal] = useState<boolean>(false)
+  const [isReportModal, setIsReportModal] = useState<boolean>(false)
 
   const onPageChange = (page: number) => {
     setPages((prev) => ({ ...prev, current: page }))
@@ -90,6 +94,22 @@ export const EventModule: React.FC = () => {
     // find the event
   }
 
+  const handleClickCreateEvent = () => {
+    if (!loading && !user) {
+      setIsLoginGuardModal(true)
+    } else {
+      router.push('/events/new')
+    }
+  }
+
+  const handleClickCreateReport = () => {
+    if (!loading && !user) {
+      setIsLoginGuardModal(true)
+    } else {
+      setIsReportModal(true)
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col bg-white">
@@ -111,18 +131,14 @@ export const EventModule: React.FC = () => {
             <Button
               variant={'greeny'}
               className="h-full"
-              onClick={() => {
-                router.push('/events/new')
-              }}
+              onClick={handleClickCreateEvent}
               rightIcon={<BiSolidLeaf />}
             >
               <h4>Buat Event</h4>
             </Button>
             <Button
               variant={'deserted'}
-              onClick={() => {
-                router.push('/events/new')
-              }}
+              onClick={handleClickCreateReport}
               rightIcon={<MdReport />}
             >
               <h4>Buat Report</h4>
@@ -188,6 +204,14 @@ export const EventModule: React.FC = () => {
           />
         </div>
       </div>
+      <CreateReportModal
+        showModal={isReportModal}
+        onClose={() => setIsReportModal(false)}
+      />
+      <LoginGuardModal
+        showModal={isLoginGuardModal}
+        onClose={() => setIsLoginGuardModal(false)}
+      />
     </>
   )
 }

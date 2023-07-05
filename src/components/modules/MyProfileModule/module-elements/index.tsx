@@ -1,1 +1,2 @@
-export * from './'
+export * from './ChangePasswordModal'
+export * from './EditProfileModal'
