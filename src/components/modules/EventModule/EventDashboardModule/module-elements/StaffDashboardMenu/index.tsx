@@ -7,6 +7,7 @@ import IEvent from 'src/components/modules/EventModule/module-elements/EventCard
 import { TextInput } from 'flowbite-react'
 import { Button } from '@elements'
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai'
+import { toast } from 'react-toastify'
 
 export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
   const router = useRouter()
@@ -17,7 +18,7 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
 
   function handleAddStaff() {
     const body = {
-      staff_email: textInput,
+      "staff_email": textInput,
     }
     const config: AxiosRequestConfig = {
       headers: {
@@ -25,25 +26,48 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
       },
     }
     axios
-      .post(`${cfg.API}/api/v1/events/${id}`, body, config)
+      .post(`${cfg.API}/api/v1/events/${id}/staffs/`, body, config)
       .then((res) => {
-        console.log(res)
+        toast.success('Staf berhasil ditambahkan')
+        setStaffs((prev) => ( prev ? [...prev, textInput] : [textInput]))
         setTextInput('')
       })
       .catch((err) => {
-        console.log(err)
+        if (err.response?.status === 401) {
+          toast.error('Mohon untuk me-refresh halaman ini.')
+        } else if (err.response.data.errors.length > 0) {
+          toast.error(
+            `${err.response.data.errors[0].attr} error: ${err.response.data.errors[0].detail}`
+          )
+        } else {
+          toast.error('Telah terjadi kesalahan.')
+        }
       })
   }
 
   function handleRemoveStaff(staffEmail: string) {
-    // TODO
+    const config: AxiosRequestConfig = {
+      headers: {
+        Authorization: `Bearer ${tokens?.access}`,
+      },
+    }
     axios
-      .delete(`api/v1/events/${id}/staffs/${staffEmail}`)
+      .delete(`${cfg.API}/api/v1/events/${id}/staffs/${staffEmail}/`, config)
       .then((res) => {
+        toast.success('Staf berhasil dihapus')
+        setStaffs((prev) => ( prev ? prev?.filter((val, i) => val !== staffEmail) : []))
         console.log(res)
       })
       .catch((err) => {
-        console.log(err)
+        if (err.response?.status === 401) {
+          toast.error('Mohon untuk me-refresh halaman ini.')
+        } else if (err.response.data.errors.length > 0) {
+          toast.error(
+            `${err.response.data.errors[0].attr} error: ${err.response.data.errors[0].detail}`
+          )
+        } else {
+          toast.error('Telah terjadi kesalahan.')
+        }
       })
   }
 
@@ -53,18 +77,7 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
 
   useEffect(() => {
     if (event) {
-      // fetchExistingStaffs()
-      // TODO
-      setStaffs([
-        'me_bbbb@mail.com',
-        'you@mail.com',
-        'test2@ui.ac.id',
-        'awooga@gmail.id',
-        'two@outlook.com',
-        'test_aaaaa@mail.com',
-        'whenthe@mail.com',
-        'more@mail.com',
-      ])
+      fetchExistingStaffs()
     }
   }, [event])
 
@@ -106,7 +119,7 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
           placeholder="Alamat email staf yang ingin ditambahkan"
           className="w-full sm:w-[50%]"
         />
-        <Button variant="greeny" rightIcon={<AiOutlinePlusCircle />}>
+        <Button variant="greeny" rightIcon={<AiOutlinePlusCircle />} onClick={() => handleAddStaff()} type='button'>
           Add Staff
         </Button>
       </form>
