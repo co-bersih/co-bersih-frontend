@@ -12,15 +12,16 @@ import { useAuthContext } from '@contexts'
 import axios from 'axios'
 import { cfg } from 'src/config'
 import { useRouter } from 'next/router'
-import { Spinner } from 'flowbite-react'
+import { Breadcrumb, Spinner } from 'flowbite-react'
+import { BreadcrumbItem } from 'flowbite-react/lib/esm/components/Breadcrumb/BreadcrumbItem'
 
 export const EventDashboardModule: React.FC = () => {
-  const [tab, setTab] = useState<DashboardTabs>(DashboardTabs.participants)
-  const [data, setData] = useState<IEvent>()
-  const { tokens, loading: authLoading, user } = useAuthContext()
-
   const router = useRouter()
   const { id } = router.query
+
+  const [tab, setTab] = useState<DashboardTabs>(DashboardTabs.staff)
+  const [data, setData] = useState<IEvent>()
+  const { tokens, loading: authLoading, user } = useAuthContext()
 
   function fetchEvent() {
     axios
@@ -47,12 +48,19 @@ export const EventDashboardModule: React.FC = () => {
   return (
     <>
       <ToastContainer />
-      <div className="flex flex-col bg-white relative">
-        <div className="relative min-h-screen flex flex-col gap-x-12 md:flex-row pt-24 pb-8 px-4 sm:px-12 md:px-32 lg:px-40">
+      <div className="flex flex-col bg-white relative gap-x-12 pt-24 pb-8 px-4 sm:px-12 md:px-32 lg:px-40 gap-y-2">
+        <Breadcrumb>
+          <Breadcrumb.Item href="/events">Events</Breadcrumb.Item>
+          <Breadcrumb.Item href={`/events/${id}`}>{id}</Breadcrumb.Item>
+          <Breadcrumb.Item href={`/events/${id}/dashboard`}>
+            Dashboard
+          </Breadcrumb.Item>
+        </Breadcrumb>
+        <div className="relative min-h-screen flex flex-col md:flex-row">
           {/* sidebar */}
           <div className="border border-black p-4 rounded-xl flex flex-col gap-y-4">
             <h2>Event Dashboard</h2>
-            <Button
+            {/* <Button
               variant={
                 tab === DashboardTabs.participants ? 'greeny' : 'primary'
               }
@@ -61,7 +69,7 @@ export const EventDashboardModule: React.FC = () => {
               }}
             >
               Participants
-            </Button>
+            </Button> */}
             <Button
               variant={tab === DashboardTabs.staff ? 'greeny' : 'primary'}
               onClick={() => {
@@ -76,17 +84,17 @@ export const EventDashboardModule: React.FC = () => {
                 setTab(DashboardTabs.token)
               }}
             >
-              Token
+              Peserta
             </Button>
           </div>
 
           {/* sidebar */}
           <div className="rounded-xl bg-neutral-50 w-full p-4">
-            {tab === DashboardTabs.participants ? (
-              <ParticipantDashboardMenu />
+            {/* {tab === DashboardTabs.participants ? (
+              data ? <ParticipantDashboardMenu {...data} /> : <Spinner />
             ) : (
               <></>
-            )}
+            )} */}
             {tab === DashboardTabs.staff ? (
               data ? (
                 <StaffDashboardMenu {...data} />
