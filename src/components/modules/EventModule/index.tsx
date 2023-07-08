@@ -24,7 +24,6 @@ const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
 
 export const EventModule: React.FC = () => {
   const { tokens, loading, user } = useAuthContext()
-  const [searchQuery, setSearchQuery] = useState<string>('')
   const router = useRouter()
   const [mapData, setMapData] = useState<IEvent[]>([dummyEvent, dummyEvent2]) // TODO
   const [catalogData, setCatalogData] = useState<IEvent[]>([])
@@ -43,11 +42,9 @@ export const EventModule: React.FC = () => {
     // TODO: refetch for new range
   }
 
-  function fetchEvents() {
+  const fetchEvents = (params: any) => {
     axios
-      .get(`${cfg.API}/api/v1/events/`, {
-        params: { page: pages.current },
-      })
+      .get(`${cfg.API}/api/v1/events/`, { params })
       .then((res) => {
         setPages((prev) => ({
           count: res.data.count,
@@ -61,7 +58,8 @@ export const EventModule: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchEvents()
+    const params = { page: pages.current }
+    fetchEvents(params)
   }, [pages.current, tokens])
 
   useEffect(() => {
@@ -70,28 +68,15 @@ export const EventModule: React.FC = () => {
     })
   }, [])
 
-  function onSearchQueryChange(e: ChangeEvent<HTMLInputElement>): void {
-    e.preventDefault()
-    setSearchQuery(e.target.value)
-    // TODO
-  }
-
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSearchValue(event.target.value)
   }
 
-  const handleSearchInputSubmit = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
-    if (event.key === 'Enter') {
-      // find the event
-    }
-  }
-
   const handleSearchIconClick = () => {
-    // find the event
+    const params = { search: searchValue }
+    fetchEvents(params)
   }
 
   const handleClickCreateEvent = () => {
@@ -163,7 +148,6 @@ export const EventModule: React.FC = () => {
                   className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
                   value={searchValue}
                   onChange={handleSearchInputChange}
-                  onKeyDown={handleSearchInputSubmit}
                 />
                 <span
                   className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
@@ -181,13 +165,6 @@ export const EventModule: React.FC = () => {
               rightIconR={<RiTreasureMapFill color="white" size={18} />}
             />
           </div>
-          {/* <TextInput 
-            className='mb-4 w-[90vw] sm:w-[75vw] md:w-[50vw]'
-            placeholder='Cari event berdasarkan judul...'
-            rightIcon={MagnifyingGlass as React.FC<React.SVGProps<SVGSVGElement>>}
-            value={searchQuery}
-            onChange={onSearchQueryChange}
-          /> */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
             {catalogData.map((event, idx) => (
               <EventCard {...event} key={idx} />
