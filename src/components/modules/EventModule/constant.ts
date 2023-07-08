@@ -8,7 +8,7 @@ export const dummyEvent: IEvent = {
     name: 'bigguy',
     email: '',
     bio: 'guy@mail.com',
-    profile_image: '',
+    profile_image_url: '',
     date_joined: '',
   },
   name: 'Dummy Event',
@@ -22,9 +22,10 @@ export const dummyEvent: IEvent = {
   longitude: 106.823,
   start_date: new Date(2010, 5, 2),
   end_date: new Date(2010, 5, 2),
-  panitia_ids: [],
+  staffs_ids: [],
   support_ids: [],
   total_participant: 502,
+  is_verified: true,
 }
 
 export const dummyEvent2: IEvent = {
@@ -34,7 +35,7 @@ export const dummyEvent2: IEvent = {
     name: 'bigguy',
     email: '',
     bio: 'guy@mail.com',
-    profile_image: '',
+    profile_image_url: '',
     date_joined: '',
   },
   name: 'Dummy Event 2 for Earth Day 2011',
@@ -48,9 +49,10 @@ export const dummyEvent2: IEvent = {
   longitude: 106.223,
   start_date: new Date(2011, 5, 2),
   end_date: new Date(2011, 5, 2),
-  panitia_ids: [],
+  staffs_ids: [],
   support_ids: [],
   total_participant: 19,
+  is_verified: true,
 }
 
 export const dummyLoc: LatLngLiteral = { lat: 0, lng: 0 }

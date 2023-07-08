@@ -10,7 +10,7 @@ import IEvent from '../module-elements/EventCard/interface'
 import dynamic from 'next/dynamic'
 import { MESSAGES } from './constant'
 import { useAuthContext } from '@contexts'
-import { AiOutlineEdit } from 'react-icons/ai'
+import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
@@ -39,10 +39,32 @@ export const EventDetailModule: React.FC = () => {
   useEffect(() => {
     if (!data || !data?.end_date) {
       return
+    } else if (!data.is_verified) {
+      setTipMessage(MESSAGES.UNVERIFIED)
     } else if (new Date(Date.now()) > new Date(data.end_date)) {
       setTipMessage(MESSAGES.FINISHED)
     }
   }, [data?.end_date])
+
+  useEffect(() => {
+    if (user && id) {
+      axios
+        .head(`${cfg.API}/api/v1/user/${user.id}/events/${id}`)
+        .then((response) => {
+          const statusCode = response.request.status
+          if (statusCode === 200) {
+            console.log('Pengguna telah bergabung dengan acara')
+          } else if (statusCode === 404) {
+            console.log('Pengguna belum bergabung dengan acara')
+          } else {
+            console.log('Permintaan gagal dengan status kode:', statusCode)
+          }
+        })
+        .catch((error) => {
+          console.log('Terjadi kesalahan:', error)
+        })
+    }
+  }, [user, id])
 
   function handleJoin() {
     const config = {
@@ -60,7 +82,7 @@ export const EventDetailModule: React.FC = () => {
         console.log(JSON.stringify(response.data))
       })
       .catch((error) => {
-        console.log(error.response.data.errors[0].detail)
+        console.log(error.response.data)
         toast.error(error.response.data, {
           position: toast.POSITION.TOP_CENTER,
         })
@@ -133,24 +155,28 @@ export const EventDetailModule: React.FC = () => {
               </div>
               <hr />
               <br />
-              <div className="flex flex-col sm:flex-row justify-center gap-y-2 gap-x-[4%]">
-                <Button
-                  variant={'greeny'}
-                  rightIcon={Enter({ size: 'w-[20px] h-[20px]' })}
-                  className="py-[0.4rem]"
-                  disabled={!data || tipMessage !== ''}
-                  onClick={handleJoin}
-                >
-                  <h4>Bergabung</h4>
-                </Button>
-                <Button
-                  variant={'deserted'}
-                  rightIcon={Money({ size: 'w-[20px] h-[20px]' })}
-                  disabled={!data || tipMessage !== ''}
-                >
-                  <h4>Dukung</h4>
-                </Button>
-              </div>
+              {data?.host.email === user?.email ? (
+                <></>
+              ) : (
+                <div className="flex flex-col sm:flex-row justify-center gap-y-2 gap-x-[4%]">
+                  <Button
+                    variant={'greeny'}
+                    rightIcon={Enter({ size: 'w-[20px] h-[20px]' })}
+                    className="py-[0.4rem]"
+                    disabled={!data || tipMessage !== ''}
+                    onClick={handleJoin}
+                  >
+                    <h4>Bergabung</h4>
+                  </Button>
+                  <Button
+                    variant={'deserted'}
+                    rightIcon={Money({ size: 'w-[20px] h-[20px]' })}
+                    disabled={!data || tipMessage !== ''}
+                  >
+                    <h4>Dukung</h4>
+                  </Button>{' '}
+                </div>
+              )}
 
               {/* only display participants if non-null and > 0 */}
               {data?.total_participant ? (
