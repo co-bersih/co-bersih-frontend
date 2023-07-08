@@ -5,8 +5,7 @@ import { AiTwotoneEdit } from 'react-icons/ai'
 import Image from 'next/image'
 import { TAB_OPTIONS } from './constant'
 import { useAuthContext } from '@contexts'
-import { EditProfileModal } from './module-elements/EditProfileModal'
-import { ChangePasswordModal } from './module-elements/ChangePasswordModal'
+import { ChangePasswordModal, EditProfileModal } from './module-elements'
 
 export const MyProfileModule: React.FC = () => {
   const { user } = useAuthContext()
