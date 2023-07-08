@@ -3,13 +3,10 @@ export interface createReportModalProps {
   onClose: () => void
 }
 
-export interface CreateEventForm {
-  name: string
+export interface CreateReportForm {
+  title: string
   description: string
-  preparation: string
   image: FileList
   latitude: number
   longitude: number
-  start_date: string // ?
-  end_date: string // ?
 }

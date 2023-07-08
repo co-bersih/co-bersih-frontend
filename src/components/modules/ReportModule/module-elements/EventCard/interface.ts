@@ -1,0 +1,26 @@
+// eslint-disable-next-line no-unused-vars
+interface IEvent {
+  id: string
+  host: {
+    id: string
+    email: string
+    name: string
+    date_joined: string
+    bio: string
+    profile_image_url: string
+  }
+  name: string
+  total_participant?: number
+  description: string
+  preparation: string
+  image_url: string
+  latitude: number
+  longitude: number
+  start_date: Date
+  end_date: Date
+  is_verified: boolean
+  staffs_ids: string[]
+  support_ids: string[]
+}
+
+export default IEvent
