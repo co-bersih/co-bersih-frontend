@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic'
 import { MESSAGES } from './constant'
 import { useAuthContext } from '@contexts'
 import { AiOutlineEdit } from 'react-icons/ai'
+import { ToastContainer, toast } from 'react-toastify'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -22,7 +23,7 @@ export const EventDetailModule: React.FC = () => {
   const [data, setData] = useState<IEvent>()
   const [tipMessage, setTipMessage] = useState<string>('')
   const { id } = router.query
-  const { user } = useAuthContext()
+  const { user, tokens } = useAuthContext()
 
   useEffect(() => {
     if (id) {
@@ -43,8 +44,32 @@ export const EventDetailModule: React.FC = () => {
     }
   }, [data?.end_date])
 
+  function handleJoin() {
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${cfg.API}/api/v1/events/${id}/join/`,
+      headers: {
+        Authorization: `Bearer ${tokens?.access}`,
+      },
+    }
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data))
+      })
+      .catch((error) => {
+        console.log(error.response.data.errors[0].detail)
+        toast.error(error.response.data, {
+          position: toast.POSITION.TOP_CENTER,
+        })
+      })
+  }
+
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-col bg-mintGreen">
         <div className="px-3 sm:px-8 md:px-32 lg:px-40 relative min-h-[105vh] flex flex-col gap-4 items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-white pt-28 pb-8">
           {data?.host.email === user?.email ? (
@@ -56,7 +81,7 @@ export const EventDetailModule: React.FC = () => {
               }}
               rightIcon={<AiOutlineEdit size="20" className="cursor-pointer" />}
             >
-              Edit
+              <h4>Edit Event</h4>
             </Button>
           ) : (
             <></>
@@ -114,6 +139,7 @@ export const EventDetailModule: React.FC = () => {
                   rightIcon={Enter({ size: 'w-[20px] h-[20px]' })}
                   className="py-[0.4rem]"
                   disabled={!data || tipMessage !== ''}
+                  onClick={handleJoin}
                 >
                   <h4>Bergabung</h4>
                 </Button>
@@ -159,7 +185,7 @@ export const EventDetailModule: React.FC = () => {
           />
           {tab === 0 && data ? (
             <div className="bg-white rounded-b-lg rounded-tr-lg p-12">
-              <h3>Description</h3>
+              <h3>Deskripsi</h3>
               <p>{data.description}</p>
               <br className="mt-4 mb-2" />
               <h3>Persiapan yang Diperlukan</h3>
