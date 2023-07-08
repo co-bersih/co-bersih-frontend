@@ -18,7 +18,7 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
 
   function handleAddStaff() {
     const body = {
-      "staff_email": textInput,
+      staff_email: textInput,
     }
     const config: AxiosRequestConfig = {
       headers: {
@@ -29,7 +29,7 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
       .post(`${cfg.API}/api/v1/events/${id}/staffs/`, body, config)
       .then((res) => {
         toast.success('Staf berhasil ditambahkan')
-        setStaffs((prev) => ( prev ? [...prev, textInput] : [textInput]))
+        setStaffs((prev) => (prev ? [...prev, textInput] : [textInput]))
         setTextInput('')
       })
       .catch((err) => {
@@ -55,7 +55,9 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
       .delete(`${cfg.API}/api/v1/events/${id}/staffs/${staffEmail}/`, config)
       .then((res) => {
         toast.success('Staf berhasil dihapus')
-        setStaffs((prev) => ( prev ? prev?.filter((val, i) => val !== staffEmail) : []))
+        setStaffs((prev) =>
+          prev ? prev?.filter((val, i) => val !== staffEmail) : []
+        )
         console.log(res)
       })
       .catch((err) => {
@@ -119,7 +121,12 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
           placeholder="Alamat email staf yang ingin ditambahkan"
           className="w-full sm:w-[50%]"
         />
-        <Button variant="greeny" rightIcon={<AiOutlinePlusCircle />} onClick={() => handleAddStaff()} type='button'>
+        <Button
+          variant="greeny"
+          rightIcon={<AiOutlinePlusCircle />}
+          onClick={() => handleAddStaff()}
+          type="button"
+        >
           Add Staff
         </Button>
       </form>

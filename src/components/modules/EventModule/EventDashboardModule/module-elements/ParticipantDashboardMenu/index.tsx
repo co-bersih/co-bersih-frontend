@@ -1,4 +1,4 @@
-import IEvent from "../../../module-elements/EventCard/interface"
+import IEvent from '../../../module-elements/EventCard/interface'
 
 export const ParticipantDashboardMenu: React.FC<IEvent> = (event) => {
   return (

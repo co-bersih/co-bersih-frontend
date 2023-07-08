@@ -23,7 +23,6 @@ export const EventDashboardModule: React.FC = () => {
   const [data, setData] = useState<IEvent>()
   const { tokens, loading: authLoading, user } = useAuthContext()
 
-
   function fetchEvent() {
     axios
       .get(`${cfg.API}/api/v1/events/${id}/`)
@@ -51,12 +50,8 @@ export const EventDashboardModule: React.FC = () => {
       <ToastContainer />
       <div className="flex flex-col bg-white relative gap-x-12 pt-24 pb-8 px-4 sm:px-12 md:px-32 lg:px-40 gap-y-2">
         <Breadcrumb>
-          <Breadcrumb.Item href="/events">
-            Events
-          </Breadcrumb.Item>
-          <Breadcrumb.Item href={`/events/${id}`}>
-            {id}
-          </Breadcrumb.Item>
+          <Breadcrumb.Item href="/events">Events</Breadcrumb.Item>
+          <Breadcrumb.Item href={`/events/${id}`}>{id}</Breadcrumb.Item>
           <Breadcrumb.Item href={`/events/${id}/dashboard`}>
             Dashboard
           </Breadcrumb.Item>
@@ -101,7 +96,11 @@ export const EventDashboardModule: React.FC = () => {
               <></>
             )} */}
             {tab === DashboardTabs.staff ? (
-              data ? <StaffDashboardMenu {...data} />: <Spinner />
+              data ? (
+                <StaffDashboardMenu {...data} />
+              ) : (
+                <Spinner />
+              )
             ) : (
               <></>
             )}
