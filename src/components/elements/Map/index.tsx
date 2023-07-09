@@ -3,6 +3,7 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { MapProps } from './interface'
 import EventPopup from './Popup/EventPopup'
+import ReportPopup from './Popup/ReportPopup'
 import { useMemo, useRef } from 'react'
 
 const defaultIcon = L.icon({
@@ -11,6 +12,12 @@ const defaultIcon = L.icon({
 })
 const eventIcon = L.icon({
   iconUrl: '/assets/icons/leaflet/marker-event.svg',
+  shadowUrl: '/assets/icons/leaflet/marker-shadow-lg.png',
+  crossOrigin: false,
+})
+
+const reportIcon = L.icon({
+  iconUrl: '/assets/icons/leaflet/marker-report.svg',
   shadowUrl: '/assets/icons/leaflet/marker-shadow-lg.png',
   crossOrigin: false,
 })
@@ -55,6 +62,19 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
             <></>
           ) : (
             <EventPopup event={event} {...options} />
+          )}
+        </Marker>
+      ))}
+      {props.reports?.map((report, idx) => (
+        <Marker
+          position={{ lat: report.latitude, lng: report.longitude }}
+          icon={reportIcon}
+          key={idx}
+        >
+          {props.disablePopup ? (
+            <></>
+          ) : (
+            <ReportPopup report={report} {...options} />
           )}
         </Marker>
       ))}

@@ -8,6 +8,7 @@ import {
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { validateJwtExp } from '@utils'
+import { cfg } from 'src/config'
 
 const AuthContext = createContext({} as AuthContextInterface)
 
@@ -42,7 +43,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       const config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/user/`,
+        url: `${cfg.API}/api/v1/user/`,
         headers: {
           Authorization: `Bearer ${tokens?.access}`,
         },
