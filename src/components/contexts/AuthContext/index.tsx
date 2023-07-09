@@ -79,7 +79,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         try {
           axios
             .post(
-              `${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/token/refresh/`,
+              `${cfg.API}/api/v1/token/refresh/`,
               { refresh: tokens.refresh }
             )
             .then((response) => {

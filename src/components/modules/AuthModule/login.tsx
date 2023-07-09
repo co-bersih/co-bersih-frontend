@@ -9,6 +9,7 @@ import { useAuthContext } from '@contexts'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useRouter } from 'next/router'
+import { cfg } from 'src/config'
 
 export const LoginModule: React.FC = () => {
   const [data, setData] = useState<ILoginData>(EMPTY_LOGIN_DATA)
@@ -25,7 +26,7 @@ export const LoginModule: React.FC = () => {
   function handleLogin() {
     setIsLoading(true)
     axios
-      .post(`${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/user/login/`, data)
+      .post(`${cfg.API}/api/v1/user/login/`, data)
       .then((response) => {
         toast.success('Successfully log in.', {
           position: toast.POSITION.TOP_CENTER,

@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios'
 import { useRouter } from 'next/router'
+import { cfg } from 'src/config'
 
 export const RegisterModule: React.FC = () => {
   const [data, setData] = useState<IRegisterData>(EMPTY_REGISTER_DATA)
@@ -42,7 +43,7 @@ export const RegisterModule: React.FC = () => {
 
       axios
         .post(
-          `${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/user/register/`,
+          `${cfg.API}/api/v1/user/register/`,
           formData,
           {
             headers: {
