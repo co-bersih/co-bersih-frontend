@@ -1,10 +1,12 @@
 import L from 'leaflet'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { MapProps } from './interface'
 import EventPopup from './Popup/EventPopup'
 import ReportPopup from './Popup/ReportPopup'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useEffect } from 'react'
+import { Button } from '../Button'
+import { BiCurrentLocation } from 'react-icons/bi'
 
 const defaultIcon = L.icon({
   iconUrl: '/assets/icons/leaflet/marker-icon.png',
@@ -41,6 +43,32 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
     []
   )
 
+  const MapWrapper = () => {
+    const map = useMap()
+    /* eslint-disable react/prop-types */
+    useEffect(() => {
+      props.onMapReady && props.onMapReady(map)
+    }, [props.onMapReady, map])
+
+    const locateUser = () => {
+      map.locate({ setView: true, maxZoom: 16 })
+    }
+
+    return (
+      <div>
+        <Button
+          variant={'ghost'}
+          type="button"
+          className="absolute top-4 right-4 z-[400] bg-[#CFE4A5] hover:bg-[#CFE4A5]/80 text-black hover:text-black/80"
+          rightIcon={<BiCurrentLocation size="22" />}
+          onClick={locateUser}
+        >
+          <h4>Ambil Dari Lokasi Saya</h4>
+        </Button>
+      </div>
+    )
+  }
+
   return (
     <MapContainer
       center={props.center}
@@ -52,6 +80,7 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <MapWrapper /> {/* Add MapWrapper component */}
       {props.events?.map((event, idx) => (
         <Marker
           position={{ lat: event.latitude, lng: event.longitude }}
@@ -92,7 +121,7 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
           {props.disablePopup ? (
             <></>
           ) : (
-            <Popup>Event akan dimulai disini!</Popup>
+            <Popup>Kegiatan akan dimulai disini!</Popup>
           )}
         </Marker>
       ) : (

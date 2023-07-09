@@ -25,12 +25,13 @@ const EventCard: React.FC<IEvent> = (event) => {
           </p>
           <div className="flex flex-row gap-x-2 mb-2">
             <Participant size={''} />
-            <p>{event.total_participant!} peserta</p>
+            <p>{event.total_participant!} orang peserta</p>
           </div>
           <div className="flex flex-row gap-x-2 md:mb-4 lg:mb-8">
             <Calendar size={''} />
             <p>
-              Starts {formatter.formatDateTimeWIB(new Date(event.start_date))}
+              Dimulai pada{' '}
+              {formatter.formatDateTimeWIB(new Date(event.start_date))}
               {/* -{' '}
             {formatter.formatDateTimeWIB(event.end_date)} */}
             </p>
@@ -44,7 +45,7 @@ const EventCard: React.FC<IEvent> = (event) => {
               }}
               rightIcon={<External size={'w-[10px] h-[10px]'} />}
             >
-              <h4>View Detail</h4>
+              <h4>Lihat Detail</h4>
             </Button>
           </div>
         </div>

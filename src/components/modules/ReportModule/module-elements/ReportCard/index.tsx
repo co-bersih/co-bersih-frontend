@@ -32,7 +32,7 @@ const ReportCard: React.FC<IReport> = (report) => {
               }}
               rightIcon={<External size={'w-[10px] h-[10px]'} />}
             >
-              <h4>View Detail</h4>
+              <h4>Lihat Detail</h4>
             </Button>
           </div>
         </div>

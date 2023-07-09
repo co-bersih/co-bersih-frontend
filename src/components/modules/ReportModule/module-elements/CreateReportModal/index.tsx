@@ -45,20 +45,6 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
     onClose()
   }
 
-  const handleGetLocation = () => {
-    setIsGettingLocation(true)
-    navigator.geolocation.getCurrentPosition(
-      (geo) => {
-        setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
-        setIsGettingLocation(false)
-      },
-      (error) => {
-        console.log(error)
-        setIsGettingLocation(false)
-      }
-    )
-  }
-
   const onSubmit = async (data: CreateReportForm) => {
     setIsLoading(true)
 
@@ -101,6 +87,12 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
       })
   }
 
+  const onMapReady = (map: L.Map) => {
+    setTimeout(() => {
+      map.invalidateSize()
+    }, 0)
+  }
+
   return (
     <>
       <div ref={rootRef} className="h-screen">
@@ -110,7 +102,7 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
           className="h-screen"
         >
           <div className="flex justify-between px-6 pt-5 items-center">
-            <h2>Buat Report</h2>
+            <h2>Buat Laporan</h2>
             <AiOutlineCloseCircle
               size="28"
               className="cursor-pointer"
@@ -159,21 +151,13 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
                         setLocationState: setLoc,
                       }}
                       className="w-full min-h-[350px] col-span-3 rounded-3xl"
+                      onMapReady={onMapReady}
                     />
                     <p className="pt-1 font-extralight">
                       ({loc.lat}, {loc.lng})
                     </p>
                     <input hidden {...register('latitude')} value={loc.lat} />
                     <input hidden {...register('longitude')} value={loc.lng} />
-                    <Button
-                      variant={'ghost'}
-                      className="bg-[#CFE4A5] hover:bg-[#CFE4A5]/80 text-black hover:text-black/80 w-fit justify-end"
-                      rightIcon={<MdLocationOn />}
-                      onClick={handleGetLocation}
-                      disabled={isGettingLocation}
-                    >
-                      <h4>Ambil Dari Lokasi Saya</h4>
-                    </Button>
                   </div>
                 ) : (
                   <p className=" bg-red-300 p-2 rounded-md">
