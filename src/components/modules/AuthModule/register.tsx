@@ -42,15 +42,11 @@ export const RegisterModule: React.FC = () => {
       formData.append('name', data.name)
 
       axios
-        .post(
-          `${cfg.API}/api/v1/user/register/`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        )
+        .post(`${cfg.API}/api/v1/user/register/`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
         .then((res) => {
           toast.success('Successfully registered user. Please log in...', {
             position: toast.POSITION.TOP_CENTER,

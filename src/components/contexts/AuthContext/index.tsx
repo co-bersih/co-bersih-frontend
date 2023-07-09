@@ -78,10 +78,9 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       if (tokens && !validateJwtExp(tokens.access)) {
         try {
           axios
-            .post(
-              `${cfg.API}/api/v1/token/refresh/`,
-              { refresh: tokens.refresh }
-            )
+            .post(`${cfg.API}/api/v1/token/refresh/`, {
+              refresh: tokens.refresh,
+            })
             .then((response) => {
               localStorage.setItem('accessToken', response.data.access)
               saveTokens(tokens.refresh, response.data.access)
