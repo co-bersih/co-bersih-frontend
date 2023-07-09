@@ -15,7 +15,6 @@
     "jsx": "preserve",
     "incremental": true,
     "baseUrl": ".",
-    "types": [],
     "paths": {
       "@icons": ["src/components/icons"],
       "@contexts": ["src/components/contexts"],

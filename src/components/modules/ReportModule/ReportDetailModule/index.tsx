@@ -10,6 +10,7 @@ import { useAuthContext } from '@contexts'
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify'
 import { IReport } from '../module-elements/ReportCard/interface'
+import { formatter } from '@utils'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -71,8 +72,21 @@ export const ReportDetailModule: React.FC = () => {
             )}
             <div className="w-full flex flex-col gap-y-2">
               <div className="flex flex-col sm:flex-row justify-between w-full">
-                <h4>Diselenggarakan oleh </h4>
+                <h4>Dilaporkan oleh </h4>
                 {data ? <p>{data.reporter.name}</p> : <Skeleton />}
+              </div>
+              <div className="flex flex-col sm:flex-row justify-between w-full">
+                <div className="flex gap-x-2 min-w-[25%]">
+                  <Clock size="w-[18px] h-[18px] md:w-[24px] md:h-[24px]" />
+                  <h4>Tanggal pelaporan</h4>
+                </div>
+                {data ? (
+                  <p>
+                    {formatter.formatDateTimeWIB(new Date(data.reported_date))}
+                  </p>
+                ) : (
+                  <Skeleton />
+                )}
               </div>
               <hr />
               <br />
@@ -86,15 +100,8 @@ export const ReportDetailModule: React.FC = () => {
                     className="py-[0.4rem]"
                     disabled={!data || tipMessage !== ''}
                   >
-                    <h4>Bergabung</h4>
+                    <h4>Create Event</h4>
                   </Button>
-                  <Button
-                    variant={'deserted'}
-                    rightIcon={Money({ size: 'w-[20px] h-[20px]' })}
-                    disabled={!data || tipMessage !== ''}
-                  >
-                    <h4>Dukung</h4>
-                  </Button>{' '}
                 </div>
               )}
 
@@ -116,21 +123,13 @@ export const ReportDetailModule: React.FC = () => {
             value={tab}
             setValue={setTab}
             className="flex justify-center w-full mt-12"
-            items={['Informasi', 'Forum Event']}
+            items={['Informasi']}
           />
           {tab === 0 && data ? (
             <div className="bg-white rounded-b-lg rounded-tr-lg p-12">
               <h3>Deskripsi</h3>
               <p>{data.description}</p>
               <br className="mt-4 mb-2" />
-            </div>
-          ) : (
-            <></>
-          )}
-          {tab === 1 && data ? (
-            <div>
-              <h3>Forum (TODO)</h3>
-              {/* todo */}
             </div>
           ) : (
             <></>
