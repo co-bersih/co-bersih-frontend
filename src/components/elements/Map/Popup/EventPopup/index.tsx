@@ -4,6 +4,7 @@ import { Popup } from 'react-leaflet'
 import Image from 'next/image'
 import { EventPopupProps } from '../interface'
 import { Calendar, External, Participant } from '@icons'
+import Link from 'next/link'
 
 const EventPopup: React.FC<EventPopupProps> = (props: EventPopupProps) => (
   <Popup maxWidth={props.maxWidth} minWidth={props.minWidth}>
@@ -26,13 +27,15 @@ const EventPopup: React.FC<EventPopupProps> = (props: EventPopupProps) => (
         <span>Starts on {formatter.formatDate(props.event.start_date)}</span>
       </div>
       <div className="flex flex-row justify-end">
-        <Button
-          className={'w-fit'}
-          variant={'greeny'}
-          rightIcon={<External size={'w-[10px] h-[10px]'} />}
-        >
-          View
-        </Button>
+        <Link href={`/events/${props.event.id}`}>
+          <Button
+            className={'w-fit'}
+            variant={'greeny'}
+            rightIcon={<External size={'w-[10px] h-[10px]'} />}
+          >
+            View
+          </Button>
+        </Link>
       </div>
     </div>
   </Popup>

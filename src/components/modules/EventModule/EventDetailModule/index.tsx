@@ -10,8 +10,12 @@ import IEvent from '../module-elements/EventCard/interface'
 import dynamic from 'next/dynamic'
 import { MESSAGES } from './constant'
 import { useAuthContext } from '@contexts'
-import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify'
+import {
+  AiFillDashboard,
+  AiOutlineDashboard,
+  AiOutlineEdit,
+} from 'react-icons/ai'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -95,16 +99,32 @@ export const EventDetailModule: React.FC = () => {
       <div className="flex flex-col bg-mintGreen">
         <div className="px-3 sm:px-8 md:px-32 lg:px-40 relative min-h-[105vh] flex flex-col gap-4 items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-white pt-28 pb-8">
           {data?.host.email === user?.email ? (
-            <Button
-              variant="primary"
-              className="ml-auto px-4"
-              onClick={() => {
-                router.push(`/events/${id}/edit`)
-              }}
-              rightIcon={<AiOutlineEdit size="20" className="cursor-pointer" />}
-            >
-              <h4>Edit Event</h4>
-            </Button>
+            <div className="flex ml-auto gap-x-2">
+              <Button
+                variant="primary"
+                className="ml-auto px-4"
+                onClick={() => {
+                  router.push(`/events/${id}/edit`)
+                }}
+                rightIcon={
+                  <AiOutlineEdit size="20" className="cursor-pointer" />
+                }
+              >
+                Edit
+              </Button>
+              <Button
+                variant="primary"
+                className="ml-auto px-4"
+                onClick={() => {
+                  router.push(`/events/${id}/dashboard`)
+                }}
+                rightIcon={
+                  <AiOutlineDashboard size="20" className="cursor-pointer" />
+                }
+              >
+                Dashboard
+              </Button>
+            </div>
           ) : (
             <></>
           )}

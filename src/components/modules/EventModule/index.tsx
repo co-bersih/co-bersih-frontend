@@ -17,6 +17,8 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import { RiGroupFill, RiHome2Line, RiTreasureMapFill } from 'react-icons/ri'
 import { CreateReportModal } from '../ReportModule/module-elements/CreateReportModal'
 import { LoginGuardModal } from '../AuthModule/module-elements'
+import { IReport } from '../ReportModule/module-elements/ReportCard/interface'
+import ReportCard from '../ReportModule/module-elements/ReportCard'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -26,6 +28,7 @@ export const EventModule: React.FC = () => {
   const { tokens, loading, user } = useAuthContext()
   const router = useRouter()
   const [mapData, setMapData] = useState<IEvent[]>([dummyEvent, dummyEvent2]) // TODO
+  const [reportData, setReportData] = useState<IReport[]>([]) // TODO
   const [catalogData, setCatalogData] = useState<IEvent[]>([])
   const [loc, setLoc] = useState<LatLngLiteral | undefined>(dummyLoc)
   const [pages, setPages] = useState<Pages>({})
@@ -57,9 +60,25 @@ export const EventModule: React.FC = () => {
       .catch((err) => console.log(err))
   }
 
+  const fetchReports = (params: any) => {
+    axios
+      .get(`${cfg.API}/api/v1/reports/`, { params })
+      .then((res) => {
+        setPages((prev) => ({
+          count: res.data.count,
+          next: res.data.next,
+          previous: res.data.previous,
+          current: prev.current,
+        }))
+        setReportData(res.data.results)
+      })
+      .catch((err) => console.log(err))
+  }
+
   useEffect(() => {
     const params = { page: pages.current }
     fetchEvents(params)
+    fetchReports(params)
   }, [pages.current, tokens])
 
   useEffect(() => {
@@ -104,6 +123,7 @@ export const EventModule: React.FC = () => {
             <DynamicMap
               center={loc}
               events={mapData}
+              reports={reportData}
               className="min-w-[80vw] lg:h-[500px] h-[400px] rounded-full"
             />
           ) : (
@@ -131,6 +151,7 @@ export const EventModule: React.FC = () => {
           </div>
           <br />
         </div>
+
         <div className="relative min-h-screen flex flex-col items-center py-8 lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] px-4 sm:px-10 md:px-20 space-y-5">
           <Toggle
             items={['Events', 'Reports']}
@@ -138,47 +159,97 @@ export const EventModule: React.FC = () => {
             setValue={setToggleValue}
             className="w-full"
           />
-          <div className="flex lg:flex-row md:flex-row flex-col w-full lg:items-center md:items-center items-end lg:space-x-4 md:space-x-4 space-x-0 lg:space-y-0 md:space-y-0 space-y-4">
-            <form className="w-full">
-              <div className="flex h-fit select-none items-center justify-center rounded-full tracking-wider transition-all border-2 border-darkGreen text-black bg-white">
-                <input
-                  id="Search"
-                  type="text"
-                  placeholder="Search"
-                  className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
-                  value={searchValue}
-                  onChange={handleSearchInputChange}
+          {toggleValue === 0 ? (
+            <>
+              <div className="flex lg:flex-row md:flex-row flex-col w-full lg:items-center md:items-center items-end lg:space-x-4 md:space-x-4 space-x-0 lg:space-y-0 md:space-y-0 space-y-4">
+                <form className="w-full">
+                  <div className="flex h-fit select-none items-center justify-center rounded-full tracking-wider transition-all border-2 border-darkGreen text-black bg-white">
+                    <input
+                      id="Search"
+                      type="text"
+                      placeholder="Search"
+                      className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
+                      value={searchValue}
+                      onChange={handleSearchInputChange}
+                    />
+                    <span
+                      className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
+                      onClick={handleSearchIconClick}
+                    >
+                      <AiOutlineSearch color="black" size="18" />
+                    </span>
+                  </div>
+                </form>
+                <FilterButton
+                  className="h-full"
+                  childrenL={<h4>Popularity</h4>}
+                  rightIconL={<RiGroupFill color="white" size={18} />}
+                  childrenR={<h4>Distance</h4>}
+                  rightIconR={<RiTreasureMapFill color="white" size={18} />}
                 />
-                <span
-                  className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
-                  onClick={handleSearchIconClick}
-                >
-                  <AiOutlineSearch color="black" size="18" />
-                </span>
               </div>
-            </form>
-            <FilterButton
-              className="h-full"
-              childrenL={<h4>Popularity</h4>}
-              rightIconL={<RiGroupFill color="white" size={18} />}
-              childrenR={<h4>Distance</h4>}
-              rightIconR={<RiTreasureMapFill color="white" size={18} />}
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
-            {catalogData.map((event, idx) => (
-              <EventCard {...event} key={idx} />
-            ))}
-          </div>
-          <br />
 
-          {/* https://www.flowbite-react.com/docs/components/pagination */}
-          <Pagination
-            currentPage={pages.current || 1}
-            onPageChange={onPageChange}
-            totalPages={Math.ceil(pages.count! / 10) || 1}
-            className="text-sm"
-          />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+                {catalogData.map((event, idx) => (
+                  <EventCard {...event} key={idx} />
+                ))}
+              </div>
+              <br />
+
+              {/* https://www.flowbite-react.com/docs/components/pagination */}
+              <Pagination
+                currentPage={pages.current || 1}
+                onPageChange={onPageChange}
+                totalPages={Math.ceil(pages.count! / 10) || 1}
+                className="text-sm"
+              />
+            </>
+          ) : (
+            <>
+              <div className="flex lg:flex-row md:flex-row flex-col w-full lg:items-center md:items-center items-end lg:space-x-4 md:space-x-4 space-x-0 lg:space-y-0 md:space-y-0 space-y-4">
+                <form className="w-full">
+                  <div className="flex h-fit select-none items-center justify-center rounded-full tracking-wider transition-all border-2 border-darkGreen text-black bg-white">
+                    <input
+                      id="Search"
+                      type="text"
+                      placeholder="Search"
+                      className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
+                      value={searchValue}
+                      onChange={handleSearchInputChange}
+                    />
+                    <span
+                      className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
+                      onClick={handleSearchIconClick}
+                    >
+                      <AiOutlineSearch color="black" size="18" />
+                    </span>
+                  </div>
+                </form>
+                <FilterButton
+                  className="h-full"
+                  childrenL={<h4>Popularity</h4>}
+                  rightIconL={<RiGroupFill color="white" size={18} />}
+                  childrenR={<h4>Distance</h4>}
+                  rightIconR={<RiTreasureMapFill color="white" size={18} />}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+                {reportData.map((report, idx) => (
+                  <ReportCard {...report} key={idx} />
+                ))}
+              </div>
+              <br />
+
+              {/* https://www.flowbite-react.com/docs/components/pagination */}
+              <Pagination
+                currentPage={pages.current || 1}
+                onPageChange={onPageChange}
+                totalPages={Math.ceil(pages.count! / 10) || 1}
+                className="text-sm"
+              />
+            </>
+          )}
         </div>
       </div>
       <CreateReportModal

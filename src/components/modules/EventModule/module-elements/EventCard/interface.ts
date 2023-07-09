@@ -20,7 +20,7 @@ interface IEvent {
   start_date: Date
   end_date: Date
   is_verified: boolean
-  staffs_ids: string[]
+  staffs?: string[]
   support_ids: string[]
 }
 

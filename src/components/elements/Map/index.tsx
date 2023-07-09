@@ -16,6 +16,12 @@ const eventIcon = L.icon({
   crossOrigin: false,
 })
 
+const reportIcon = L.icon({
+  iconUrl: '/assets/icons/leaflet/marker-report.svg',
+  shadowUrl: '/assets/icons/leaflet/marker-shadow-lg.png',
+  crossOrigin: false,
+})
+
 const options = {
   minWidth: 200,
   maxWidth: 500,
@@ -62,7 +68,7 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
       {props.reports?.map((report, idx) => (
         <Marker
           position={{ lat: report.latitude, lng: report.longitude }}
-          icon={eventIcon}
+          icon={reportIcon}
           key={idx}
         >
           {props.disablePopup ? (
