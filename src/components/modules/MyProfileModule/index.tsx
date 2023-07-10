@@ -61,6 +61,7 @@ export const MyProfileModule: React.FC = () => {
           previous: res.data.previous,
           current: prev.current,
         }))
+        console.log(res.data)
       })
       .catch((err) => console.log(err))
   }
@@ -128,7 +129,7 @@ export const MyProfileModule: React.FC = () => {
                 onClick={() => setIsEditProfileModalDisplayed(true)}
                 rightIcon={<AiTwotoneEdit />}
               >
-                Edit Profile
+                Edit Profil
               </Button>
               <Button
                 variant={'greeny'}
@@ -137,7 +138,7 @@ export const MyProfileModule: React.FC = () => {
                 }}
                 rightIcon={<RiLockPasswordFill />}
               >
-                Change Password
+                Ganti Kata Sandi
               </Button>
             </div>
           </div>
@@ -153,7 +154,7 @@ export const MyProfileModule: React.FC = () => {
       {tab === 0 ? (
         <div className="bg-white rounded-b-lg rounded-tr-lg flex flex-col items-center py-8 px-4 sm:px-10 md:px-20 space-y-5">
           <Toggle
-            items={['Kegiatan yang Diikuti', 'Kegiatan yang Dibuat']}
+            items={['Diikuti', 'Dipimpin']}
             value={toggleValue}
             setValue={setToggleValue}
             className="w-full"

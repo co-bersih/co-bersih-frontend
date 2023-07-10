@@ -63,7 +63,7 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
           rightIcon={<BiCurrentLocation size="22" />}
           onClick={locateUser}
         >
-          <h4>Ambil Dari Lokasi Saya</h4>
+          <h4>Ambil dari Lokasi Saya</h4>
         </Button>
       </div>
     )

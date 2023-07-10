@@ -19,24 +19,13 @@ export const Footer: React.FC = () => {
                 <FooTer.Title title="Menu" />
                 <FooTer.LinkGroup col>
                   <FooTer.Link href="/landing">
-                    <h4>Home</h4>
+                    <h4>Beranda</h4>
                   </FooTer.Link>
                   <FooTer.Link href="/events">
-                    <h4>Events</h4>
+                    <h4>Acara</h4>
                   </FooTer.Link>
                   <FooTer.Link href="/blogs">
-                    <h4>Blogs</h4>
-                  </FooTer.Link>
-                </FooTer.LinkGroup>
-              </div>
-              <div>
-                <FooTer.Title title="Legal" />
-                <FooTer.LinkGroup col>
-                  <FooTer.Link href="#">
-                    <h4>Privacy Policy</h4>
-                  </FooTer.Link>
-                  <FooTer.Link href="#">
-                    <h4>Terms & Conditions</h4>
+                    <h4>Blog</h4>
                   </FooTer.Link>
                 </FooTer.LinkGroup>
               </div>

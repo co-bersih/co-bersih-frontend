@@ -83,7 +83,7 @@ export const ChangePasswordModal: React.FC<changePasswordModalProps> = ({
           className="h-screen"
         >
           <div className="flex justify-between px-6 pt-5 items-center">
-            <h2>Change Password</h2>
+            <h2>Ganti Kata Sandi</h2>
             <AiOutlineCloseCircle
               size="28"
               className="cursor-pointer"
@@ -92,14 +92,14 @@ export const ChangePasswordModal: React.FC<changePasswordModalProps> = ({
           </div>
           <Modal.Body>
             <form onSubmit={handleSubmit}>
-              <h3>Old Password</h3>
+              <h3>Kata Sandi Lama</h3>
               <TextInput
                 required
                 type="password"
                 value={oldPassword}
                 onChange={handleOldPasswordChange}
               />
-              <h3>New Password</h3>
+              <h3>Kata Sandi Baru</h3>
               <TextInput
                 required
                 type="password"
@@ -111,7 +111,7 @@ export const ChangePasswordModal: React.FC<changePasswordModalProps> = ({
                 className="w-full mt-6"
                 rightIcon={<AiFillSave size={16} color="white" />}
               >
-                Save
+                Simpan
               </Button>
             </form>
           </Modal.Body>

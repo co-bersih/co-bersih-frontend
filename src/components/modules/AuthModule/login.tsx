@@ -62,7 +62,7 @@ export const LoginModule: React.FC = () => {
     <>
       <div className="login flex h-screen bg-gray-100 flex-row">
         <div className="lg:m-0 m-auto bg-white shadow text-gray-900 p-8 flex flex-col items-center justify-center rounded-md lg:w-1/2 lg:space-y-5 space-y-2">
-          <h2>Login</h2>
+          <h2>Masuk</h2>
           <form className="flex w-full justify-center">
             <div className="pt-5 w-full lg:w-auto lg:space-y-5 space-y-2">
               <div className="flex flex-col w-full lg:w-auto">
@@ -110,7 +110,7 @@ export const LoginModule: React.FC = () => {
                 onClick={handleLogin}
                 disabled={isLoading}
               >
-                {isLoading ? <Spinner /> : <h4>Log In</h4>}
+                {isLoading ? <Spinner /> : <h4>Masuk</h4>}
               </Button>
             </div>
           </form>
