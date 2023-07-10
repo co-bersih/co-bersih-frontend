@@ -68,8 +68,8 @@ export const EditEventModule: React.FC = () => {
   const onSubmit = async (data: CreateEventForm) => {
     setIsLoading(true)
 
-    data.start_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS);
-    data.end_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS);
+    data.start_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS)
+    data.end_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS)
 
     data.latitude = loc?.lat || 0
     data.longitude = loc?.lng || 0
@@ -135,8 +135,14 @@ export const EditEventModule: React.FC = () => {
       axios
         .get(`${cfg.API}/api/v1/events/${id}/`)
         .then((res) => {
-          res.data.start_date = String(res.data.start_date).substring(0, res.data.start_date.length - 1)
-          res.data.end_date = String(res.data.end_date).substring(0, res.data.end_date.length - 1)
+          res.data.start_date = String(res.data.start_date).substring(
+            0,
+            res.data.start_date.length - 1
+          )
+          res.data.end_date = String(res.data.end_date).substring(
+            0,
+            res.data.end_date.length - 1
+          )
           setData(res.data)
           setDefaultData(res.data)
         })
@@ -158,7 +164,7 @@ export const EditEventModule: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!isLoading && !authLoading  && data) {
+    if (!isLoading && !authLoading && data) {
       authorize(user, data)
     }
   }, [isLoading, authLoading, user, data])
@@ -166,7 +172,7 @@ export const EditEventModule: React.FC = () => {
   useEffect(() => {
     setLoc({
       lat: data.latitude,
-      lng: data.longitude
+      lng: data.longitude,
     })
   }, [data.latitude, data.longitude])
 
@@ -174,12 +180,12 @@ export const EditEventModule: React.FC = () => {
     <>
       <ToastContainer />
       <div className="flex flex-col bg-white relative pb-8 pt-20 px-4 sm:px-12 md:px-32 lg:px-40">
-        <Breadcrumb className='mb-4'>
+        <Breadcrumb className="mb-4">
           <Breadcrumb.Item href="/events">Kegiatan</Breadcrumb.Item>
-          <Breadcrumb.Item href={`/events/${id}`}>Detail Kegiatan</Breadcrumb.Item>
-          <Breadcrumb.Item href={`/events/${id}/edit`}>
-            Edit
+          <Breadcrumb.Item href={`/events/${id}`}>
+            Detail Kegiatan
           </Breadcrumb.Item>
+          <Breadcrumb.Item href={`/events/${id}/edit`}>Edit</Breadcrumb.Item>
         </Breadcrumb>
         <div className="relative min-h-screen flex flex-col items-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px]">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -219,13 +225,18 @@ export const EditEventModule: React.FC = () => {
               />
               <div className="col-span-2">
                 <h4>Foto Cover Baru</h4>
-                <p className='text-xs font-extralight'>File disamping hanya menampilkan file yang baru.</p>
+                <p className="text-xs font-extralight">
+                  File disamping hanya menampilkan file yang baru.
+                </p>
               </div>
               <FileInput
                 className="col-span-3"
-                {...register('image', { 
-                  required: false ,
-                  validate: (val => (val.length === 0 || val[0].size < cfg.MAX_IMG_SIZE_IN_MEGABYTE * cfg.MEGABYTE || `File tidak boleh lebih besar dari ${cfg.MAX_IMG_SIZE_IN_MEGABYTE} MB.` )) 
+                {...register('image', {
+                  required: false,
+                  validate: (val) =>
+                    val.length === 0 ||
+                    val[0].size < cfg.MAX_IMG_SIZE_IN_MEGABYTE * cfg.MEGABYTE ||
+                    `File tidak boleh lebih besar dari ${cfg.MAX_IMG_SIZE_IN_MEGABYTE} MB.`,
                 })}
                 accept="image/*"
               />
@@ -235,14 +246,19 @@ export const EditEventModule: React.FC = () => {
               </div>
               <div className="w-full col-span-3">
                 <TextInput
-                  {...register('start_date', { 
-                    required: false, 
-                    valueAsDate: true, 
-                    validate: (val) => (val === new Date(defaultData.start_date) || val < control._formValues.end_date || 'Tanggal & waktu mulai harus sebelum tanggal & waktu selesai.')
+                  {...register('start_date', {
+                    required: false,
+                    valueAsDate: true,
+                    validate: (val) =>
+                      val === new Date(defaultData.start_date) ||
+                      val < control._formValues.end_date ||
+                      'Tanggal & waktu mulai harus sebelum tanggal & waktu selesai.',
                   })}
                   type="datetime-local"
                 />
-                <p className='text-sm text-red-500'>{errors.start_date?.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.start_date?.message}
+                </p>
               </div>
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Selesai</h4>
@@ -250,14 +266,19 @@ export const EditEventModule: React.FC = () => {
               </div>
               <div className="w-full col-span-3">
                 <TextInput
-                  {...register('end_date', { 
-                    required: false, 
-                    valueAsDate: true, 
-                    validate: (val) => (!val || val > new Date() || 'Tanggal & waktu selesai harus di masa mendatang.') 
+                  {...register('end_date', {
+                    required: false,
+                    valueAsDate: true,
+                    validate: (val) =>
+                      !val ||
+                      val > new Date() ||
+                      'Tanggal & waktu selesai harus di masa mendatang.',
                   })}
                   type="datetime-local"
                 />
-                <p className='text-sm text-red-500'>{errors.end_date?.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.end_date?.message}
+                </p>
               </div>
               <div className="col-span-2">
                 <h4>Lokasi Mulai</h4>
@@ -269,7 +290,7 @@ export const EditEventModule: React.FC = () => {
                     draggable={{
                       locationState: loc,
                       setLocationState: setLoc,
-                      icon: 'event'
+                      icon: 'event',
                     }}
                     className="w-full min-h-[350px] col-span-3 rounded-3xl"
                   />

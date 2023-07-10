@@ -51,7 +51,9 @@ export const EventDashboardModule: React.FC = () => {
       <div className="flex flex-col bg-white relative gap-x-12 pt-24 pb-8 px-4 sm:px-12 md:px-32 lg:px-40 gap-y-2 h-screen">
         <Breadcrumb>
           <Breadcrumb.Item href="/events">Kegiatan</Breadcrumb.Item>
-          <Breadcrumb.Item href={`/events/${id}`}>Detail Kegiatan</Breadcrumb.Item>
+          <Breadcrumb.Item href={`/events/${id}`}>
+            Detail Kegiatan
+          </Breadcrumb.Item>
           <Breadcrumb.Item href={`/events/${id}/dashboard`}>
             Dashboard
           </Breadcrumb.Item>

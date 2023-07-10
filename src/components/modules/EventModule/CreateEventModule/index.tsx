@@ -48,8 +48,8 @@ export const CreateEventModule: React.FC = () => {
   const onSubmit = async (data: CreateEventForm) => {
     setIsLoading(true)
 
-    data.start_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS);
-    data.end_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS);
+    data.start_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS)
+    data.end_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS)
 
     data.latitude = loc?.lat || 0
     data.longitude = loc?.lng || 0
@@ -108,7 +108,7 @@ export const CreateEventModule: React.FC = () => {
     <>
       <ToastContainer />
       <div className="flex flex-col bg-white relative px-4 sm:px-12 md:px-32 lg:px-40 pt-24 pb-8">
-        <Breadcrumb className='mb-4'>
+        <Breadcrumb className="mb-4">
           <Breadcrumb.Item href="/events">Kegiatan</Breadcrumb.Item>
           <Breadcrumb.Item href={`/events`}>Buat Kegiatan</Breadcrumb.Item>
         </Breadcrumb>
@@ -123,7 +123,7 @@ export const CreateEventModule: React.FC = () => {
               <TextInput
                 className="w-full col-span-3"
                 {...register('name', {
-                  required: "Judul kegiatan wajib diisi",
+                  required: 'Judul kegiatan wajib diisi',
                   maxLength: 100,
                   minLength: 1,
                 })}
@@ -153,13 +153,16 @@ export const CreateEventModule: React.FC = () => {
               </div>
               <div className="col-span-3">
                 <FileInput
-                  {...register('image', { 
-                    required: true, 
-                    validate: (val => (val[0].size < cfg.MAX_IMG_SIZE_IN_MEGABYTE * cfg.MEGABYTE || `File tidak boleh lebih besar dari ${cfg.MAX_IMG_SIZE_IN_MEGABYTE} MB.` )) 
+                  {...register('image', {
+                    required: true,
+                    validate: (val) =>
+                      val[0].size <
+                        cfg.MAX_IMG_SIZE_IN_MEGABYTE * cfg.MEGABYTE ||
+                      `File tidak boleh lebih besar dari ${cfg.MAX_IMG_SIZE_IN_MEGABYTE} MB.`,
                   })}
                   accept="image/*"
                 />
-                <p className='text-sm text-red-500'>{errors.image?.message}</p>
+                <p className="text-sm text-red-500">{errors.image?.message}</p>
               </div>
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Mulai</h4>
@@ -167,14 +170,18 @@ export const CreateEventModule: React.FC = () => {
               </div>
               <div className="w-full col-span-3">
                 <TextInput
-                  {...register('start_date', { 
-                    required: true, 
-                    valueAsDate: true, 
-                    validate: (val) => (val < control._formValues.end_date || 'Tanggal & waktu mulai harus sebelum tanggal & waktu selesai.')
+                  {...register('start_date', {
+                    required: true,
+                    valueAsDate: true,
+                    validate: (val) =>
+                      val < control._formValues.end_date ||
+                      'Tanggal & waktu mulai harus sebelum tanggal & waktu selesai.',
                   })}
                   type="datetime-local"
                 />
-                <p className='text-sm text-red-500'>{errors.start_date?.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.start_date?.message}
+                </p>
               </div>
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Selesai</h4>
@@ -182,27 +189,33 @@ export const CreateEventModule: React.FC = () => {
               </div>
               <div className="w-full col-span-3">
                 <TextInput
-                  {...register('end_date', { 
-                    required: true, 
-                    valueAsDate: true, 
-                    validate: (val) => (val > new Date() || 'Tanggal & waktu selesai harus di masa mendatang.') 
+                  {...register('end_date', {
+                    required: true,
+                    valueAsDate: true,
+                    validate: (val) =>
+                      val > new Date() ||
+                      'Tanggal & waktu selesai harus di masa mendatang.',
                   })}
                   type="datetime-local"
                 />
-                <p className='text-sm text-red-500'>{errors.end_date?.message}</p>
+                <p className="text-sm text-red-500">
+                  {errors.end_date?.message}
+                </p>
               </div>
               <div className="col-span-2">
                 <h4>Lokasi Mulai</h4>
               </div>
               {loc?.lat && loc.lng ? (
                 <div className="col-span-3">
-                  <p>Petunjuk: Tarik penanda biru di peta sesuai lokasi kegiatan.</p>
+                  <p>
+                    Petunjuk: Tarik penanda biru di peta sesuai lokasi kegiatan.
+                  </p>
                   <DynamicMap
                     center={loc}
                     draggable={{
                       locationState: loc,
                       setLocationState: setLoc,
-                      icon: 'event'
+                      icon: 'event',
                     }}
                     className="w-full min-h-[350px] col-span-3 rounded-3xl"
                   />

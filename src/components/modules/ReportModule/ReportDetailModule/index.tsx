@@ -51,9 +51,11 @@ export const ReportDetailModule: React.FC = () => {
       <ToastContainer />
       <div className="flex flex-col bg-mintGreen">
         <div className="relative min-h-[105vh] flex flex-col pt-24 pb-8 px-4 sm:px-12 md:px-32 lg:px-40  gap-4 items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-white">
-          <Breadcrumb className='mr-auto'>
+          <Breadcrumb className="mr-auto">
             <Breadcrumb.Item href="/events">Laporan</Breadcrumb.Item>
-            <Breadcrumb.Item href={`/events/${id}`}>Detail Laporan</Breadcrumb.Item>
+            <Breadcrumb.Item href={`/events/${id}`}>
+              Detail Laporan
+            </Breadcrumb.Item>
           </Breadcrumb>
           {data?.reporter.email === user?.email ? (
             <Button

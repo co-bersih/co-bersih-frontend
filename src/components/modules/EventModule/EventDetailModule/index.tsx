@@ -114,9 +114,11 @@ export const EventDetailModule: React.FC = () => {
       <ToastContainer />
       <div className="flex flex-col bg-mintGreen">
         <div className="relative min-h-[105vh] px-3 sm:px-8 md:px-32 lg:px-40  pt-28 pb-8 flex flex-col gap-4 items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-white">
-          <Breadcrumb className='mr-auto'>
+          <Breadcrumb className="mr-auto">
             <Breadcrumb.Item href="/events">Kegiatan</Breadcrumb.Item>
-            <Breadcrumb.Item href={`/events/${id}`}>Detail Kegiatan</Breadcrumb.Item>
+            <Breadcrumb.Item href={`/events/${id}`}>
+              Detail Kegiatan
+            </Breadcrumb.Item>
           </Breadcrumb>
           {data?.host.email === user?.email ? (
             <div className="flex ml-auto gap-x-2">

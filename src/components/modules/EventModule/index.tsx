@@ -47,8 +47,7 @@ export const EventModule: React.FC = () => {
   // data fetching
 
   const fetchEvents = (params: any) => {
-    return axios
-      .get(`${cfg.API}/api/v1/events/`, { params })
+    return axios.get(`${cfg.API}/api/v1/events/`, { params })
   }
 
   const fetchPagedEvents = (params: any) => {
@@ -82,7 +81,7 @@ export const EventModule: React.FC = () => {
         toAppend.push(event)
       }
     })
-    setMapEventsData(prev => (prev ? [...prev, ...toAppend] : toAppend))
+    setMapEventsData((prev) => (prev ? [...prev, ...toAppend] : toAppend))
   }
 
   const fetchReports = (params: any) => {
@@ -111,12 +110,12 @@ export const EventModule: React.FC = () => {
       setMinimumZoom(newZoom)
     }
   }
-  
+
   const handleMove = (newCenter: LatLngLiteral) => {
     try {
       setLoc({ lat: newCenter.lat, lng: newCenter.lng })
     } catch {
-      console.log("could not get new center: ", JSON.stringify(newCenter))
+      console.log('could not get new center: ', JSON.stringify(newCenter))
     }
   }
 
@@ -177,17 +176,19 @@ export const EventModule: React.FC = () => {
       return
     }
     console.log(minimumZoom)
-    fetchMappedEvents({ lon: loc?.lng, lat: loc?.lat, min: 0, max: 5*minimumZoom })
+    fetchMappedEvents({
+      lon: loc?.lng,
+      lat: loc?.lat,
+      min: 0,
+      max: 5 * minimumZoom,
+    })
   }, [minimumZoom, loc])
-  
 
   return (
     <>
       <ToastContainer />
       <div className="flex flex-col bg-white">
-        <div 
-          className="relative h-screen flex flex-col items-center justify-end lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-mintGreen space-y-5"
-        >
+        <div className="relative h-screen flex flex-col items-center justify-end lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-mintGreen space-y-5">
           <h1>Temukan Acara Co-Bersih Terdekat</h1>
           {loc?.lat && loc.lng ? (
             <div>

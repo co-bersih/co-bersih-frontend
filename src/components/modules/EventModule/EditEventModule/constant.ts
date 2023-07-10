@@ -21,5 +21,5 @@ export const EMPTY_EVENT = {
   end_date: new Date(),
   // panitia_ids: [],
   support_ids: [],
-  is_verified: true
+  is_verified: true,
 }

@@ -1,5 +1,12 @@
 import L, { LatLngLiteral } from 'leaflet'
-import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet'
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { MapProps } from './interface'
 import EventPopup from './Popup/EventPopup'
@@ -7,28 +14,12 @@ import ReportPopup from './Popup/ReportPopup'
 import { useMemo, useRef, useEffect, useState, useCallback, Ref } from 'react'
 import { Button } from '../Button'
 import { BiCurrentLocation } from 'react-icons/bi'
+import { PopupConfig } from './constant'
 
-const defaultIcon = L.icon({
-  iconUrl: '/assets/icons/leaflet/marker-icon.png',
-  shadowUrl: '/assets/icons/leaflet/marker-shadow.png',
-})
-const eventIcon = L.icon({
-  iconUrl: '/assets/icons/leaflet/marker-event.svg',
-  shadowUrl: '/assets/icons/leaflet/marker-shadow-lg.png',
-  crossOrigin: false,
-})
-
-const reportIcon = L.icon({
-  iconUrl: '/assets/icons/leaflet/marker-report.svg',
-  shadowUrl: '/assets/icons/leaflet/marker-shadow-lg.png',
-  crossOrigin: false,
-})
-
-const options = {
-  minWidth: 200,
-  maxWidth: 500,
-}
-
+/**
+ * @param {MapProps} props: MapProps of the Map component
+ * @return {React.FC}: A fixed tooltip for "Lokasi Saya"
+ */
 const MapWrapper: React.FC<MapProps> = (props) => {
   const map = useMap()
   /* eslint-disable react/prop-types */
@@ -62,7 +53,7 @@ const Tile: React.FC<MapProps> = (props) => {
     },
     moveend(e) {
       props.onMove && props.onMove(e.target._lastCenter)
-    }
+    },
   })
 
   return (
@@ -74,7 +65,7 @@ const Tile: React.FC<MapProps> = (props) => {
 }
 
 export const Map: React.FC<MapProps> = (props: MapProps) => {
-  const [currentLoc, setCurrentLoc] = useState<LatLngLiteral>();
+  const [currentLoc, setCurrentLoc] = useState<LatLngLiteral>()
   const markerRef = useRef(null)
   const eventHandler = useMemo(
     () => ({
@@ -100,33 +91,32 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
       zoom={11}
       scrollWheelZoom={true}
       className={`z-20 ${props.className} rounded-lg`}
-
     >
       <Tile {...props} />
       {props.hideMapWrapper ? null : <MapWrapper {...props} />}
       {props.events?.map((event, idx) => (
         <Marker
           position={{ lat: event.latitude, lng: event.longitude }}
-          icon={eventIcon}
+          icon={PopupConfig.EVENT_ICON}
           key={idx}
         >
           {props.disablePopup ? (
             <Popup>Kegiatan dimulai disini.</Popup>
           ) : (
-            <EventPopup event={event} {...options} />
+            <EventPopup event={event} {...PopupConfig.POPUP_OPTIONS} />
           )}
         </Marker>
       ))}
       {props.reports?.map((report, idx) => (
         <Marker
           position={{ lat: report.latitude, lng: report.longitude }}
-          icon={reportIcon}
+          icon={PopupConfig.REPORT_ICON}
           key={idx}
         >
           {props.disablePopup ? (
             <Popup>Laporan dibuat disini.</Popup>
           ) : (
-            <ReportPopup report={report} {...options} />
+            <ReportPopup report={report} {...PopupConfig.POPUP_OPTIONS} />
           )}
         </Marker>
       ))}
@@ -136,7 +126,13 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
             lat: props.draggable.locationState.lat,
             lng: props.draggable.locationState.lng,
           }}
-          icon={props.draggable.icon === 'event' ? eventIcon : props.draggable.icon === 'report' ? reportIcon : defaultIcon}
+          icon={
+            props.draggable.icon === 'event'
+              ? PopupConfig.EVENT_ICON
+              : props.draggable.icon === 'report'
+              ? PopupConfig.REPORT_ICON
+              : PopupConfig.DEFAULT_ICON
+          }
           draggable={true}
           eventHandlers={eventHandler}
           ref={markerRef}
@@ -150,14 +146,18 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
       ) : (
         <></>
       )}
-      { currentLoc ? <Marker
+      {currentLoc ? (
+        <Marker
           position={currentLoc}
-          icon={defaultIcon}
+          icon={PopupConfig.DEFAULT_ICON}
           draggable={false}
           eventHandlers={eventHandler}
         >
-            <Popup>Anda disini.</Popup>
-        </Marker> : <></> }
+          <Popup>Anda disini.</Popup>
+        </Marker>
+      ) : (
+        <></>
+      )}
     </MapContainer>
   )
 }
