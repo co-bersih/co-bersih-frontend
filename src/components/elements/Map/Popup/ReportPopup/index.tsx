@@ -9,7 +9,9 @@ import Link from 'next/link'
 
 const ReportPopup: React.FC<ReportPopupProps> = (props: ReportPopupProps) => (
   <Popup maxWidth={props.maxWidth} minWidth={props.minWidth}>
-    <span className=" bg-mintGreen py-1 px-3 w-fit rounded-xl">Laporan</span>
+    <span className=" bg-coral py-1 px-3 w-fit rounded-xl text-white">
+      Laporan
+    </span>
     <div className="flex flex-col sm:flex-row gap-4 h-[200px] w-[25vw] mt-1">
       <Image
         src={props.report.image_url || '/assets/images/placeholder/image.png'}

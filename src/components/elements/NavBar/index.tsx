@@ -22,7 +22,7 @@ export const NavBar: React.FC = () => {
             variant={'primary'}
             leftIcon={<RiHome2Line color="teal" size={16} />}
           >
-            <h4>Home</h4>
+            <h4>Beranda</h4>
           </Button>
         </Navbar.Link>
         <Navbar.Link href="/events">
@@ -30,7 +30,7 @@ export const NavBar: React.FC = () => {
             variant={'primary'}
             leftIcon={<RiEarthLine color="teal" size={16} />}
           >
-            <h4>Events</h4>
+            <h4>Acara</h4>
           </Button>
         </Navbar.Link>
         <Navbar.Link href="/blogs">
@@ -38,7 +38,7 @@ export const NavBar: React.FC = () => {
             variant={'primary'}
             leftIcon={<RiArticleLine color="teal" size={16} />}
           >
-            <h4>Blogs</h4>
+            <h4>Blog</h4>
           </Button>
         </Navbar.Link>
       </Navbar.Collapse>
@@ -67,14 +67,14 @@ export const NavBar: React.FC = () => {
             </Dropdown.Header>
             <Navbar.Link href={`/my-profile/${user.id}`}>
               <Dropdown.Item>
-                <h4>My Profile</h4>
+                <h4>Profil Anda</h4>
               </Dropdown.Item>
             </Navbar.Link>
 
             <Dropdown.Divider />
             <Navbar.Link href="/auth/logout">
               <Dropdown.Item>
-                <h4>Log Out</h4>
+                <h4>Keluar</h4>
               </Dropdown.Item>
             </Navbar.Link>
           </Dropdown>
@@ -85,12 +85,12 @@ export const NavBar: React.FC = () => {
           <Navbar.Collapse className="justify-end lg:block md:hidden hidden">
             <Navbar.Link href="/auth/register">
               <Button variant={'ghost'}>
-                <h4>Register</h4>
+                <h4>Daftar</h4>
               </Button>
             </Navbar.Link>
             <Navbar.Link href="/auth/login">
               <Button variant={'solid'}>
-                <h4>Log In</h4>
+                <h4>Masuk</h4>
               </Button>
             </Navbar.Link>
           </Navbar.Collapse>
@@ -100,23 +100,23 @@ export const NavBar: React.FC = () => {
 
       <Navbar.Collapse className="lg:hidden">
         <Navbar.Link href="/landing">
-          <h4>Home</h4>
+          <h4>Beranda</h4>
         </Navbar.Link>
         <Navbar.Link href="/events">
-          <h4>Events</h4>
+          <h4>Acara</h4>
         </Navbar.Link>
         <Navbar.Link href="/blogs">
-          <h4>Blogs</h4>
+          <h4>Blog</h4>
         </Navbar.Link>
         {user ? (
           <div></div>
         ) : (
           <>
             <Navbar.Link href="/auth/register">
-              <h4>Register</h4>
+              <h4>Daftar</h4>
             </Navbar.Link>
             <Navbar.Link href="/auth/login">
-              <h4>Log In</h4>
+              <h4>Masuk</h4>
             </Navbar.Link>
           </>
         )}
