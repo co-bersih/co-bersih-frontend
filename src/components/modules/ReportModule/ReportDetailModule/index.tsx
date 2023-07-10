@@ -82,7 +82,7 @@ export const ReportDetailModule: React.FC = () => {
                 height={400}
                 width={400}
                 alt={data?.title}
-                className="object-cover w-[40vw] h-[55vw] md:w-[36vw] md:h-[26vw] w-[95vw] sm:w-full rounded-xl"
+                className="object-cover h-[55vw] md:w-[36vw] md:h-[26vw] w-[95vw] sm:w-full rounded-xl"
               />
             ) : (
               <Skeleton className="h-[300px]" />
