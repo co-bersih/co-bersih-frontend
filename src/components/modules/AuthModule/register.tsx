@@ -117,12 +117,12 @@ export const RegisterModule: React.FC = () => {
               </div>
 
               <div className="flex flex-col w-full lg:w-auto">
-                <h4>Name</h4>
+                <h4>Nama</h4>
                 <div className="lg:w-[400px]">
                   <TextInput
                     id="name"
                     type="text"
-                    placeholder="Name"
+                    placeholder="Nama"
                     onChange={(e) => {
                       onFormChange(e.target)
                       setNameError('')
@@ -137,12 +137,12 @@ export const RegisterModule: React.FC = () => {
               </div>
 
               <div className="flex flex-col w-full lg:w-auto">
-                <h4>Password</h4>
+                <h4>Kata Sandi</h4>
                 <div className="w-full">
                   <TextInput
                     id="password"
                     type="password"
-                    placeholder="Password"
+                    placeholder="Kata Sandi"
                     onChange={(e) => {
                       onFormChange(e.target)
                       setPasswordErrors([])
@@ -159,12 +159,12 @@ export const RegisterModule: React.FC = () => {
               </div>
 
               <div className="flex flex-col w-full lg:w-auto">
-                <h4>Repeat your password</h4>
+                <h4>Ulangi Kata Sandi Anda</h4>
                 <div className="w-full">
                   <TextInput
                     id="password2"
                     type="password"
-                    placeholder="Password"
+                    placeholder="Kata Sandi"
                     onChange={(e) => {
                       onFormChange(e.target)
                       setRepeatPassError('')

@@ -86,12 +86,12 @@ export const LoginModule: React.FC = () => {
               </div>
 
               <div className="flex flex-col w-full lg:w-auto">
-                <h4>Password</h4>
+                <h4>Kata Sandi</h4>
                 <div className="lg:w-[400px]">
                   <TextInput
                     id="password"
                     type="password"
-                    placeholder="Password"
+                    placeholder="Kata Sandi"
                     onChange={(e) => {
                       onFormChange(e.target)
                       setPasswordError('')
