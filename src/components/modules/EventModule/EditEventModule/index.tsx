@@ -172,7 +172,7 @@ export const EditEventModule: React.FC = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <h2>Edit Event</h2>
             <br />
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 justify-items-stretch w-full">
+            <div className="flex flex-col md:grid md:grid-cols-5 gap-4 justify-items-stretch w-full">
               <div className="col-span-2">
                 <h4>Judul Event</h4>
               </div>

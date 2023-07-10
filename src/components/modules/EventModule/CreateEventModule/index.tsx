@@ -100,11 +100,11 @@ export const CreateEventModule: React.FC = () => {
       <div className="flex flex-col bg-white relative">
         <div className="relative min-h-screen flex flex-col items-center pt-24 pb-8 lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] px-4 sm:px-12 md:px-32 lg:px-40">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-            <h2>Data Event Baru</h2>
+            <h2>Buat Kegiatan</h2>
             <br />
             <div className="flex flex-col md:grid md:grid-cols-5 gap-4 justify-items-stretch w-full">
               <div className="col-span-2">
-                <h4>Judul Event</h4>
+                <h4>Judul Kegiatan</h4>
               </div>
               <TextInput
                 className="w-full col-span-3"
@@ -198,7 +198,7 @@ export const CreateEventModule: React.FC = () => {
                   <h4>Batalkan</h4>
                 </Button>
                 <Button variant={'greeny'} isLoading={isLoading}>
-                  <h4>Ajukan Event</h4>
+                  <h4>Ajukan Kegiatan</h4>
                 </Button>
               </div>
             </div>

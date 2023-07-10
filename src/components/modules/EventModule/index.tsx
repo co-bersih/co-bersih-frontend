@@ -12,11 +12,13 @@ import axios from 'axios'
 import { Pages } from './interface'
 import IEvent from './module-elements/EventCard/interface'
 import { BiSolidLeaf } from 'react-icons/bi'
-import { MdReport } from 'react-icons/md'
+import { MdNewReleases, MdReport } from 'react-icons/md'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { RiGroupFill, RiHome2Line, RiTreasureMapFill } from 'react-icons/ri'
 import { CreateReportModal } from '../ReportModule/module-elements/CreateReportModal'
 import { LoginGuardModal } from '../AuthModule/module-elements'
+import { IReport } from '../ReportModule/module-elements/ReportCard/interface'
+import ReportCard from '../ReportModule/module-elements/ReportCard'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -24,10 +26,9 @@ const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
 
 export const EventModule: React.FC = () => {
   const { tokens, loading, user } = useAuthContext()
-  const [searchQuery, setSearchQuery] = useState<string>('')
   const router = useRouter()
-  const [mapData, setMapData] = useState<IEvent[]>([dummyEvent, dummyEvent2]) // TODO
-  const [catalogData, setCatalogData] = useState<IEvent[]>([])
+  const [eventsData, setEventsData] = useState<IEvent[]>([])
+  const [reportsData, setReportsData] = useState<IReport[]>([])
   const [loc, setLoc] = useState<LatLngLiteral | undefined>(dummyLoc)
   const [pages, setPages] = useState<Pages>({})
   const [toggleValue, setToggleValue] = useState(0)
@@ -43,11 +44,9 @@ export const EventModule: React.FC = () => {
     // TODO: refetch for new range
   }
 
-  function fetchEvents() {
+  const fetchEvents = (params: any) => {
     axios
-      .get(`${cfg.API}/api/v1/events/`, {
-        params: { page: pages.current },
-      })
+      .get(`${cfg.API}/api/v1/events/`, { params })
       .then((res) => {
         setPages((prev) => ({
           count: res.data.count,
@@ -55,13 +54,30 @@ export const EventModule: React.FC = () => {
           previous: res.data.previous,
           current: prev.current,
         }))
-        setCatalogData(res.data.results)
+        setEventsData(res.data.results)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const fetchReports = (params: any) => {
+    axios
+      .get(`${cfg.API}/api/v1/reports/`, { params })
+      .then((res) => {
+        setPages((prev) => ({
+          count: res.data.count,
+          next: res.data.next,
+          previous: res.data.previous,
+          current: prev.current,
+        }))
+        setReportsData(res.data.results)
       })
       .catch((err) => console.log(err))
   }
 
   useEffect(() => {
-    fetchEvents()
+    const params = { page: pages.current }
+    fetchEvents(params)
+    fetchReports(params)
   }, [pages.current, tokens])
 
   useEffect(() => {
@@ -69,12 +85,6 @@ export const EventModule: React.FC = () => {
       setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
     })
   }, [])
-
-  function onSearchQueryChange(e: ChangeEvent<HTMLInputElement>): void {
-    e.preventDefault()
-    setSearchQuery(e.target.value)
-    // TODO
-  }
 
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -86,12 +96,15 @@ export const EventModule: React.FC = () => {
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === 'Enter') {
-      // find the event
+      event.preventDefault()
+      const params = { search: searchValue }
+      fetchEvents(params)
     }
   }
 
   const handleSearchIconClick = () => {
-    // find the event
+    const params = { search: searchValue }
+    fetchEvents(params)
   }
 
   const handleClickCreateEvent = () => {
@@ -114,11 +127,16 @@ export const EventModule: React.FC = () => {
     <>
       <div className="flex flex-col bg-white">
         <div className="relative h-screen flex flex-col items-center justify-end lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-mintGreen space-y-5">
-          <h1>Temukan Event Terdekat</h1>
+          <h1>Temukan Acara Co-Bersih Terdekat</h1>
           {loc?.lat && loc.lng ? (
             <DynamicMap
               center={loc}
-              events={mapData}
+              draggable={{
+                locationState: loc,
+                setLocationState: setLoc,
+              }}
+              events={eventsData}
+              reports={reportsData}
               className="min-w-[80vw] lg:h-[500px] h-[400px] rounded-full"
             />
           ) : (
@@ -134,74 +152,116 @@ export const EventModule: React.FC = () => {
               onClick={handleClickCreateEvent}
               rightIcon={<BiSolidLeaf />}
             >
-              <h4>Buat Event</h4>
+              <h4>Buat Kegiatan</h4>
             </Button>
             <Button
               variant={'deserted'}
               onClick={handleClickCreateReport}
               rightIcon={<MdReport />}
             >
-              <h4>Buat Report</h4>
+              <h4>Buat Laporan</h4>
             </Button>
           </div>
           <br />
         </div>
+
         <div className="relative min-h-screen flex flex-col items-center py-8 lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] px-4 sm:px-10 md:px-20 space-y-5">
           <Toggle
-            items={['Events', 'Reports']}
+            items={['Kegiatan', 'Laporan']}
             value={toggleValue}
             setValue={setToggleValue}
             className="w-full"
           />
-          <div className="flex lg:flex-row md:flex-row flex-col w-full lg:items-center md:items-center items-end lg:space-x-4 md:space-x-4 space-x-0 lg:space-y-0 md:space-y-0 space-y-4">
-            <form className="w-full">
-              <div className="flex h-fit select-none items-center justify-center rounded-full tracking-wider transition-all border-2 border-darkGreen text-black bg-white">
-                <input
-                  id="Search"
-                  type="text"
-                  placeholder="Search"
-                  className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
-                  value={searchValue}
-                  onChange={handleSearchInputChange}
-                  onKeyDown={handleSearchInputSubmit}
+          {toggleValue === 0 ? (
+            <>
+              <div className="flex lg:flex-row md:flex-row flex-col w-full lg:items-center md:items-center items-end lg:space-x-4 md:space-x-4 space-x-0 lg:space-y-0 md:space-y-0 space-y-4">
+                <div className="w-full flex h-fit select-none items-center justify-center rounded-full tracking-wider transition-all border-2 border-darkGreen text-black bg-white">
+                  <input
+                    id="Search"
+                    type="text"
+                    placeholder="Cari kegiatan ..."
+                    className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
+                    value={searchValue}
+                    onChange={handleSearchInputChange}
+                    onKeyDown={handleSearchInputSubmit}
+                  />
+                  <span
+                    className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
+                    onClick={handleSearchIconClick}
+                  >
+                    <AiOutlineSearch color="black" size="18" />
+                  </span>
+                </div>
+                <FilterButton
+                  className="h-full"
+                  childrenL={<h4>Terbaru</h4>}
+                  rightIconL={<MdNewReleases color="white" size={18} />}
+                  childrenR={<h4>Terdekat</h4>}
+                  rightIconR={<RiTreasureMapFill color="white" size={18} />}
                 />
-                <span
-                  className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
-                  onClick={handleSearchIconClick}
-                >
-                  <AiOutlineSearch color="black" size="18" />
-                </span>
               </div>
-            </form>
-            <FilterButton
-              className="h-full"
-              childrenL={<h4>Popularity</h4>}
-              rightIconL={<RiGroupFill color="white" size={18} />}
-              childrenR={<h4>Distance</h4>}
-              rightIconR={<RiTreasureMapFill color="white" size={18} />}
-            />
-          </div>
-          {/* <TextInput 
-            className='mb-4 w-[90vw] sm:w-[75vw] md:w-[50vw]'
-            placeholder='Cari event berdasarkan judul...'
-            rightIcon={MagnifyingGlass as React.FC<React.SVGProps<SVGSVGElement>>}
-            value={searchQuery}
-            onChange={onSearchQueryChange}
-          /> */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
-            {catalogData.map((event, idx) => (
-              <EventCard {...event} key={idx} />
-            ))}
-          </div>
-          <br />
 
-          {/* https://www.flowbite-react.com/docs/components/pagination */}
-          <Pagination
-            currentPage={pages.current || 1}
-            onPageChange={onPageChange}
-            totalPages={Math.ceil(pages.count! / 10) || 1}
-            className="text-sm"
-          />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+                {eventsData.map((event, idx) => (
+                  <EventCard {...event} key={idx} />
+                ))}
+              </div>
+              <br />
+
+              {/* https://www.flowbite-react.com/docs/components/pagination */}
+              <Pagination
+                currentPage={pages.current || 1}
+                onPageChange={onPageChange}
+                totalPages={Math.ceil(pages.count! / 10) || 1}
+                className="text-sm"
+              />
+            </>
+          ) : (
+            <>
+              <div className="flex lg:flex-row md:flex-row flex-col w-full lg:items-center md:items-center items-end lg:space-x-4 md:space-x-4 space-x-0 lg:space-y-0 md:space-y-0 space-y-4">
+                <form className="w-full">
+                  <div className="flex h-fit select-none items-center justify-center rounded-full tracking-wider transition-all border-2 border-darkGreen text-black bg-white">
+                    <input
+                      id="Search"
+                      type="text"
+                      placeholder="Cari laporan ..."
+                      className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
+                      value={searchValue}
+                      onChange={handleSearchInputChange}
+                    />
+                    <span
+                      className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
+                      onClick={handleSearchIconClick}
+                    >
+                      <AiOutlineSearch color="black" size="18" />
+                    </span>
+                  </div>
+                </form>
+                <FilterButton
+                  className="h-full"
+                  childrenL={<h4>Terbaru</h4>}
+                  rightIconL={<MdNewReleases color="white" size={18} />}
+                  childrenR={<h4>Terdekat</h4>}
+                  rightIconR={<RiTreasureMapFill color="white" size={18} />}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+                {reportsData.map((report, idx) => (
+                  <ReportCard {...report} key={idx} />
+                ))}
+              </div>
+              <br />
+
+              {/* https://www.flowbite-react.com/docs/components/pagination */}
+              <Pagination
+                currentPage={pages.current || 1}
+                onPageChange={onPageChange}
+                totalPages={Math.ceil(pages.count! / 10) || 1}
+                className="text-sm"
+              />
+            </>
+          )}
         </div>
       </div>
       <CreateReportModal
