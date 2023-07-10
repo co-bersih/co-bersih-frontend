@@ -49,8 +49,8 @@ export const LogoutModule: React.FC = () => {
         >
           <Modal.Body>
             <div className="text-center mt-6">
-              <h2>You have been logged out.</h2>
-              <h3> You will be redirected...</h3>
+              <h2>Anda telah keluar.</h2>
+              <h3>Anda akan dialihkan...</h3>
             </div>
           </Modal.Body>
         </Modal>
