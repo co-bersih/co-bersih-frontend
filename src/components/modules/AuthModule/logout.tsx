@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useAuthContext } from '@contexts'
 import { Modal } from 'flowbite-react'
 import axios from 'axios'
+import { cfg } from 'src/config'
 
 export const LogoutModule: React.FC = () => {
   const router = useRouter()
@@ -13,7 +14,7 @@ export const LogoutModule: React.FC = () => {
       if (tokens) {
         try {
           await axios.post(
-            `${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/token/blacklist/`,
+            `${cfg.API}/api/v1/token/blacklist/`,
             { refresh: tokens.refresh },
             {
               headers: {

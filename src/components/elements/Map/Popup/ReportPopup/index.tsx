@@ -4,11 +4,13 @@ import { Popup } from 'react-leaflet'
 import Image from 'next/image'
 import { ReportPopupProps } from '../interface'
 import { External, Participant } from '@icons'
+import { GrCircleInformation } from 'react-icons/gr'
+import Link from 'next/link'
 
 const ReportPopup: React.FC<ReportPopupProps> = (props: ReportPopupProps) => (
   <Popup maxWidth={props.maxWidth} minWidth={props.minWidth}>
-    <span className=" bg-mintGreen py-1 px-3 w-fit rounded-xl">Report</span>
-    <div className="flex flex-col sm:flex-row gap-4 h-[200px] w-[25vw]">
+    <span className=" bg-mintGreen py-1 px-3 w-fit rounded-xl">Laporan</span>
+    <div className="flex flex-col sm:flex-row gap-4 h-[200px] w-[25vw] mt-1">
       <Image
         src={props.report.image_url || '/assets/images/placeholder/image.png'}
         height={200}
@@ -20,19 +22,25 @@ const ReportPopup: React.FC<ReportPopupProps> = (props: ReportPopupProps) => (
         <h4>{props.report.title}</h4>
         <div className="flex flex-row gap-x-2 items-center">
           <Participant size={''} />
-          <span>Reported by {props.report.reporter.name}</span>
+          <span className="whitespace-nowrap">
+            Dilaporkan oleh {props.report.reporter.name}
+          </span>
         </div>
-        <span className="mb-2 md:mb-4">
-          {formatter.trimLongText(props.report.description)}...
-        </span>
+        <div className="flex flex-row gap-x-2 items-start">
+          <GrCircleInformation className="w-5 h-5" />
+          <span>{formatter.trimLongText(props.report.description)}...</span>
+        </div>
+
         <div className="flex justify-end grow">
-          <Button
-            className={'mt-auto'}
-            variant={'greeny'}
-            rightIcon={<External size={'w-[10px] h-[10px]'} />}
-          >
-            <h4>View</h4>
-          </Button>
+          <Link href={`/reports/${props.report.id}`}>
+            <Button
+              className={'mt-auto'}
+              variant={'greeny'}
+              rightIcon={<External size={'w-[10px] h-[10px]'} />}
+            >
+              <h4>Lihat</h4>
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ const ReportCard: React.FC<IReport> = (report) => {
 
   return (
     <>
-      <div className=" bg-lightGray p-4 md:p-6 rounded-3xl flex flex-col sm:flex-row gap-4 h-[330px] w-[100%] sm:w-[90%] md:w-[40vw] lg:h-[300px] lg:w-[35vw]">
+      <div className=" bg-lightGray p-4 md:p-6 rounded-3xl flex flex-col sm:flex-row gap-4 h-fit w-[100%] md:w-[40vw] lg:h-[300px] lg:w-[35vw]">
         <Image
           src={report.image_url || '/assets/images/placeholder/image.png'}
           height={200}
@@ -32,7 +32,7 @@ const ReportCard: React.FC<IReport> = (report) => {
               }}
               rightIcon={<External size={'w-[10px] h-[10px]'} />}
             >
-              <h4>View Detail</h4>
+              <h4>Lihat Detail</h4>
             </Button>
           </div>
         </div>

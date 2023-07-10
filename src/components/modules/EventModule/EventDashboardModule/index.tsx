@@ -48,18 +48,18 @@ export const EventDashboardModule: React.FC = () => {
   return (
     <>
       <ToastContainer />
-      <div className="flex flex-col bg-white relative gap-x-12 pt-24 pb-8 px-4 sm:px-12 md:px-32 lg:px-40 gap-y-2">
+      <div className="flex flex-col bg-white relative gap-x-12 pt-24 pb-8 px-4 sm:px-12 md:px-32 lg:px-40 gap-y-2 h-screen">
         <Breadcrumb>
           <Breadcrumb.Item href="/events">Events</Breadcrumb.Item>
-          <Breadcrumb.Item href={`/events/${id}`}>{id}</Breadcrumb.Item>
+          <Breadcrumb.Item href={`/events/${id}`}>Detail Event</Breadcrumb.Item>
           <Breadcrumb.Item href={`/events/${id}/dashboard`}>
             Dashboard
           </Breadcrumb.Item>
         </Breadcrumb>
-        <div className="relative min-h-screen flex flex-col md:flex-row">
+        <div className="relative h-full flex flex-col md:flex-row">
           {/* sidebar */}
           <div className="border border-black p-4 rounded-xl flex flex-col gap-y-4">
-            <h2>Event Dashboard</h2>
+            <h2>Dashboard Kegiatan</h2>
             {/* <Button
               variant={
                 tab === DashboardTabs.participants ? 'greeny' : 'primary'

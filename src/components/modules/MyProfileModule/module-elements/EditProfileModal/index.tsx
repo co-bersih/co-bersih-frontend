@@ -7,6 +7,7 @@ import { AiFillSave, AiOutlineCloseCircle } from 'react-icons/ai'
 import { Button } from '@elements'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { cfg } from 'src/config'
 
 export const EditProfileModal: React.FC<editProfileModalProps> = ({
   user,
@@ -86,7 +87,7 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
     try {
       const config = {
         method: 'patch',
-        url: `${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/user/${user?.id}`,
+        url: `${cfg.API}/api/v1/user/${user?.id}`,
         headers: {
           Authorization: `Bearer ${tokens?.access}`,
         },
@@ -117,7 +118,7 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
 
   return (
     <>
-      <div ref={rootRef} className="h-screen">
+      <div ref={rootRef}>
         <Modal
           show={showModal}
           root={rootRef.current ?? undefined}
