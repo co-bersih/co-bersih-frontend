@@ -95,7 +95,7 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
 
   return (
     <>
-      <div ref={rootRef} className="h-screen">
+      <div ref={rootRef}>
         <Modal
           show={showModal}
           root={rootRef.current ?? undefined}

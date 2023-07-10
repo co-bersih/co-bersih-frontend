@@ -11,6 +11,7 @@ import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai'
 import { ToastContainer, toast } from 'react-toastify'
 import { IReport } from '../module-elements/ReportCard/interface'
 import { formatter } from '@utils'
+import { LoginGuardModal } from '../../AuthModule/module-elements'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -22,7 +23,8 @@ export const ReportDetailModule: React.FC = () => {
   const [data, setData] = useState<IReport>()
   const [tipMessage, setTipMessage] = useState<string>('')
   const { id } = router.query
-  const { user, tokens } = useAuthContext()
+  const { user, loading } = useAuthContext()
+  const [isLoginGuardModal, setIsLoginGuardModal] = useState<boolean>(false)
 
   useEffect(() => {
     if (id) {
@@ -34,6 +36,14 @@ export const ReportDetailModule: React.FC = () => {
         .catch((err) => console.log(err))
     }
   }, [id])
+
+  function handleCreateEventFromReport() {
+    if (!loading && !user) {
+      setIsLoginGuardModal(true)
+    } else {
+      router.replace('/events/new')
+    }
+  }
 
   return (
     <>
@@ -99,8 +109,9 @@ export const ReportDetailModule: React.FC = () => {
                     rightIcon={Enter({ size: 'w-[20px] h-[20px]' })}
                     className="py-[0.4rem]"
                     disabled={!data || tipMessage !== ''}
+                    onClick={handleCreateEventFromReport}
                   >
-                    <h4>Create Event</h4>
+                    <h4>Ajukan Kegiatan dari Laporan</h4>
                   </Button>
                 </div>
               )}
@@ -111,6 +122,7 @@ export const ReportDetailModule: React.FC = () => {
                   className="w-full h-[280px] "
                   reports={[data]}
                   disablePopup
+                  hideMapWrapper={true}
                 />
               ) : (
                 <></>
@@ -136,6 +148,10 @@ export const ReportDetailModule: React.FC = () => {
           )}
         </div>
       </div>
+      <LoginGuardModal
+        showModal={isLoginGuardModal}
+        onClose={() => setIsLoginGuardModal(false)}
+      />
     </>
   )
 }

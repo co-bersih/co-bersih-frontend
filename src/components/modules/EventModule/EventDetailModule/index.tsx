@@ -11,11 +11,13 @@ import dynamic from 'next/dynamic'
 import { MESSAGES } from './constant'
 import { useAuthContext } from '@contexts'
 import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
 import {
   AiFillDashboard,
   AiOutlineDashboard,
   AiOutlineEdit,
 } from 'react-icons/ai'
+import { LoginGuardModal } from '../../AuthModule/module-elements/LoginGuardModal'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -27,7 +29,8 @@ export const EventDetailModule: React.FC = () => {
   const [data, setData] = useState<IEvent>()
   const [tipMessage, setTipMessage] = useState<string>('')
   const { id } = router.query
-  const { user, tokens } = useAuthContext()
+  const { user, tokens, loading } = useAuthContext()
+  const [isLoginGuardModal, setIsLoginGuardModal] = useState<boolean>(false)
 
   useEffect(() => {
     if (id) {
@@ -71,26 +74,38 @@ export const EventDetailModule: React.FC = () => {
   }, [user, id])
 
   function handleJoin() {
-    const config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: `${cfg.API}/api/v1/events/${id}/join/`,
-      headers: {
-        Authorization: `Bearer ${tokens?.access}`,
-      },
-    }
+    if (!loading && !user) {
+      setIsLoginGuardModal(true)
+    } else {
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: `${cfg.API}/api/v1/events/${id}/join/`,
+        headers: {
+          Authorization: `Bearer ${tokens?.access}`,
+        },
+      }
 
-    axios
-      .request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data))
-      })
-      .catch((error) => {
-        console.log(error.response.data)
-        toast.error(error.response.data, {
-          position: toast.POSITION.TOP_CENTER,
+      axios
+        .request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data))
         })
-      })
+        .catch((error) => {
+          console.log(error.response.data)
+          toast.error('Gagal bergabung, silakan coba lagi.', {
+            position: toast.POSITION.TOP_CENTER,
+          })
+        })
+    }
+  }
+
+  function handleSupport() {
+    if (!loading && !user) {
+      setIsLoginGuardModal(true)
+    } else {
+      // Todo
+    }
   }
 
   return (
@@ -202,6 +217,7 @@ export const EventDetailModule: React.FC = () => {
                       />
                     }
                     disabled={!data || tipMessage !== ''}
+                    onClick={handleSupport}
                   >
                     <h4>Dukung</h4>
                   </Button>
@@ -261,6 +277,10 @@ export const EventDetailModule: React.FC = () => {
           )}
         </div>
       </div>
+      <LoginGuardModal
+        showModal={isLoginGuardModal}
+        onClose={() => setIsLoginGuardModal(false)}
+      />
     </>
   )
 }
