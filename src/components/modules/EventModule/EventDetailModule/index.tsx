@@ -161,7 +161,7 @@ export const EventDetailModule: React.FC = () => {
                 height={400}
                 width={400}
                 alt={data?.name}
-                className="object-cover lg:w-[36vw] lg:h-[26vw] w-full rounded-xl"
+                className="object-cover lg:w-[36vw] lg:h-[26vw] w-[95vw] sm:w-full rounded-xl"
               />
             ) : (
               <Skeleton className="h-[300px]" />

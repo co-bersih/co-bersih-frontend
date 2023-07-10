@@ -75,24 +75,24 @@ export const ReportDetailModule: React.FC = () => {
           {data && tipMessage && (
             <TipCard type={'information'} content={tipMessage} />
           )}
-          <div className="flex gap-x-4 md:gap-x-12 w-full">
+          <div className="flex lg:flex-row flex-col gap-x-4 md:gap-x-12 w-full items-center">
             {data ? (
               <Image
                 src={data?.image_url || '/assets/images/placeholder/image.png'}
                 height={400}
                 width={400}
                 alt={data?.title}
-                className="object-cover w-[40vw] h-[55vw] md:w-[36vw] md:h-[26vw] rounded-xl"
+                className="object-cover w-[40vw] h-[55vw] md:w-[36vw] md:h-[26vw] w-[95vw] sm:w-full rounded-xl"
               />
             ) : (
               <Skeleton className="h-[300px]" />
             )}
-            <div className="w-full flex flex-col gap-y-2">
+            <div className="w-full flex flex-col gap-y-2 text-center">
               <div className="flex flex-col sm:flex-row justify-between w-full">
                 <h4>Dilaporkan oleh </h4>
                 {data ? <p>{data.reporter.name}</p> : <Skeleton />}
               </div>
-              <div className="flex flex-col sm:flex-row justify-between w-full">
+              <div className="flex flex-col sm:flex-row justify-between w-full items-center">
                 <div className="flex gap-x-2 min-w-[25%]">
                   <Clock size="w-[18px] h-[18px] md:w-[24px] md:h-[24px]" />
                   <h4>Tanggal pelaporan</h4>

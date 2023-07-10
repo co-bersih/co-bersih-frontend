@@ -17,7 +17,7 @@ import { Pagination, Spinner } from 'flowbite-react'
 import ReportCard from '../ReportModule/module-elements/ReportCard'
 
 export const MyProfileModule: React.FC = () => {
-  const { user, tokens } = useAuthContext()
+  const { user, tokens, loading: authLoading } = useAuthContext()
   const router = useRouter()
   const { id } = router.query
   const [tab, setTab] = useState<number>(0)
@@ -30,13 +30,14 @@ export const MyProfileModule: React.FC = () => {
   const [joinedEventsData, setJoinedEventsData] = useState<IEvent[]>([])
   const [createdEventsData, setCreatedEventsData] = useState<IEvent[]>([])
   const [reportsData, setReportsData] = useState<IReport[]>([])
-  const [pages, setPages] = useState<Pages>({})
+  const [joinedEventsPages, setJoinedEventsPages] = useState<Pages>({})
+  const [createdEventsPages, setCreatedEventsPages] = useState<Pages>({})
 
   const fetchJoinedEvents = (params: any) => {
     axios
       .get(`${cfg.API}/api/v1/user/${id}/events/`, { params })
       .then((res) => {
-        setPages((prev) => ({
+        setJoinedEventsPages((prev) => ({
           count: res.data.count,
           next: res.data.next,
           previous: res.data.previous,
@@ -49,19 +50,17 @@ export const MyProfileModule: React.FC = () => {
 
   const fetchCreatedEvents = (params: any) => {
     axios
-      .get(`${cfg.API}/api/v1/events/`, { params })
+      .get(`${cfg.API}/api/v1/user/${id}/events-staff/`, { params })
       .then((res) => {
-        const filteredResults = res.data.results.filter(
-          (event: any) => event.host.email === user?.email
-        )
-        setCreatedEventsData(filteredResults)
-        setPages((prev) => ({
+        setCreatedEventsData(res.data.results)
+        setCreatedEventsPages((prev) => ({
           count: res.data.count,
           next: res.data.next,
           previous: res.data.previous,
           current: prev.current,
         }))
-        console.log(res.data)
+        console.log(res.data.results.length)
+        setCreatedEventsData(res.data.results)
       })
       .catch((err) => console.log(err))
   }
@@ -74,7 +73,7 @@ export const MyProfileModule: React.FC = () => {
           (report: any) => report.reporter.email === user?.email
         )
         setReportsData(filteredResults)
-        setPages((prev) => ({
+        setJoinedEventsPages((prev) => ({
           count: res.data.count,
           next: res.data.next,
           previous: res.data.previous,
@@ -86,17 +85,16 @@ export const MyProfileModule: React.FC = () => {
   }
 
   const onPageChange = (page: number) => {
-    setPages((prev) => ({ ...prev, current: page }))
+    setJoinedEventsPages((prev) => ({ ...prev, current: page }))
   }
 
   useEffect(() => {
-    if (id) {
-      const params = { page: pages.current }
-      fetchJoinedEvents(params)
-      fetchCreatedEvents(params)
+    if (id && !authLoading) {
+      fetchJoinedEvents({ page: joinedEventsPages.current || 0 + 1 })
+      fetchCreatedEvents({ page: createdEventsPages.current || 0 + 1 })
       fetchReports()
     }
-  }, [id, tab, toggleValue])
+  }, [id, authLoading])
 
   const setChangePasswordModal = () => {}
   return (
@@ -152,7 +150,7 @@ export const MyProfileModule: React.FC = () => {
         items={TAB_OPTIONS}
       />
       {tab === 0 ? (
-        <div className="bg-white rounded-b-lg rounded-tr-lg flex flex-col items-center py-8 px-4 sm:px-10 md:px-20 space-y-5">
+        <div className="bg-white rounded-b-lg rounded-tr-lg flex flex-col items-center py-8 px-4 sm:px-10 md:px-20 space-y-5 min-h-screen md:min-h-[50vh] h-fit">
           <Toggle
             items={['Diikuti', 'Dipimpin']}
             value={toggleValue}
@@ -173,15 +171,15 @@ export const MyProfileModule: React.FC = () => {
               <br />
 
               <Pagination
-                currentPage={pages.current || 1}
+                currentPage={joinedEventsPages.current || 1}
                 onPageChange={onPageChange}
-                totalPages={Math.ceil(pages.count! / 10) || 1}
-                className="text-sm"
+                totalPages={Math.ceil(joinedEventsPages.count! / 10) || 1}
+                className="text-sm mt-auto"
               />
             </>
           ) : (
             <>
-              {joinedEventsData.length === 0 ? (
+              {createdEventsData.length === 0 ? (
                 <h2>Belum ada kegiatan yang dibuat!</h2>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
@@ -193,10 +191,10 @@ export const MyProfileModule: React.FC = () => {
               <br />
 
               <Pagination
-                currentPage={pages.current || 1}
+                currentPage={createdEventsPages.current || 1}
                 onPageChange={onPageChange}
-                totalPages={Math.ceil(pages.count! / 10) || 1}
-                className="text-sm"
+                totalPages={Math.ceil(createdEventsPages.count! / 10) || 1}
+                className="text-sm mt-auto"
               />
             </>
           )}
