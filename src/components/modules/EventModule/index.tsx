@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import EventCard from './module-elements/EventCard'
 import { Pagination, TextInput } from 'flowbite-react'
-import { LatLngLiteral, map } from 'leaflet'
+import L, { LatLngLiteral, map } from 'leaflet'
 import dynamic from 'next/dynamic'
 import { dummyEvent, dummyEvent2, dummyLoc } from './constant'
 import { Button, FilterButton, Toggle } from '@elements'
@@ -19,6 +19,7 @@ import { CreateReportModal } from '../ReportModule/module-elements/CreateReportM
 import { LoginGuardModal } from '../AuthModule/module-elements'
 import { IReport } from '../ReportModule/module-elements/ReportCard/interface'
 import ReportCard from '../ReportModule/module-elements/ReportCard'
+import { ToastContainer, toast } from 'react-toastify'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -27,26 +28,31 @@ const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
 export const EventModule: React.FC = () => {
   const { tokens, loading, user } = useAuthContext()
   const router = useRouter()
+
+  // data states
   const [eventsData, setEventsData] = useState<IEvent[]>([])
+  const [mapEventsData, setMapEventsData] = useState<IEvent[]>()
   const [reportsData, setReportsData] = useState<IReport[]>([])
+  const [reportEventsData, setReportEventsData] = useState<IReport[]>()
+  // other states
   const [loc, setLoc] = useState<LatLngLiteral | undefined>(dummyLoc)
   const [pages, setPages] = useState<Pages>({})
+  const [minimumZoom, setMinimumZoom] = useState<number>(12)
   const [toggleValue, setToggleValue] = useState(0)
   const [searchValue, setSearchValue] = useState('')
+
   const [isLoginGuardModal, setIsLoginGuardModal] = useState<boolean>(false)
   const [isReportModal, setIsReportModal] = useState<boolean>(false)
 
-  const onPageChange = (page: number) => {
-    setPages((prev) => ({ ...prev, current: page }))
-  }
-
-  const onScrollOut = () => {
-    // TODO: refetch for new range
-  }
+  // data fetching
 
   const fetchEvents = (params: any) => {
-    axios
+    return axios
       .get(`${cfg.API}/api/v1/events/`, { params })
+  }
+
+  const fetchPagedEvents = (params: any) => {
+    fetchEvents(params)
       .then((res) => {
         setPages((prev) => ({
           count: res.data.count,
@@ -57,6 +63,26 @@ export const EventModule: React.FC = () => {
         setEventsData(res.data.results)
       })
       .catch((err) => console.log(err))
+  }
+
+  const fetchMappedEvents = (params: any) => {
+    fetchEvents(params)
+      .then((res) => {
+        addToMapEventsData(res.data.results)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const addToMapEventsData = (events: IEvent[]) => {
+    const toAppend: IEvent[] = []
+    const mapEventIds: string[] = mapEventsData?.map((event) => event.id) || []
+
+    events.forEach((event, idx) => {
+      if (!mapEventIds.includes(event.id)) {
+        toAppend.push(event)
+      }
+    })
+    setMapEventsData(prev => (prev ? [...prev, ...toAppend] : toAppend))
   }
 
   const fetchReports = (params: any) => {
@@ -74,17 +100,25 @@ export const EventModule: React.FC = () => {
       .catch((err) => console.log(err))
   }
 
-  useEffect(() => {
-    const params = { page: pages.current }
-    fetchEvents(params)
-    fetchReports(params)
-  }, [pages.current, tokens])
+  // event handlers
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((geo) => {
-      setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
-    })
-  }, [])
+  const onPageChange = (page: number) => {
+    setPages((prev) => ({ ...prev, current: page }))
+  }
+
+  const handleZoomChange = (newZoom: number) => {
+    if (newZoom < minimumZoom) {
+      setMinimumZoom(newZoom)
+    }
+  }
+  
+  const handleMove = (newCenter: LatLngLiteral) => {
+    try {
+      setLoc({ lat: newCenter.lat, lng: newCenter.lng })
+    } catch {
+      console.log("could not get new center: ", JSON.stringify(newCenter))
+    }
+  }
 
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -98,13 +132,13 @@ export const EventModule: React.FC = () => {
     if (event.key === 'Enter') {
       event.preventDefault()
       const params = { search: searchValue }
-      fetchEvents(params)
+      fetchPagedEvents(params)
     }
   }
 
   const handleSearchIconClick = () => {
     const params = { search: searchValue }
-    fetchEvents(params)
+    fetchPagedEvents(params)
   }
 
   const handleClickCreateEvent = () => {
@@ -123,24 +157,51 @@ export const EventModule: React.FC = () => {
     }
   }
 
+  // use effects
+
+  useEffect(() => {
+    const params = { page: pages.current }
+    fetchPagedEvents(params)
+    fetchReports(params)
+  }, [pages.current, tokens])
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((geo) => {
+      setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
+    })
+    setMinimumZoom(11)
+  }, [])
+
+  useEffect(() => {
+    if (minimumZoom < 0 || minimumZoom > 30) {
+      return
+    }
+    console.log(minimumZoom)
+    fetchMappedEvents({ lon: loc?.lng, lat: loc?.lat, min: 0, max: 5*minimumZoom })
+  }, [minimumZoom, loc])
+  
+
   return (
     <>
+      <ToastContainer />
       <div className="flex flex-col bg-white">
-        <div className="relative h-screen flex flex-col items-center justify-end lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-mintGreen space-y-5">
+        <div 
+          className="relative h-screen flex flex-col items-center justify-end lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-mintGreen space-y-5"
+        >
           <h1>Temukan Acara Co-Bersih Terdekat</h1>
           {loc?.lat && loc.lng ? (
-            <DynamicMap
-              center={loc}
-              draggable={{
-                locationState: loc,
-                setLocationState: setLoc,
-              }}
-              events={eventsData}
-              reports={reportsData}
-              className="min-w-[80vw] lg:h-[500px] h-[400px] rounded-full"
-            />
+            <div>
+              <DynamicMap
+                center={loc}
+                events={mapEventsData}
+                reports={reportsData}
+                className="min-w-[80vw] lg:h-[500px] h-[400px] rounded-full"
+                onZoomChange={handleZoomChange}
+                onMove={handleMove}
+              />
+            </div>
           ) : (
-            <p className=" bg-red-300 p-2 rounded-md">
+            <p className=" bg-red-300 p-2 rounded-md my-auto">
               Pastikan lokasi Anda menyala dan browser dapat menggunakan lokasi
               tersebut.
             </p>

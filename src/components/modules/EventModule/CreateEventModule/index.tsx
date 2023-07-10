@@ -1,4 +1,5 @@
 import {
+  Breadcrumb,
   FileInput,
   Label,
   Pagination,
@@ -19,6 +20,7 @@ import { cfg } from 'src/config'
 import { useAuthContext } from '@contexts'
 import { ToastContainer, toast } from 'react-toastify'
 import { useRouter } from 'next/router'
+import { formatter } from '@utils'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -26,6 +28,7 @@ const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
 
 export const CreateEventModule: React.FC = () => {
   const {
+    control,
     register,
     handleSubmit,
     watch,
@@ -45,14 +48,17 @@ export const CreateEventModule: React.FC = () => {
   const onSubmit = async (data: CreateEventForm) => {
     setIsLoading(true)
 
+    data.start_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS);
+    data.end_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS);
+
     data.latitude = loc?.lat || 0
     data.longitude = loc?.lng || 0
     const formData = new FormData()
     formData.append('name', data.name)
     formData.append('description', data.description)
     formData.append('preparation', data.preparation)
-    formData.append('start_date', data.start_date)
-    formData.append('end_date', data.end_date)
+    formData.append('start_date', data.start_date.toISOString())
+    formData.append('end_date', data.end_date.toISOString())
     formData.append('image', data.image[0])
     formData.append('latitude', String(data.latitude))
     formData.append('longitude', String(data.longitude))
@@ -94,11 +100,19 @@ export const CreateEventModule: React.FC = () => {
     }
   }, [])
 
+  // useEffect(() => {
+  //   errors && toast.error(JSON.stringify(errors));
+  // }, [errors])
+
   return (
     <>
       <ToastContainer />
-      <div className="flex flex-col bg-white relative">
-        <div className="relative min-h-screen flex flex-col items-center pt-24 pb-8 lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] px-4 sm:px-12 md:px-32 lg:px-40">
+      <div className="flex flex-col bg-white relative px-4 sm:px-12 md:px-32 lg:px-40 pt-24 pb-8">
+        <Breadcrumb className='mb-4'>
+          <Breadcrumb.Item href="/events">Kegiatan</Breadcrumb.Item>
+          <Breadcrumb.Item href={`/events`}>Buat Kegiatan</Breadcrumb.Item>
+        </Breadcrumb>
+        <div className="relative min-h-screen flex flex-col items-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px]">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <h2>Buat Kegiatan</h2>
             <br />
@@ -109,7 +123,7 @@ export const CreateEventModule: React.FC = () => {
               <TextInput
                 className="w-full col-span-3"
                 {...register('name', {
-                  required: true,
+                  required: "Judul kegiatan wajib diisi",
                   maxLength: 100,
                   minLength: 1,
                 })}
@@ -137,39 +151,58 @@ export const CreateEventModule: React.FC = () => {
               <div className="col-span-2">
                 <h4>Foto Cover</h4>
               </div>
-              <FileInput
-                className="col-span-3"
-                {...register('image', { required: true })}
-                accept="image/*"
-              />
+              <div className="col-span-3">
+                <FileInput
+                  {...register('image', { 
+                    required: true, 
+                    validate: (val => (val[0].size < cfg.MAX_IMG_SIZE_IN_MEGABYTE * cfg.MEGABYTE || `File tidak boleh lebih besar dari ${cfg.MAX_IMG_SIZE_IN_MEGABYTE} MB.` )) 
+                  })}
+                  accept="image/*"
+                />
+                <p className='text-sm text-red-500'>{errors.image?.message}</p>
+              </div>
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Mulai</h4>
-                <p className="text-xs font-extralight">Timezone: GMT+0 (UTC)</p>
+                <p className="text-xs font-extralight">Timezone: GMT+7 (WIB)</p>
               </div>
-              <TextInput
-                className="w-full col-span-3"
-                {...register('start_date', { required: true })}
-                type="datetime-local"
-              />
+              <div className="w-full col-span-3">
+                <TextInput
+                  {...register('start_date', { 
+                    required: true, 
+                    valueAsDate: true, 
+                    validate: (val) => (val < control._formValues.end_date || 'Tanggal & waktu mulai harus sebelum tanggal & waktu selesai.')
+                  })}
+                  type="datetime-local"
+                />
+                <p className='text-sm text-red-500'>{errors.start_date?.message}</p>
+              </div>
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Selesai</h4>
-                <p className="text-xs font-extralight">Timezone: GMT+0 (UTC)</p>
+                <p className="text-xs font-extralight">Timezone: GMT+7 (WIB)</p>
               </div>
-              <TextInput
-                className="w-full col-span-3"
-                {...register('end_date', { required: true })}
-                type="datetime-local"
-              />
+              <div className="w-full col-span-3">
+                <TextInput
+                  {...register('end_date', { 
+                    required: true, 
+                    valueAsDate: true, 
+                    validate: (val) => (val > new Date() || 'Tanggal & waktu selesai harus di masa mendatang.') 
+                  })}
+                  type="datetime-local"
+                />
+                <p className='text-sm text-red-500'>{errors.end_date?.message}</p>
+              </div>
               <div className="col-span-2">
                 <h4>Lokasi Mulai</h4>
               </div>
               {loc?.lat && loc.lng ? (
                 <div className="col-span-3">
+                  <p>Petunjuk: Tarik penanda biru di peta sesuai lokasi kegiatan.</p>
                   <DynamicMap
                     center={loc}
                     draggable={{
                       locationState: loc,
                       setLocationState: setLoc,
+                      icon: 'event'
                     }}
                     className="w-full min-h-[350px] col-span-3 rounded-3xl"
                   />
