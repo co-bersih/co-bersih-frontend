@@ -76,7 +76,7 @@ export const ChangePasswordModal: React.FC<changePasswordModalProps> = ({
 
   return (
     <>
-      <div ref={rootRef} className="h-screen">
+      <div ref={rootRef}>
         <Modal
           show={showModal}
           root={rootRef.current ?? undefined}

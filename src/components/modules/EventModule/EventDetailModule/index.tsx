@@ -225,6 +225,7 @@ export const EventDetailModule: React.FC = () => {
                   className="w-full h-[280px] "
                   events={[data]}
                   disablePopup
+                  hideMapWrapper={true}
                 />
               ) : (
                 <></>

@@ -80,7 +80,7 @@ export const Map: React.FC<MapProps> = (props: MapProps) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <MapWrapper /> {/* Add MapWrapper component */}
+      {props.hideMapWrapper ? null : <MapWrapper />}
       {props.events?.map((event, idx) => (
         <Marker
           position={{ lat: event.latitude, lng: event.longitude }}

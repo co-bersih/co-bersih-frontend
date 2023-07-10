@@ -65,7 +65,7 @@ export const NavBar: React.FC = () => {
                 {user.email}
               </span>
             </Dropdown.Header>
-            <Navbar.Link href="/my-profile">
+            <Navbar.Link href={`/my-profile/${user.id}`}>
               <Dropdown.Item>
                 <h4>My Profile</h4>
               </Dropdown.Item>

@@ -118,7 +118,7 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
 
   return (
     <>
-      <div ref={rootRef} className="h-screen">
+      <div ref={rootRef}>
         <Modal
           show={showModal}
           root={rootRef.current ?? undefined}

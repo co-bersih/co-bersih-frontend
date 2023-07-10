@@ -11,7 +11,7 @@ export type MapProps = {
     locationState: LatLngLiteral
     setLocationState: React.Dispatch<React.SetStateAction<any>>
   }
-  // reports?: ...
   className?: string
   onMapReady?: (map: L.Map) => void
+  hideMapWrapper?: boolean
 }

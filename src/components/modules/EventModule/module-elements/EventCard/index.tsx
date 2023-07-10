@@ -10,7 +10,7 @@ const EventCard: React.FC<IEvent> = (event) => {
 
   return (
     <>
-      <div className=" bg-lightGray p-4 md:p-6 rounded-3xl flex flex-col sm:flex-row gap-4 h-[330px] w-[100%] sm:w-[90%] md:w-[40vw] lg:h-[300px] lg:w-[35vw]">
+      <div className=" bg-lightGray p-4 md:p-6 rounded-3xl flex flex-col sm:flex-row gap-4 h-fit w-[100%] md:w-[40vw] lg:h-[300px] lg:w-[35vw]">
         <Image
           src={event.image_url || '/assets/images/placeholder/image.png'}
           height={200}
