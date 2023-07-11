@@ -3,7 +3,7 @@ import React from 'react'
 import { Carousel } from 'flowbite-react'
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs'
 
-export const HeroModule: React.FC = () => {
+export const Hero: React.FC = () => {
   return (
     <div className="h-screen bg-mintGreen">
       <div className="h-screen flex flex-col items-center justify-center lg:rounded-b-[200px] md:rounded-b-[150px] rounded-b-[50px] bg-white">

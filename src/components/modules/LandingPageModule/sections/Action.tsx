@@ -2,7 +2,7 @@ import { Carousel } from 'flowbite-react'
 import Image from 'next/image'
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs'
 
-export const ActionModule: React.FC = () => {
+export const Action: React.FC = () => {
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-mintGreen space-y-3">
       <div className="flex flex-row items-center lg:justify-between justify-center lg:px-0 px-10 lg:-mb-0 -mb-12 ">

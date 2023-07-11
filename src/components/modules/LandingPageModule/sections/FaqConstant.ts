@@ -1,4 +1,4 @@
-export const faqs = [
+export const FAQ_DATA = [
   {
     question: 'Apa itu Co-Bersih dan apa tujuannya?',
     answer:
