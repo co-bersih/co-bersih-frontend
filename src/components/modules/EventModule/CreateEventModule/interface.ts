@@ -5,6 +5,6 @@ export interface CreateEventForm {
   image: FileList
   latitude: number
   longitude: number
-  start_date: string // ?
-  end_date: string // ?
+  start_date: Date
+  end_date: Date
 }

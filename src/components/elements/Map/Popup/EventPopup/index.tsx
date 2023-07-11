@@ -11,7 +11,7 @@ const EventPopup: React.FC<EventPopupProps> = (props: EventPopupProps) => (
     <div className="w-[18vw]">
       <span className=" bg-mintGreen py-1 px-3 w-fit rounded-xl">Kegiatan</span>
       <Image
-        src={props.event.image_url}
+        src={props.event.image_url || '/assets/images/placeholder/image.png'}
         width={200}
         height={100}
         alt={props.event.name}

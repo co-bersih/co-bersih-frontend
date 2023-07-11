@@ -18,6 +18,7 @@ import {
   AiOutlineEdit,
 } from 'react-icons/ai'
 import { LoginGuardModal } from '../../AuthModule/module-elements/LoginGuardModal'
+import { Breadcrumb } from 'flowbite-react'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -112,7 +113,13 @@ export const EventDetailModule: React.FC = () => {
     <>
       <ToastContainer />
       <div className="flex flex-col bg-mintGreen">
-        <div className="px-3 sm:px-8 md:px-32 lg:px-40 relative min-h-[105vh] flex flex-col gap-4 items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-white pt-28 pb-8">
+        <div className="relative min-h-[105vh] px-3 sm:px-8 md:px-32 lg:px-40  pt-28 pb-8 flex flex-col gap-4 items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-white">
+          <Breadcrumb className="mr-auto">
+            <Breadcrumb.Item href="/events">Kegiatan</Breadcrumb.Item>
+            <Breadcrumb.Item href={`/events/${id}`}>
+              Detail Kegiatan
+            </Breadcrumb.Item>
+          </Breadcrumb>
           {data?.host.email === user?.email ? (
             <div className="flex ml-auto gap-x-2">
               <Button
@@ -154,7 +161,7 @@ export const EventDetailModule: React.FC = () => {
                 height={400}
                 width={400}
                 alt={data?.name}
-                className="object-cover lg:w-[36vw] lg:h-[26vw] w-full rounded-xl"
+                className="object-cover lg:w-[36vw] lg:h-[26vw] w-[95vw] sm:w-full rounded-xl"
               />
             ) : (
               <Skeleton className="h-[300px]" />
@@ -190,39 +197,35 @@ export const EventDetailModule: React.FC = () => {
               </div>
               <hr />
               <br />
-              {data?.host.email === user?.email ? (
-                <></>
-              ) : (
-                <div className="flex flex-col sm:flex-row justify-center gap-y-2 gap-x-[4%]">
-                  <Button
-                    variant={'greeny'}
-                    rightIcon={
-                      <Enter
-                        size={'w-[20px] h-[20px]'}
-                        fill={data && tipMessage === '' ? 'white' : '#ACACAC'}
-                      />
-                    }
-                    className="py-[0.4rem]"
-                    disabled={!data || tipMessage !== ''}
-                    onClick={handleJoin}
-                  >
-                    <h4>Bergabung</h4>
-                  </Button>
-                  <Button
-                    variant={'deserted'}
-                    rightIcon={
-                      <Money
-                        size={'w-[20px] h-[20px]'}
-                        fill={data && tipMessage === '' ? '#458549' : '#ACACAC'}
-                      />
-                    }
-                    disabled={!data || tipMessage !== ''}
-                    onClick={handleSupport}
-                  >
-                    <h4>Dukung</h4>
-                  </Button>
-                </div>
-              )}
+              <div className="flex flex-col sm:flex-row justify-center gap-y-2 gap-x-[4%]">
+                <Button
+                  variant={'greeny'}
+                  rightIcon={
+                    <Enter
+                      size={'w-[20px] h-[20px]'}
+                      fill={data && tipMessage === '' ? 'white' : '#ACACAC'}
+                    />
+                  }
+                  className="py-[0.4rem]"
+                  disabled={!data || tipMessage !== ''}
+                  onClick={handleJoin}
+                >
+                  <h4>Bergabung</h4>
+                </Button>
+                <Button
+                  variant={'deserted'}
+                  rightIcon={
+                    <Money
+                      size={'w-[20px] h-[20px]'}
+                      fill={data && tipMessage === '' ? '#458549' : '#ACACAC'}
+                    />
+                  }
+                  disabled={!data || tipMessage !== ''}
+                  onClick={handleSupport}
+                >
+                  <h4>Dukung</h4>
+                </Button>
+              </div>
 
               {/* only display participants if non-null and > 0 */}
               {data?.total_participant ? (
