@@ -10,27 +10,40 @@ const EventCard: React.FC<IEvent> = (event) => {
 
   return (
     <>
-      <div className=" bg-lightGray p-4 md:p-6 rounded-3xl flex flex-col sm:flex-row gap-4 h-[330px] w-[100%] sm:w-[90%] md:w-[40vw] lg:h-[300px] lg:w-[35vw]">
+      <div className="flex flex-col sm:flex-row gap-4 bg-lightGray p-4 rounded-3xl h-full md:h-full lg:h-[320px] w-[100%] lg:w-[35vw]">
         <Image
           src={event.image_url || '/assets/images/placeholder/image.png'}
           height={200}
           width={120}
           alt={event.name}
-          className="h-[30%] sm:h-[100%] w-[100%] sm:w-[120px] object-cover rounded-2xl md:rounded-2xl"
+          className="h-[100%] lg:w-[40%] w-[100%] object-cover rounded-2xl md:rounded-2xl"
         />
         <div className="flex flex-col w-full">
-          <h3 className="mb-2 md:mb-4">{event.name}</h3>
-          <p className="mb-2 md:mb-4">
-            {formatter.trimLongText(event.description)}...
-          </p>
+          <div className="flex space-x-2">
+            <h4 className=" bg-mintGreen py-1 px-3 mb-2 w-fit rounded-xl text-sm">
+              Kegiatan
+            </h4>
+            {event.is_verified ? (
+              <h4 className="bg-paleGreen py-1 px-3 mb-2 w-fit rounded-xl text-sm">
+                Terverifikasi
+              </h4>
+            ) : (
+              <h4 className="bg-teal py-1 px-3 mb-2 w-fit rounded-xl text-sm">
+                Tidak Terverifikasi
+              </h4>
+            )}
+          </div>
+          <h3 className="mb-2">{event.name}</h3>
+          <p className="mb-2">{formatter.trimLongText(event.description)}...</p>
           <div className="flex flex-row gap-x-2 mb-2">
             <Participant size={''} />
-            <p>{event.total_participant!} peserta</p>
+            <p>{event.total_participant!} orang peserta</p>
           </div>
-          <div className="flex flex-row gap-x-2 md:mb-4 lg:mb-8">
+          <div className="flex flex-row gap-x-2">
             <Calendar size={''} />
             <p>
-              Starts {formatter.formatDateTimeWIB(new Date(event.start_date))}
+              Dimulai pada{' '}
+              {formatter.formatDateTimeWIB(new Date(event.start_date))}
               {/* -{' '}
             {formatter.formatDateTimeWIB(event.end_date)} */}
             </p>
@@ -44,7 +57,7 @@ const EventCard: React.FC<IEvent> = (event) => {
               }}
               rightIcon={<External size={'w-[10px] h-[10px]'} />}
             >
-              <h4>View Detail</h4>
+              <h4>Lihat Detail</h4>
             </Button>
           </div>
         </div>

@@ -10,7 +10,7 @@ export namespace formatter {
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      timeZone: 'Asia/Jakarta', // Set the timezone to GMT+7 (WIB)
+      timeZone: 'UTC', // Set the timezone to GMT+7 (WIB)
     }
 
     return date.toLocaleString('en-US', options) + ' WIB'

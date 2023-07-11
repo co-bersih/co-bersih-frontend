@@ -7,6 +7,7 @@ import { AiFillSave, AiOutlineCloseCircle } from 'react-icons/ai'
 import { Button } from '@elements'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { cfg } from 'src/config'
 
 export const EditProfileModal: React.FC<editProfileModalProps> = ({
   user,
@@ -86,7 +87,7 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
     try {
       const config = {
         method: 'patch',
-        url: `${process.env.NEXT_PUBLIC_APP_API_URL}/api/v1/user/${user?.id}`,
+        url: `${cfg.API}/api/v1/user/${user?.id}`,
         headers: {
           Authorization: `Bearer ${tokens?.access}`,
         },
@@ -96,7 +97,7 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
       await axios
         .request(config)
         .then((response) => {
-          toast.success('Successfully edit profile.', {
+          toast.success('Berhasil edit profil.', {
             position: toast.POSITION.TOP_CENTER,
           })
           onClose()
@@ -117,14 +118,14 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
 
   return (
     <>
-      <div ref={rootRef} className="h-screen">
+      <div ref={rootRef}>
         <Modal
           show={showModal}
           root={rootRef.current ?? undefined}
           className="h-screen"
         >
           <div className="flex justify-between px-6 pt-5 items-center">
-            <h2>Edit Profile</h2>
+            <h2>Edit Profil</h2>
             <AiOutlineCloseCircle
               size="28"
               className="cursor-pointer"
@@ -133,16 +134,16 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
           </div>
           <Modal.Body>
             <form onSubmit={handleSubmit}>
-              <h3>Name</h3>
+              <h3>Nama</h3>
               <TextInput
                 required
                 type="text"
                 value={name}
                 onChange={handleNameChange}
               />
-              <h3>Bio</h3>
+              <h3>Biodata</h3>
               <TextInput type="text" value={bio} onChange={handleBioChange} />
-              <h3>Profile Image</h3>
+              <h3>Foto Profil</h3>
               <div className="w-full space-y-2 pb-5">
                 <div className="relative flex justify-center items-center">
                   <div
@@ -176,7 +177,7 @@ export const EditProfileModal: React.FC<editProfileModalProps> = ({
                 className="w-full"
                 rightIcon={<AiFillSave size={16} color="white" />}
               >
-                Save
+                Simpan
               </Button>
             </form>
           </Modal.Body>
