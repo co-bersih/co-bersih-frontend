@@ -3,14 +3,14 @@ import React from 'react'
 import { Carousel } from 'flowbite-react'
 import { BsArrowLeftCircle, BsArrowRightCircle } from 'react-icons/bs'
 
-export const HeroModule: React.FC = () => {
+export const Hero: React.FC = () => {
   return (
     <div className="h-screen bg-mintGreen">
       <div className="h-screen flex flex-col items-center justify-center lg:rounded-b-[200px] md:rounded-b-[150px] rounded-b-[50px] bg-white">
-        <h1 className="lg:px-64 px-5 text-center ">
+        <h1 className="lg:px-64 px-5 text-center z-[7] leading-[1.4]">
           Mari bergabung dalam misi kami untuk menciptakan lingkungan yang
           bersih dan sehat bagi{' '}
-          <span className="font-poppinsMedium bg-paleGreen rounded-full px-2 bg-opacity-80">
+          <span className="z-[6] font-poppinsMedium bg-gradient-to-r from-lightGreen via-paleGreen to-lightGreen rounded-full px-2 bg-opacity-80 shiny">
             Indonesia
           </span>
         </h1>

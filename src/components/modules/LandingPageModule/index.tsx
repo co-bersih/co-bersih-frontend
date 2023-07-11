@@ -1,15 +1,16 @@
-import React from 'react'
-import { HeroModule } from './sections/hero'
-import { ActionModule } from './sections/action'
-import { WalkingText } from './sections/walking'
+import { Action } from './sections/Action'
+import { FAQ } from './sections/Faq'
+import { Hero } from './sections/Hero'
+import { WalkingText } from './sections/WalkingText'
 
 export const LandingPageModule: React.FC = () => {
   return (
     <>
       <div className="flex flex-col ">
-        <HeroModule />
-        <ActionModule />
+        <Hero />
+        <Action />
         <WalkingText />
+        <FAQ />
       </div>
     </>
   )

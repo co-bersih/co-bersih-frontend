@@ -1,1 +1,1 @@
-export const TAB_OPTIONS = ['Events Joined', 'Events Organized']
+export const TAB_OPTIONS = ['Kegiatan', 'Laporan']
