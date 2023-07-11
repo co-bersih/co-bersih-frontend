@@ -319,10 +319,24 @@ export const EditEventModule: React.FC = () => {
                 >
                   <h4>Hapus Event</h4>
                 </Button>
-                <Button variant={'deserted'} isLoading={isLoading}>
+                <Button
+                  variant={'deserted'}
+                  isLoading={isLoading}
+                  type="button"
+                  onClick={() => {
+                    router.push('/events')
+                  }}
+                >
                   <h4>Batalkan Edit</h4>
                 </Button>
-                <Button variant={'greeny'} isLoading={isLoading}>
+                <Button
+                  variant={'greeny'}
+                  isLoading={isLoading}
+                  type="button"
+                  onClick={() => {
+                    router.push('/events')
+                  }}
+                >
                   <h4>Selesai Edit</h4>
                 </Button>
               </div>
