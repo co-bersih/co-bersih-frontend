@@ -70,6 +70,16 @@ export const NavBar: React.FC = () => {
                 <h4>Profil Anda</h4>
               </Dropdown.Item>
             </Navbar.Link>
+            <button
+              className="w-full"
+              onClick={() => {
+                alert('show modal')
+              }}
+            >
+              <Dropdown.Item>
+                <h4>Masukkan Token</h4>
+              </Dropdown.Item>
+            </button>
 
             <Dropdown.Divider />
             <Navbar.Link href="/auth/logout">
