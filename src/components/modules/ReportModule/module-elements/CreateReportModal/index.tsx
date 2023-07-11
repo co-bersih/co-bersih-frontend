@@ -149,6 +149,7 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
                       draggable={{
                         locationState: loc,
                         setLocationState: setLoc,
+                        icon: 'report'
                       }}
                       className="w-full min-h-[350px] col-span-3 rounded-3xl"
                       onMapReady={onMapReady}
