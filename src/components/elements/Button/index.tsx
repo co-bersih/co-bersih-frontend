@@ -10,17 +10,17 @@ export const Button: React.FC<ButtonProps> = ({
   rightIcon,
   disabled,
   isLoading,
+  type,
 }) => {
-  // TODO: Write element's logic
-
   return (
     <>
       <button
         onClick={onClick}
         disabled={disabled || isLoading}
+        type={type}
         className={`${className} flex h-fit select-none items-center justify-center gap-1 rounded-full tracking-wider transition-all p-1
         ${
-          variant == 1 &&
+          variant == 'primary' &&
           ` bg-[#EFEFEE] hover:border-darkGreen hover:border-2 pr-3 ${
             isLoading
               ? 'border-darkGreen disabled:bg-seaGreen'
@@ -28,7 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
           } disabled:text-black/50  disabled:drop-shadow-none`
         }
         ${
-          variant == 2 &&
+          variant == 'ghost' &&
           ` hover:bg-teal px-5 hover:text-white ${
             isLoading
               ? 'border-darkGreen disabled:bg-seaGreen'
@@ -36,7 +36,7 @@ export const Button: React.FC<ButtonProps> = ({
           } disabled:text-black/50  disabled:drop-shadow-none`
         }
         ${
-          variant == 3 &&
+          variant == 'solid' &&
           ` bg-black px-5 text-white hover:bg-black/80 ${
             isLoading
               ? 'border-darkGreen disabled:bg-seaGreen'
@@ -44,7 +44,7 @@ export const Button: React.FC<ButtonProps> = ({
           } disabled:text-black/50  disabled:drop-shadow-none`
         }
         ${
-          variant == 4 &&
+          variant == 'greeny' &&
           ` bg-seaGreen px-5 text-white hover:bg-teal ${
             isLoading
               ? 'border-darkGreen disabled:bg-seaGreen'
@@ -52,7 +52,7 @@ export const Button: React.FC<ButtonProps> = ({
           } disabled:text-black/50  disabled:drop-shadow-none`
         }
         ${
-          variant == 5 &&
+          variant == 'deserted' &&
           ` px-5 border-2 border-darkGreen text-darkGreen bg-white hover:bg-mintGreen ${
             isLoading
               ? 'border-darkGreen disabled:bg-seaGreen'

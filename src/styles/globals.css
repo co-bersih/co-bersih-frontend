@@ -48,7 +48,7 @@ p {
     font-size: 12pt;
   }
   h3 {
-    font-size: 7.5pt;
+    font-size: 12pt;
   }
   h4 {
     font-size: 10pt;
@@ -94,5 +94,53 @@ p {
   p {
     font-size: 11pt;
     line-height: 18px;
+  }
+}
+
+.marqueeStyle {
+  display: flex;
+  flex-shrink: 0;
+  height: 50px;
+  align-items: center;
+  animation: slide-left 10s linear infinite;
+}
+@keyframes slide-left {
+  from {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  to {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+}
+
+.skeleton {
+  background: #353e4e;
+  background: linear-gradient(110deg, #dfdfdf 8%, #353e4e 18%, #dfdfdf 33%);
+  background-size: 200% 100%;
+}
+
+.shiny {
+  animation: 1.5s shine linear infinite;
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
   }
 }

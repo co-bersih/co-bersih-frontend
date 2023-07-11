@@ -18,11 +18,14 @@ export const Footer: React.FC = () => {
               <div>
                 <FooTer.Title title="Menu" />
                 <FooTer.LinkGroup col>
-                  <FooTer.Link href="#">
-                    <h3>Home</h3>
+                  <FooTer.Link href="/landing">
+                    <h4>Home</h4>
                   </FooTer.Link>
-                  <FooTer.Link href="#">
-                    <h3>Home</h3>
+                  <FooTer.Link href="/events">
+                    <h4>Events</h4>
+                  </FooTer.Link>
+                  <FooTer.Link href="/blogs">
+                    <h4>Blogs</h4>
                   </FooTer.Link>
                 </FooTer.LinkGroup>
               </div>
@@ -30,10 +33,10 @@ export const Footer: React.FC = () => {
                 <FooTer.Title title="Legal" />
                 <FooTer.LinkGroup col>
                   <FooTer.Link href="#">
-                    <h3>Privacy Policy</h3>
+                    <h4>Privacy Policy</h4>
                   </FooTer.Link>
                   <FooTer.Link href="#">
-                    <h3>Terms & Conditions</h3>
+                    <h4>Terms & Conditions</h4>
                   </FooTer.Link>
                 </FooTer.LinkGroup>
               </div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { HeroModule } from './sections/hero'
 import { ActionModule } from './sections/action'
+import { WalkingText } from './sections/walking'
 
 export const LandingPageModule: React.FC = () => {
   return (
@@ -8,6 +9,7 @@ export const LandingPageModule: React.FC = () => {
       <div className="flex flex-col ">
         <HeroModule />
         <ActionModule />
+        <WalkingText />
       </div>
     </>
   )
