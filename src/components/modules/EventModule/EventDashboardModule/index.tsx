@@ -39,7 +39,12 @@ export const EventDashboardModule: React.FC = () => {
   }, [tokens, authLoading, router.isReady])
 
   useEffect(() => {
-    if (data && data.host.id !== user?.id) {
+    if (
+      data &&
+      data.host.id !== user?.id &&
+      data.staffs &&
+      !data.staffs.includes(user?.email || '')
+    ) {
       toast.error('Anda tidak memiliki akses ke halaman tersebut.')
       router.push('/events')
     }

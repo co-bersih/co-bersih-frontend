@@ -152,6 +152,23 @@ export const EventDetailModule: React.FC = () => {
           ) : (
             <></>
           )}
+          {user?.email && data?.staffs?.includes(user.email) ? (
+            <Button
+              variant="primary"
+              className="ml-auto px-4"
+              onClick={() => {
+                router.push(`/events/${id}/dashboard`)
+              }}
+              rightIcon={
+                <AiOutlineDashboard size="20" className="cursor-pointer" />
+              }
+            >
+              Dashboard
+            </Button>
+          ) : (
+            <></>
+          )}
+
           {data ? <h2>{data?.name}</h2> : <Skeleton />}
           {data && tipMessage && (
             <TipCard type={'information'} content={tipMessage} />
