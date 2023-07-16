@@ -67,7 +67,7 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
     axios
       .post(`${cfg.API}/api/v1/reports/`, formData, options)
       .then((res) => {
-        toast.success('Anda berhasil membuat Report.')
+        toast.success('Anda berhasil membuat laporan.')
         router.push(`/reports/${res.data.id}`)
       })
       .catch((err) => {

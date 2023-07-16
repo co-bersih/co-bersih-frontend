@@ -15,9 +15,11 @@ import { useRouter } from 'next/router'
 import { Pages } from '../EventModule/interface'
 import { Pagination, Spinner } from 'flowbite-react'
 import ReportCard from '../ReportModule/module-elements/ReportCard'
+import { UserInterface } from 'src/components/contexts/AuthContext/interface'
 
 export const MyProfileModule: React.FC = () => {
-  const { user, tokens, loading: authLoading } = useAuthContext()
+  const { user } = useAuthContext()
+  const [profile, setProfile] = useState<UserInterface | null>(null)
   const router = useRouter()
   const { id } = router.query
   const [tab, setTab] = useState<number>(0)
@@ -59,7 +61,6 @@ export const MyProfileModule: React.FC = () => {
           previous: res.data.previous,
           current: prev.current,
         }))
-        console.log(res.data.results.length)
         setCreatedEventsData(res.data.results)
       })
       .catch((err) => console.log(err))
@@ -79,7 +80,6 @@ export const MyProfileModule: React.FC = () => {
           previous: res.data.previous,
           current: prev.current,
         }))
-        console.log(filteredResults)
       })
       .catch((err) => console.log(err))
   }
@@ -88,59 +88,89 @@ export const MyProfileModule: React.FC = () => {
     setJoinedEventsPages((prev) => ({ ...prev, current: page }))
   }
 
+  const getProfile = () => {
+    axios
+      .get(`${cfg.API}/api/v1/user/${id}`)
+      .then((res) => {
+        const user: UserInterface = {
+          id: res.data.id,
+          email: res.data.email,
+          name: res.data.name,
+          bio: res.data.bio,
+          profileImage: res.data.profile_image_url,
+          dateJoined: res.data.date_joined,
+        }
+        setProfile(user)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
   useEffect(() => {
-    if (id && !authLoading) {
+    if (id) {
+      getProfile()
       fetchJoinedEvents({ page: joinedEventsPages.current || 0 + 1 })
       fetchCreatedEvents({ page: createdEventsPages.current || 0 + 1 })
       fetchReports()
     }
-  }, [id, authLoading, tab, toggleValue])
+  }, [id])
 
-  const setChangePasswordModal = () => {}
+  useEffect(() => {
+    fetchJoinedEvents({ page: joinedEventsPages.current || 0 + 1 })
+    fetchCreatedEvents({ page: createdEventsPages.current || 0 + 1 })
+    fetchReports()
+  }, [tab, toggleValue])
+
   return (
     <div className="bg-mintGreen relative">
       <div className="bg-mintGreen">
         <div className="rounded-b-[200px] lg:h-64 h-60 bg-white"></div>
       </div>
-      <div className="flex lg:flex-row flex-col lg:items-start items-center lg:space-x-12 lg:space-y-0 space-y-6 lg:mx-[230px] -mt-24 mx-6 ">
-        <Image
-          src={
-            user?.profileImage
-              ? user.profileImage
-              : '/assets/images/hero/Hero1.png'
-          }
-          alt=""
-          width={250}
-          height={250}
-          className="w-48 h-48 border-4 border-white rounded-full"
-        />
-        <div className="flex flex-col w-full">
-          <div className="flex lg:flex-row flex-col lg:justify-between justify-center lg:mb-6 lg:space-y-0 space-y-3">
-            <div className="flex flex-col space-y-2 lg:items-start items-center">
-              <h1>{user?.name}</h1>
-              <h2>{user?.email}</h2>
+      <div className="flex justify-center items-center w-full ">
+        <div className="flex lg:flex-row flex-col lg:items-start items-center lg:space-x-12 lg:space-y-0 space-y-6 -mt-24 mx-6 w-full lg:w-[60%]">
+          <Image
+            src={
+              profile?.profileImage
+                ? profile.profileImage
+                : '/assets/images/hero/Hero1.png'
+            }
+            alt=""
+            width={250}
+            height={250}
+            className="w-48 h-48 border-4 border-white rounded-full"
+          />
+          <div className="flex flex-col w-full">
+            <div className="flex lg:flex-row flex-col lg:justify-between justify-center lg:mb-6 lg:space-y-0 space-y-3">
+              <div className="flex flex-col space-y-2 lg:items-start items-center">
+                <h1>{profile?.name}</h1>
+                <h2>{profile?.email}</h2>
+              </div>
+              {user?.email === profile?.email ? (
+                <div className="flex flex-col lg:items-start space-y-2">
+                  <Button
+                    variant={'greeny'}
+                    onClick={() => setIsEditProfileModalDisplayed(true)}
+                    rightIcon={<AiTwotoneEdit />}
+                  >
+                    Edit Profil
+                  </Button>
+                  <Button
+                    variant={'greeny'}
+                    onClick={() => {
+                      setIsChangePasswordModalDisplayed(true)
+                    }}
+                    rightIcon={<RiLockPasswordFill />}
+                  >
+                    Ganti Kata Sandi
+                  </Button>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
-
-            <div className="flex flex-col lg:items-start space-y-2">
-              <Button
-                variant={'greeny'}
-                onClick={() => setIsEditProfileModalDisplayed(true)}
-                rightIcon={<AiTwotoneEdit />}
-              >
-                Edit Profil
-              </Button>
-              <Button
-                variant={'greeny'}
-                onClick={() => {
-                  setIsChangePasswordModalDisplayed(true)
-                }}
-                rightIcon={<RiLockPasswordFill />}
-              >
-                Ganti Kata Sandi
-              </Button>
-            </div>
+            <p className="break-words">{profile?.bio}</p>
           </div>
-          <p>{user?.bio}</p>
         </div>
       </div>
       <Tabs
@@ -220,7 +250,7 @@ export const MyProfileModule: React.FC = () => {
 
       <div className="bg-white relative"></div>
       <EditProfileModal
-        user={user}
+        user={profile}
         showModal={isEditProfileModalDisplayed}
         onClose={() => setIsEditProfileModalDisplayed(false)}
       />
