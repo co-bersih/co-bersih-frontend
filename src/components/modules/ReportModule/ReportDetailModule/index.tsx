@@ -13,6 +13,7 @@ import { IReport } from '../module-elements/ReportCard/interface'
 import { formatter } from '@utils'
 import { LoginGuardModal } from '../../AuthModule/module-elements'
 import { Breadcrumb } from 'flowbite-react'
+import { EditReportModal } from '../module-elements/EditReportModal'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -26,6 +27,7 @@ export const ReportDetailModule: React.FC = () => {
   const { id } = router.query
   const { user, loading } = useAuthContext()
   const [isLoginGuardModal, setIsLoginGuardModal] = useState<boolean>(false)
+  const [isEditReportModal, setIsEditReportModal] = useState<boolean>(false)
 
   useEffect(() => {
     if (id) {
@@ -53,7 +55,7 @@ export const ReportDetailModule: React.FC = () => {
         <div className="relative min-h-[105vh] flex flex-col pt-24 pb-8 px-4 sm:px-12 md:px-32 lg:px-40  gap-4 items-center justify-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px] bg-white">
           <Breadcrumb className="mr-auto">
             <Breadcrumb.Item href="/events">Laporan</Breadcrumb.Item>
-            <Breadcrumb.Item href={`/events/${id}`}>
+            <Breadcrumb.Item href={`/reports/${id}`}>
               Detail Laporan
             </Breadcrumb.Item>
           </Breadcrumb>
@@ -62,7 +64,7 @@ export const ReportDetailModule: React.FC = () => {
               variant="primary"
               className="ml-auto px-4"
               onClick={() => {
-                router.push(`/reports/${id}/edit`)
+                setIsEditReportModal(true)
               }}
               rightIcon={<AiOutlineEdit size="20" className="cursor-pointer" />}
             >
@@ -158,6 +160,11 @@ export const ReportDetailModule: React.FC = () => {
       <LoginGuardModal
         showModal={isLoginGuardModal}
         onClose={() => setIsLoginGuardModal(false)}
+      />
+      <EditReportModal
+        report={data ?? null}
+        showModal={isEditReportModal}
+        onClose={() => setIsEditReportModal(false)}
       />
     </>
   )

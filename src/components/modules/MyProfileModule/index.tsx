@@ -94,7 +94,7 @@ export const MyProfileModule: React.FC = () => {
       fetchCreatedEvents({ page: createdEventsPages.current || 0 + 1 })
       fetchReports()
     }
-  }, [id, authLoading])
+  }, [id, authLoading, tab, toggleValue])
 
   const setChangePasswordModal = () => {}
   return (
