@@ -12,6 +12,7 @@ import { CreateEventForm } from '../CreateEventModule/interface'
 import { Button } from '@elements'
 import { EMPTY_EVENT } from './constant'
 import IEvent from '../module-elements/EventCard/interface'
+import { MdLocationOn } from 'react-icons/md'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -32,6 +33,7 @@ export const EditEventModule: React.FC = () => {
   const router = useRouter()
   const { id } = router.query
   const { tokens, user, loading: authLoading } = useAuthContext()
+  const [isGettingLocation, setIsGettingLocation] = useState<boolean>(false)
 
   const onDelete = () => {
     setIsLoading(true)
@@ -161,6 +163,20 @@ export const EditEventModule: React.FC = () => {
     } else {
       setIsLoading(false)
     }
+  }
+
+  const handleGetLocation = () => {
+    setIsGettingLocation(true)
+    navigator.geolocation.getCurrentPosition(
+      (geo) => {
+        setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
+        setIsGettingLocation(false)
+      },
+      (error) => {
+        console.log(error)
+        setIsGettingLocation(false)
+      }
+    )
   }
 
   useEffect(() => {
@@ -299,6 +315,17 @@ export const EditEventModule: React.FC = () => {
                   </p>
                   <input hidden {...register('latitude')} value={loc.lat} />
                   <input hidden {...register('longitude')} value={loc.lng} />
+                  <div className="flex w-full justify-end">
+                    <Button
+                      variant={'ghost'}
+                      className="bg-[#CFE4A5] hover:bg-[#CFE4A5]/80 text-black hover:text-black/80 w-fit justify-end mt-2"
+                      rightIcon={<MdLocationOn />}
+                      onClick={handleGetLocation}
+                      disabled={isGettingLocation}
+                    >
+                      <h4>Ambil Dari Lokasi Saya</h4>
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <p className=" bg-red-300 p-2 rounded-md">

@@ -70,7 +70,7 @@ export const EventModule: React.FC = () => {
   }
 
   const fetchPagedReports = (params: any) => {
-    fetchEvents(params)
+    fetchReports(params)
       .then((res) => {
         setPages((prev) => ({
           count: res.data.count,
