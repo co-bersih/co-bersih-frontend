@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import axios, { AxiosRequestConfig } from 'axios'
 import { useAuthContext } from '@contexts'
 import { FileInput, Modal, TextInput, Textarea } from 'flowbite-react'
-import { CreateReportForm, createReportModalProps } from './interface'
+import { CreateReportForm, editReportModalProps } from './interface'
 import { AiFillSave, AiOutlineCloseCircle } from 'react-icons/ai'
 import { MdLocationOn } from 'react-icons/md'
 import { Button } from '@elements'
@@ -18,7 +18,8 @@ const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
 })
 
-export const CreateReportModal: React.FC<createReportModalProps> = ({
+export const EditReportModal: React.FC<editReportModalProps> = ({
+  report,
   onClose,
   showModal,
 }) => {
@@ -31,7 +32,7 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
   const {
     register,
     handleSubmit,
-    watch,
+    setValue,
     formState: { errors },
   } = useForm<CreateReportForm>()
 
@@ -41,8 +42,51 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
     })
   }, [])
 
+  useEffect(() => {
+    if (report) {
+      setValue('title', report.title)
+      setValue('description', report.description)
+      if (report?.latitude && report?.longitude) {
+        navigator.geolocation.getCurrentPosition((geo) => {
+          setLoc({ lat: report.latitude, lng: report.longitude })
+        })
+      }
+    }
+  }, [showModal, report])
+
   const handleClose = () => {
     onClose()
+  }
+
+  const onDelete = () => {
+    setIsLoading(true)
+    const options: AxiosRequestConfig = {
+      headers: {
+        Authorization: `Bearer ${tokens?.access}`,
+        'Content-Type': 'application/json',
+      },
+    }
+
+    axios
+      .delete(`${cfg.API}/api/v1/reports/${report?.id}/`, options)
+      .then((res) => {
+        toast.success('Anda berhasil menghapus laporan.')
+        router.push(`/events/`)
+      })
+      .catch((err) => {
+        if (err.response?.status === 401) {
+          toast.error('Mohon untuk me-refresh halaman ini.')
+        } else if (err.response.data.errors?.length > 0) {
+          toast.error(
+            `${err.response.data.errors[0].attr} error: ${err.response.data.errors[0].detail}`
+          )
+        } else {
+          toast.error('Telah terjadi kesalahan.')
+        }
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   const onSubmit = async (data: CreateReportForm) => {
@@ -53,7 +97,9 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
     const formData = new FormData()
     formData.append('title', data.title)
     formData.append('description', data.description)
-    formData.append('image', data.image[0])
+    if (data.image[0]) {
+      formData.append('image', data.image[0])
+    }
     formData.append('latitude', String(data.latitude))
     formData.append('longitude', String(data.longitude))
 
@@ -65,13 +111,16 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
     }
 
     axios
-      .post(`${cfg.API}/api/v1/reports/`, formData, options)
+      .patch(`${cfg.API}/api/v1/reports/${report?.id}/`, formData, options)
       .then((res) => {
-        toast.success('Anda berhasil membuat laporan.')
-        router.push(`/reports/${res.data.id}`)
+        toast.success('Anda berhasil mengedit laporan.')
+        onClose()
+        setTimeout(() => {
+          window.location.reload()
+        }, 500)
       })
       .catch((err) => {
-        console.log(err.response.data)
+        console.log(err.response)
         if (err.response?.status === 401) {
           toast.error('Mohon untuk me-refresh halaman ini.')
         } else if (err.response.data.errors.length > 0) {
@@ -93,6 +142,20 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
     }, 0)
   }
 
+  const handleGetLocation = () => {
+    setIsGettingLocation(true)
+    navigator.geolocation.getCurrentPosition(
+      (geo) => {
+        setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
+        setIsGettingLocation(false)
+      },
+      (error) => {
+        console.log(error)
+        setIsGettingLocation(false)
+      }
+    )
+  }
+
   return (
     <>
       <div ref={rootRef}>
@@ -102,7 +165,7 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
           className="h-screen"
         >
           <div className="flex justify-between px-6 pt-5 items-center">
-            <h2>Buat Laporan</h2>
+            <h2>Edit Laporan</h2>
             <AiOutlineCloseCircle
               size="28"
               className="cursor-pointer"
@@ -117,8 +180,9 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
                 </div>
                 <TextInput
                   className="w-full col-span-3"
+                  defaultValue={report?.title}
                   {...register('title', {
-                    required: true,
+                    required: false,
                     maxLength: 100,
                     minLength: 1,
                   })}
@@ -129,14 +193,16 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
                 <Textarea
                   className="w-full col-span-3 lg:text-[14px] text-[13px] "
                   rows={4}
-                  {...register('description', { required: true })}
+                  defaultValue={report?.description}
+                  {...register('description', { required: false })}
                 />
                 <div className="col-span-2">
                   <h4>Foto Cover</h4>
                 </div>
                 <FileInput
                   className="col-span-3"
-                  {...register('image', { required: true })}
+                  defaultValue={report?.image_url}
+                  {...register('image', { required: false })}
                   accept="image/*"
                 />
                 <div className="col-span-2">
@@ -159,6 +225,15 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
                     </p>
                     <input hidden {...register('latitude')} value={loc.lat} />
                     <input hidden {...register('longitude')} value={loc.lng} />
+                    <Button
+                      variant={'ghost'}
+                      className="bg-[#CFE4A5] hover:bg-[#CFE4A5]/80 text-black hover:text-black/80 w-fit justify-end mt-2"
+                      rightIcon={<MdLocationOn />}
+                      onClick={handleGetLocation}
+                      disabled={isGettingLocation}
+                    >
+                      <h4>Ambil Dari Lokasi Saya</h4>
+                    </Button>
                   </div>
                 ) : (
                   <p className=" bg-red-300 p-2 rounded-md">
@@ -167,7 +242,18 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
                   </p>
                 )}
 
-                <div className="flex col-span-5 w-[100%] mx-auto justify-end gap-x-4 mt-3">
+                <div className="flex col-span-5 w-[100%] mx-auto lg:justify-end justify-center lg:gap-x-4 gap-x-1 mt-3">
+                  <Button
+                    variant={'solid'}
+                    className={`text-red-50 bg-red-800`}
+                    isLoading={isLoading}
+                    type="button"
+                    onClick={() => {
+                      onDelete()
+                    }}
+                  >
+                    <h4>Hapus</h4>
+                  </Button>
                   <Button
                     variant={'deserted'}
                     isLoading={isLoading}
@@ -179,7 +265,7 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
                     <h4>Batalkan</h4>
                   </Button>
                   <Button variant={'greeny'} isLoading={isLoading}>
-                    <h4>Ajukan Laporan</h4>
+                    <h4>Simpan</h4>
                   </Button>
                 </div>
               </div>

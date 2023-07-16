@@ -10,20 +10,22 @@ const ReportCard: React.FC<IReport> = (report) => {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row gap-4 bg-lightGray p-4 rounded-3xl h-fit w-[100%] lg:h-[320px] lg:w-[35vw]">
-        <Image
-          src={report.image_url || '/assets/images/placeholder/image.png'}
-          height={200}
-          width={120}
-          alt={report.title}
-          className="h-[100%] lg:w-[40%] w-[100%] object-cover rounded-2xl md:rounded-2xl"
-        />
+      <div className="flex flex-col sm:flex-row gap-4 bg-lightGray p-4 rounded-3xl h-[100%] w-[100%] lg:w-full">
+        <div className="relative flex-shrink-0 lg:w-[40%] w-full lg:h-full h-40 ">
+          <Image
+            src={report.image_url || '/assets/images/placeholder/image.png'}
+            layout="fill"
+            objectFit="cover"
+            alt={report.title}
+            className="rounded-2xl md:rounded-2xl"
+          />
+        </div>
         <div className="flex flex-col w-full">
           <h4 className=" bg-coral py-1 px-3 mb-2 w-fit rounded-xl text-white text-sm">
             Laporan
           </h4>
           <h3 className="mb-2 md:mb-4">{report.title}</h3>
-          <p className="mb-2 md:mb-4">
+          <p className="mb-2 md:mb-4 lg:pb-8">
             {formatter.trimLongText(report.description)}...
           </p>
           <div className="flex justify-end grow">

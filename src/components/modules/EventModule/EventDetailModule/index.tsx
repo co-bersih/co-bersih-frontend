@@ -90,7 +90,9 @@ export const EventDetailModule: React.FC = () => {
       axios
         .request(config)
         .then((response) => {
-          console.log(JSON.stringify(response.data))
+          toast.success('Berhasil bergabung dalam kegiatan!', {
+            position: toast.POSITION.TOP_CENTER,
+          })
         })
         .catch((error) => {
           console.log(error.response.data)
@@ -193,7 +195,29 @@ export const EventDetailModule: React.FC = () => {
               </div>
               <div className="flex flex-col sm:flex-row justify-between w-full lg:items-start items-center">
                 <h4>Diselenggarakan oleh </h4>
-                {data ? <p>{data.host.name}</p> : <Skeleton />}
+                {data ? (
+                  <div
+                    className="flex items-center gap-x-2 cursor-pointer hover:underline"
+                    onClick={() => {
+                      router.push(`/profile/${data.host.id}`)
+                    }}
+                  >
+                    <Image
+                      src={
+                        data.host.profile_image_url
+                          ? data.host.profile_image_url
+                          : '/assets/images/hero/Hero1.png'
+                      }
+                      alt=""
+                      width={10}
+                      height={10}
+                      className="w-6 h-6 border-white rounded-full"
+                    />
+                    <p>{data.host.name}</p>
+                  </div>
+                ) : (
+                  <Skeleton />
+                )}
               </div>
               <hr />
               <br />
