@@ -238,7 +238,9 @@ export const EditEventModule: React.FC = () => {
               />
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Mulai</h4>
-                <p className="text-xs font-extralight">Menggunakan timezone setempat</p>
+                <p className="text-xs font-extralight">
+                  Menggunakan timezone setempat
+                </p>
               </div>
               <div className="w-full col-span-3">
                 <TextInput
@@ -258,7 +260,9 @@ export const EditEventModule: React.FC = () => {
               </div>
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Selesai</h4>
-                <p className="text-xs font-extralight">Menggunakan timezone setempat</p>
+                <p className="text-xs font-extralight">
+                  Menggunakan timezone setempat
+                </p>
               </div>
               <div className="w-full col-span-3">
                 <TextInput
