@@ -169,7 +169,7 @@ export const EventDetailModule: React.FC = () => {
                 width={400}
                 alt={data?.name}
                 className="object-cover lg:w-[36vw] w-[95vw] sm:w-full rounded-xl"
-                placeholder='empty'
+                placeholder="empty"
               />
             ) : (
               <Skeleton className="h-[300px] w-full" />
@@ -181,9 +181,7 @@ export const EventDetailModule: React.FC = () => {
                   <h4>Tanggal & Waktu Mulai</h4>
                 </div>
                 {data ? (
-                  <p>
-                    {formatter.formatDateTime(new Date(data.start_date))}
-                  </p>
+                  <p>{formatter.formatDateTime(new Date(data.start_date))}</p>
                 ) : (
                   <Skeleton />
                 )}
