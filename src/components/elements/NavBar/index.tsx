@@ -65,23 +65,26 @@ export const NavBar: React.FC = () => {
                 {user.email}
               </span>
             </Dropdown.Header>
-            <Navbar.Link href={`/my-profile/${user.id}`}>
+            <Navbar.Link href={`/profile/${user.id}`}>
               <Dropdown.Item>
                 <h4>Profil Anda</h4>
               </Dropdown.Item>
             </Navbar.Link>
-            <button
-              className="w-full"
-              onClick={() => {
-                alert('show modal')
-              }}
-            >
-              <Dropdown.Item>
-                <h4>Masukkan Token</h4>
-              </Dropdown.Item>
-            </button>
+            <Navbar.Link>
+              <button
+                className="w-full"
+                onClick={() => {
+                  alert('show modal')
+                }}
+              >
+                <Dropdown.Item>
+                  <h4>Masukkan Token</h4>
+                </Dropdown.Item>
+              </button>
+            </Navbar.Link>
 
             <Dropdown.Divider />
+
             <Navbar.Link href="/auth/logout">
               <Dropdown.Item>
                 <h4>Keluar</h4>

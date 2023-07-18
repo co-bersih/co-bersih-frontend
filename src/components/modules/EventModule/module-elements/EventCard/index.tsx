@@ -10,14 +10,16 @@ const EventCard: React.FC<IEvent> = (event) => {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row gap-4 bg-lightGray p-4 rounded-3xl h-full md:h-full lg:h-[320px] w-[100%] lg:w-[35vw]">
-        <Image
-          src={event.image_url || '/assets/images/placeholder/image.png'}
-          height={200}
-          width={120}
-          alt={event.name}
-          className="h-[100%] lg:w-[40%] w-[100%] object-cover rounded-2xl md:rounded-2xl"
-        />
+      <div className="flex flex-col sm:flex-row gap-4 bg-lightGray p-4 rounded-3xl h-[100%] w-[100%] lg:w-full">
+        <div className="relative flex-shrink-0 lg:w-[40%] w-full lg:h-full h-40 ">
+          <Image
+            src={event.image_url || '/assets/images/placeholder/image.png'}
+            layout="fill"
+            objectFit="cover"
+            alt={event.name}
+            className="rounded-2xl md:rounded-2xl"
+          />
+        </div>
         <div className="flex flex-col w-full">
           <div className="flex space-x-2">
             <h4 className=" bg-mintGreen py-1 px-3 mb-2 w-fit rounded-xl text-sm">
@@ -39,7 +41,7 @@ const EventCard: React.FC<IEvent> = (event) => {
             <Participant size={''} />
             <p>{event.total_participant!} orang peserta</p>
           </div>
-          <div className="flex flex-row gap-x-2">
+          <div className="flex flex-row gap-x-2 lg:pb-8">
             <Calendar size={''} />
             <p>
               Dimulai pada{' '}
