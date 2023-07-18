@@ -92,7 +92,29 @@ export const ReportDetailModule: React.FC = () => {
             <div className="w-full flex flex-col gap-y-2 text-center">
               <div className="flex flex-col sm:flex-row justify-between w-full">
                 <h4>Dilaporkan oleh </h4>
-                {data ? <p>{data.reporter.name}</p> : <Skeleton />}
+                {data ? (
+                  <div
+                    className="flex items-center gap-x-2 cursor-pointer hover:underline"
+                    onClick={() => {
+                      router.push(`/profile/${data.reporter.id}`)
+                    }}
+                  >
+                    <Image
+                      src={
+                        data.reporter.profile_image_url
+                          ? data.reporter.profile_image_url
+                          : '/assets/images/hero/Hero1.png'
+                      }
+                      alt=""
+                      width={10}
+                      height={10}
+                      className="w-6 h-6 border-white rounded-full"
+                    />
+                    <p>{data.reporter.name}</p>
+                  </div>
+                ) : (
+                  <Skeleton />
+                )}{' '}
               </div>
               <div className="flex flex-col sm:flex-row justify-between w-full items-center">
                 <div className="flex gap-x-2 min-w-[25%]">
