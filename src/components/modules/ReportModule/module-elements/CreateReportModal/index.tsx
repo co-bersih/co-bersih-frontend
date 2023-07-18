@@ -93,6 +93,20 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
     }, 0)
   }
 
+  const handleGetLocation = () => {
+    setIsGettingLocation(true)
+    navigator.geolocation.getCurrentPosition(
+      (geo) => {
+        setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
+        setIsGettingLocation(false)
+      },
+      (error) => {
+        console.log(error)
+        setIsGettingLocation(false)
+      }
+    )
+  }
+
   return (
     <>
       <div ref={rootRef}>
@@ -159,6 +173,15 @@ export const CreateReportModal: React.FC<createReportModalProps> = ({
                     </p>
                     <input hidden {...register('latitude')} value={loc.lat} />
                     <input hidden {...register('longitude')} value={loc.lng} />
+                    <Button
+                      variant={'ghost'}
+                      className="bg-[#CFE4A5] hover:bg-[#CFE4A5]/80 text-black hover:text-black/80 w-fit justify-end mt-2"
+                      rightIcon={<MdLocationOn />}
+                      onClick={handleGetLocation}
+                      disabled={isGettingLocation}
+                    >
+                      <h4>Ambil Dari Lokasi Saya</h4>
+                    </Button>
                   </div>
                 ) : (
                   <p className=" bg-red-300 p-2 rounded-md">

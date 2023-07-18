@@ -122,8 +122,8 @@ export const EventDetailModule: React.FC = () => {
               Detail Kegiatan
             </Breadcrumb.Item>
           </Breadcrumb>
-          {data?.host.email === user?.email ? (
-            <div className="flex ml-auto gap-x-2">
+          <div className="flex ml-auto gap-x-2">
+            {data?.host.email === user?.email ? (
               <Button
                 variant="primary"
                 className="ml-auto px-4"
@@ -136,6 +136,10 @@ export const EventDetailModule: React.FC = () => {
               >
                 Edit
               </Button>
+            ) : (
+              <></>
+            )}
+            {user?.email && data?.staffs?.includes(user.email) ? (
               <Button
                 variant="primary"
                 className="ml-auto px-4"
@@ -148,10 +152,11 @@ export const EventDetailModule: React.FC = () => {
               >
                 Dashboard
               </Button>
-            </div>
-          ) : (
-            <></>
-          )}
+            ) : (
+              <></>
+            )}
+          </div>
+
           {data ? <h2>{data?.name}</h2> : <Skeleton />}
           {data && tipMessage && (
             <TipCard type={'information'} content={tipMessage} />
@@ -221,35 +226,41 @@ export const EventDetailModule: React.FC = () => {
               </div>
               <hr />
               <br />
-              <div className="flex flex-col sm:flex-row justify-center gap-y-2 gap-x-[4%]">
-                <Button
-                  variant={'greeny'}
-                  rightIcon={
-                    <Enter
-                      size={'w-[20px] h-[20px]'}
-                      fill={data && tipMessage === '' ? 'white' : '#ACACAC'}
-                    />
-                  }
-                  className="py-[0.4rem]"
-                  disabled={!data || tipMessage !== ''}
-                  onClick={handleJoin}
-                >
-                  <h4>Bergabung</h4>
-                </Button>
-                <Button
-                  variant={'deserted'}
-                  rightIcon={
-                    <Money
-                      size={'w-[20px] h-[20px]'}
-                      fill={data && tipMessage === '' ? '#458549' : '#ACACAC'}
-                    />
-                  }
-                  disabled={!data || tipMessage !== ''}
-                  onClick={handleSupport}
-                >
-                  <h4>Dukung</h4>
-                </Button>
-              </div>
+              {user?.email &&
+              (data?.host?.id === user?.id ||
+                data?.staffs?.includes(user.email)) ? (
+                <></>
+              ) : (
+                <div className="flex flex-col sm:flex-row justify-center gap-y-2 gap-x-[4%]">
+                  <Button
+                    variant={'greeny'}
+                    rightIcon={
+                      <Enter
+                        size={'w-[20px] h-[20px]'}
+                        fill={data && tipMessage === '' ? 'white' : '#ACACAC'}
+                      />
+                    }
+                    className="py-[0.4rem]"
+                    disabled={!data || tipMessage !== ''}
+                    onClick={handleJoin}
+                  >
+                    <h4>Bergabung</h4>
+                  </Button>
+                  <Button
+                    variant={'deserted'}
+                    rightIcon={
+                      <Money
+                        size={'w-[20px] h-[20px]'}
+                        fill={data && tipMessage === '' ? '#458549' : '#ACACAC'}
+                      />
+                    }
+                    disabled={!data || tipMessage !== ''}
+                    onClick={handleSupport}
+                  >
+                    <h4>Dukung</h4>
+                  </Button>
+                </div>
+              )}
 
               {/* only display participants if non-null and > 0 */}
               {data?.total_participant ? (

@@ -33,6 +33,7 @@ export const EventModule: React.FC = () => {
   const [eventsData, setEventsData] = useState<IEvent[]>([])
   const [mapEventsData, setMapEventsData] = useState<IEvent[]>()
   const [reportsData, setReportsData] = useState<IReport[]>([])
+  const [mapReportsData, setMapReportsData] = useState<IReport[]>()
   const [reportEventsData, setReportEventsData] = useState<IReport[]>()
   // other states
   const [loc, setLoc] = useState<LatLngLiteral | undefined>(dummyLoc)
@@ -50,6 +51,10 @@ export const EventModule: React.FC = () => {
     return axios.get(`${cfg.API}/api/v1/events/`, { params })
   }
 
+  const fetchReports = (params: any) => {
+    return axios.get(`${cfg.API}/api/v1/reports/`, { params })
+  }
+
   const fetchPagedEvents = (params: any) => {
     fetchEvents(params)
       .then((res) => {
@@ -64,10 +69,32 @@ export const EventModule: React.FC = () => {
       .catch((err) => console.log(err))
   }
 
+  const fetchPagedReports = (params: any) => {
+    fetchReports(params)
+      .then((res) => {
+        setPages((prev) => ({
+          count: res.data.count,
+          next: res.data.next,
+          previous: res.data.previous,
+          current: prev.current,
+        }))
+        setReportsData(res.data.results)
+      })
+      .catch((err) => console.log(err))
+  }
+
   const fetchMappedEvents = (params: any) => {
     fetchEvents(params)
       .then((res) => {
         addToMapEventsData(res.data.results)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const fetchMappedReports = (params: any) => {
+    fetchReports(params)
+      .then((res) => {
+        addToMapReportsData(res.data.results)
       })
       .catch((err) => console.log(err))
   }
@@ -84,19 +111,17 @@ export const EventModule: React.FC = () => {
     setMapEventsData((prev) => (prev ? [...prev, ...toAppend] : toAppend))
   }
 
-  const fetchReports = (params: any) => {
-    axios
-      .get(`${cfg.API}/api/v1/reports/`, { params })
-      .then((res) => {
-        setPages((prev) => ({
-          count: res.data.count,
-          next: res.data.next,
-          previous: res.data.previous,
-          current: prev.current,
-        }))
-        setReportsData(res.data.results)
-      })
-      .catch((err) => console.log(err))
+  const addToMapReportsData = (reports: IReport[]) => {
+    const toAppend: IReport[] = []
+    const mapReportIds: string[] =
+      mapReportsData?.map((report) => report.id) || []
+
+    reports.forEach((report, idx) => {
+      if (!mapReportIds.includes(report.id)) {
+        toAppend.push(report)
+      }
+    })
+    setMapReportsData((prev) => (prev ? [...prev, ...toAppend] : toAppend))
   }
 
   // event handlers
@@ -161,7 +186,7 @@ export const EventModule: React.FC = () => {
   useEffect(() => {
     const params = { page: pages.current }
     fetchPagedEvents(params)
-    fetchReports(params)
+    fetchPagedReports(params)
   }, [pages.current, tokens])
 
   useEffect(() => {
@@ -182,6 +207,12 @@ export const EventModule: React.FC = () => {
       min: 0,
       max: 5 * minimumZoom,
     })
+    fetchMappedReports({
+      lon: loc?.lng,
+      lat: loc?.lat,
+      min: 0,
+      max: 5 * minimumZoom,
+    })
   }, [minimumZoom, loc])
 
   return (
@@ -195,7 +226,7 @@ export const EventModule: React.FC = () => {
               <DynamicMap
                 center={loc}
                 events={mapEventsData}
-                reports={reportsData}
+                reports={mapReportsData}
                 className="min-w-[80vw] lg:h-[500px] h-[400px] rounded-full"
                 onZoomChange={handleZoomChange}
                 onMove={handleMove}
