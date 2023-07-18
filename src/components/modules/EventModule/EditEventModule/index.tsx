@@ -67,12 +67,10 @@ export const EditEventModule: React.FC = () => {
 
   const onSubmit = async (data: CreateEventForm) => {
     setIsLoading(true)
-
     data.start_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS)
-    data.end_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS)
+    data.end_date.setTime(data.end_date.getTime() + 7 * cfg.HOURS)
+    // toast.info(data.start_date.toISOString() + " // " + data.end_date.toISOString())
 
-    data.latitude = loc?.lat || 0
-    data.longitude = loc?.lng || 0
     const formData = new FormData()
     data.name &&
       data.name !== defaultData.name &&
@@ -94,10 +92,10 @@ export const EditEventModule: React.FC = () => {
       formData.append('image', data.image[0])
     data.latitude &&
       data.latitude !== defaultData.latitude &&
-      formData.append('latitude', String(data.latitude))
+      formData.append('latitude', String(loc?.lat || 0))
     data.longitude &&
       data.longitude !== defaultData.longitude &&
-      formData.append('longitude', String(data.longitude))
+      formData.append('longitude', String(loc?.lng || 0))
 
     const options: AxiosRequestConfig = {
       headers: {
@@ -106,7 +104,6 @@ export const EditEventModule: React.FC = () => {
       },
     }
 
-    console.log(data.start_date.toISOString())
     axios
       .patch(`${cfg.API}/api/v1/events/${id}/`, formData, options)
       .then((res) => {
@@ -114,7 +111,6 @@ export const EditEventModule: React.FC = () => {
         router.push(`/events/${res.data.id}`)
       })
       .catch((err) => {
-        console.log(err.response.data)
         if (err.response?.status === 401) {
           toast.error('Mohon untuk me-refresh halaman ini.')
         } else if (err.response.data.errors.length > 0) {
@@ -242,7 +238,7 @@ export const EditEventModule: React.FC = () => {
               />
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Mulai</h4>
-                <p className="text-xs font-extralight">Timezone: GMT+7 (WIB)</p>
+                <p className="text-xs font-extralight">Menggunakan timezone setempat</p>
               </div>
               <div className="w-full col-span-3">
                 <TextInput
@@ -262,7 +258,7 @@ export const EditEventModule: React.FC = () => {
               </div>
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Selesai</h4>
-                <p className="text-xs font-extralight">Timezone: GMT+7 (WIB)</p>
+                <p className="text-xs font-extralight">Menggunakan timezone setempat</p>
               </div>
               <div className="w-full col-span-3">
                 <TextInput
@@ -282,6 +278,9 @@ export const EditEventModule: React.FC = () => {
               </div>
               <div className="col-span-2">
                 <h4>Lokasi Mulai</h4>
+                <p className="text-xs font-extralight">
+                  Tarik penanda lingkaran biru di peta sesuai lokasi kegiatan.
+                </p>
               </div>
               {loc?.lat && loc.lng ? (
                 <div className="col-span-3">
@@ -332,10 +331,10 @@ export const EditEventModule: React.FC = () => {
                 <Button
                   variant={'greeny'}
                   isLoading={isLoading}
-                  type="button"
-                  onClick={() => {
-                    router.push('/events')
-                  }}
+                  type="submit"
+                  // onClick={() => {
+                  //   router.push('/events')
+                  // }}
                 >
                   <h4>Selesai Edit</h4>
                 </Button>
