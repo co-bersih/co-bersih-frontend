@@ -3,7 +3,7 @@ export namespace formatter {
     if (!limit) limit = 100
     return text.substring(0, Math.min((text.length, limit)))
   }
-  export const formatDateTimeWIB = function (date: Date): string {
+  export const formatDateTime = function (date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
       day: 'numeric',
       month: 'short',
@@ -13,7 +13,7 @@ export namespace formatter {
       timeZone: 'UTC', // Set the timezone to GMT+7 (WIB)
     }
 
-    return date.toLocaleString('en-US', options) + ' WIB'
+    return date.toLocaleString('en-US', options) + ''
   }
   export const formatDate = function (date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
