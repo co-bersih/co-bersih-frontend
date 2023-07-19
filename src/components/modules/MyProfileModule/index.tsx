@@ -16,6 +16,7 @@ import { Pages } from '../EventModule/interface'
 import { Pagination, Spinner } from 'flowbite-react'
 import ReportCard from '../ReportModule/module-elements/ReportCard'
 import { UserInterface } from 'src/components/contexts/AuthContext/interface'
+import { GrDocumentMissing } from 'react-icons/gr'
 
 export const MyProfileModule: React.FC = () => {
   const { user } = useAuthContext()
@@ -29,9 +30,9 @@ export const MyProfileModule: React.FC = () => {
     useState<boolean>(false)
   const [toggleValue, setToggleValue] = useState(0)
 
-  const [joinedEventsData, setJoinedEventsData] = useState<IEvent[]>([])
-  const [createdEventsData, setCreatedEventsData] = useState<IEvent[]>([])
-  const [reportsData, setReportsData] = useState<IReport[]>([])
+  const [joinedEventsData, setJoinedEventsData] = useState<IEvent[]>()
+  const [createdEventsData, setCreatedEventsData] = useState<IEvent[]>()
+  const [reportsData, setReportsData] = useState<IReport[]>()
   const [joinedEventsPages, setJoinedEventsPages] = useState<Pages>({})
   const [createdEventsPages, setCreatedEventsPages] = useState<Pages>({})
 
@@ -52,7 +53,7 @@ export const MyProfileModule: React.FC = () => {
 
   const fetchCreatedEvents = (params: any) => {
     axios
-      .get(`${cfg.API}/api/v1/user/${id}/events-staff/`, { params })
+      .get(`${cfg.API}/api/v1/user/${user?.id}/events-staff/`, { params })
       .then((res) => {
         setCreatedEventsData(res.data.results)
         setCreatedEventsPages((prev) => ({
@@ -68,7 +69,7 @@ export const MyProfileModule: React.FC = () => {
 
   const fetchReports = () => {
     axios
-      .get(`${cfg.API}/api/v1/reports/`)
+      .get(`${cfg.API}/api/v1/user/${id}/reports/`)
       .then((res) => {
         const filteredResults = res.data.results.filter(
           (report: any) => report.reporter.email === user?.email
@@ -117,8 +118,8 @@ export const MyProfileModule: React.FC = () => {
   }, [id])
 
   useEffect(() => {
-    fetchJoinedEvents({ page: joinedEventsPages.current || 0 + 1 })
-    fetchCreatedEvents({ page: createdEventsPages.current || 0 + 1 })
+    fetchJoinedEvents({ page: (joinedEventsPages.current || 0) + 1 })
+    fetchCreatedEvents({ page: (createdEventsPages.current || 0) + 1 })
     fetchReports()
   }, [tab, toggleValue])
 
@@ -180,20 +181,23 @@ export const MyProfileModule: React.FC = () => {
         items={TAB_OPTIONS}
       />
       {tab === 0 ? (
-        <div className="bg-white rounded-b-lg rounded-tr-lg flex flex-col items-center py-8 px-4 sm:px-10 md:px-20 space-y-5 min-h-screen md:min-h-[50vh] h-fit">
+        <div className="bg-white rounded-b-lg rounded-tr-lg flex flex-col items-center py-8 px-4 sm:px-10 md:px-20 space-y-5 min-h-[75vh]  h-fit">
           <Toggle
-            items={['Diikuti', 'Dipimpin']}
+            items={['Sebagai Peserta', 'Sebagai Panitia']}
             value={toggleValue}
             setValue={setToggleValue}
             className="w-full"
           />
           {toggleValue === 0 ? (
             <>
-              {joinedEventsData.length === 0 ? (
-                <h2>Belum ada kegiatan yang diikuti!</h2>
+              {joinedEventsData?.length === 0 ? (
+                <div className="flex flex-col items-center gap-y-2 py-2 my-auto">
+                  <GrDocumentMissing size={100} />
+                  <h3>Belum ada kegiatan yang diikuti!</h3>
+                </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
-                  {joinedEventsData.map((event, idx) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center w-full">
+                  {joinedEventsData?.map((event, idx) => (
                     <EventCard {...event} key={idx} />
                   ))}
                 </div>
@@ -209,11 +213,14 @@ export const MyProfileModule: React.FC = () => {
             </>
           ) : (
             <>
-              {createdEventsData.length === 0 ? (
-                <h2>Belum ada kegiatan yang dibuat!</h2>
+              {createdEventsData?.length === 0 ? (
+                <div className="flex flex-col items-center gap-y-2 py-2 my-auto">
+                  <GrDocumentMissing size={100} />
+                  <h3>Belum ada kegiatan yang diselenggarakan!</h3>
+                </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
-                  {createdEventsData.map((event, idx) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center w-full">
+                  {createdEventsData?.map((event, idx) => (
                     <EventCard {...event} key={idx} />
                   ))}
                 </div>
@@ -233,12 +240,15 @@ export const MyProfileModule: React.FC = () => {
         <></>
       )}
       {tab === 1 ? (
-        <div className="bg-white rounded-b-lg rounded-tr-lg flex flex-col items-center py-8 px-4 sm:px-10 md:px-20 space-y-5">
-          {reportsData.length === 0 ? (
-            <h2>Belum ada laporan yang dibuat!</h2>
+        <div className="bg-white rounded-b-lg rounded-tr-lg flex flex-col items-center py-8 px-4 sm:px-10 md:px-20 space-y-5 min-h-[75vh]  h-fit">
+          {reportsData?.length === 0 ? (
+            <div className="flex flex-col items-center gap-y-2 py-2 my-auto">
+              <GrDocumentMissing size={100} />
+              <h3>Belum ada laporan yang diselenggarakan!</h3>
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
-              {reportsData.map((report, idx) => (
+              {reportsData?.map((report, idx) => (
                 <ReportCard {...report} key={idx} />
               ))}
             </div>
