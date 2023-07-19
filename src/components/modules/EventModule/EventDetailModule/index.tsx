@@ -147,34 +147,43 @@ export const EventDetailModule: React.FC = () => {
           </Breadcrumb>
           <div className="flex ml-auto gap-x-2">
             {data?.host.email === user?.email ? (
-              <Button
-                variant="primary"
-                className="ml-auto px-4"
-                onClick={() => {
-                  router.push(`/events/${id}/edit`)
-                }}
-                rightIcon={
-                  <AiOutlineEdit size="20" className="cursor-pointer" />
-                }
-              >
-                Edit
-              </Button>
-            ) : (
-              <></>
-            )}
-            {user?.email && data?.staffs?.includes(user.email) ? (
-              <Button
-                variant="primary"
-                className="ml-auto px-4"
-                onClick={() => {
-                  router.push(`/events/${id}/dashboard`)
-                }}
-                rightIcon={
-                  <AiOutlineDashboard size="20" className="cursor-pointer" />
-                }
-              >
-                Dashboard
-              </Button>
+              <div className="flex ml-auto gap-x-2">
+                {data?.host.email === user?.email ? (
+                  <Button
+                    variant="primary"
+                    className="ml-auto px-4"
+                    onClick={() => {
+                      router.push(`/events/${id}/edit`)
+                    }}
+                    rightIcon={
+                      <AiOutlineEdit size="20" className="cursor-pointer" />
+                    }
+                  >
+                    Edit
+                  </Button>
+                ) : (
+                  <></>
+                )}
+                {user?.email && data?.staffs?.includes(user.email) ? (
+                  <Button
+                    variant="primary"
+                    className="ml-auto px-4"
+                    onClick={() => {
+                      router.push(`/events/${id}/dashboard`)
+                    }}
+                    rightIcon={
+                      <AiOutlineDashboard
+                        size="20"
+                        className="cursor-pointer"
+                      />
+                    }
+                  >
+                    Dashboard
+                  </Button>
+                ) : (
+                  <></>
+                )}
+              </div>
             ) : (
               <></>
             )}
@@ -184,17 +193,18 @@ export const EventDetailModule: React.FC = () => {
           {data && tipMessage && (
             <TipCard type={'information'} content={tipMessage} />
           )}
-          <div className="flex lg:flex-row flex-col gap-x-4 md:gap-x-12 w-full">
+          <div className="flex lg:flex-row flex-col gap-x-4 md:gap-x-12 w-full h-fit">
             {data ? (
               <Image
                 src={data?.image_url || '/assets/images/placeholder/image.png'}
                 height={400}
                 width={400}
                 alt={data?.name}
-                className="object-cover lg:w-[36vw] lg:h-[26vw] w-[95vw] sm:w-full rounded-xl"
+                className="object-cover lg:w-[36vw] w-[95vw] sm:w-full rounded-xl"
+                placeholder="empty"
               />
             ) : (
-              <Skeleton className="h-[300px]" />
+              <Skeleton className="h-[300px] w-full" />
             )}
             <div className="w-full flex flex-col gap-y-2">
               <div className="flex flex-col sm:flex-row justify-between w-full lg:items-start items-center">
@@ -203,9 +213,7 @@ export const EventDetailModule: React.FC = () => {
                   <h4>Tanggal & Waktu Mulai</h4>
                 </div>
                 {data ? (
-                  <p>
-                    {formatter.formatDateTimeWIB(new Date(data.start_date))}
-                  </p>
+                  <p>{formatter.formatDateTime(new Date(data.start_date))}</p>
                 ) : (
                   <Skeleton />
                 )}
@@ -216,7 +224,7 @@ export const EventDetailModule: React.FC = () => {
                   <h4>Tanggal & Waktu Selesai</h4>
                 </div>
                 {data ? (
-                  <p>{formatter.formatDateTimeWIB(new Date(data.end_date))}</p>
+                  <p>{formatter.formatDateTime(new Date(data.end_date))}</p>
                 ) : (
                   <Skeleton />
                 )}

@@ -94,14 +94,19 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
             className="p-2 m-1 bg-slate-200 rounded-full flex justify-between"
           >
             {staff}
-            <button
-              className="px-1 h-full hover:border hover:border-black hover:bg-red-300 active:bg-red-400 rounded-full"
-              onClick={() => {
-                handleRemoveStaff(staff)
-              }}
-            >
-              <AiOutlineMinusCircle />
-            </button>
+            {staff !== event.host.email ? (
+              <button
+                className="px-1 h-full hover:border hover:border-black hover:bg-red-300 active:bg-red-400 rounded-full"
+                onClick={(e) => {
+                  e.preventDefault()
+                  handleRemoveStaff(staff)
+                }}
+              >
+                <AiOutlineMinusCircle />
+              </button>
+            ) : (
+              <></>
+            )}
           </p>
         ))}
       </div>
@@ -109,7 +114,8 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
       <h4>Tambah Staf</h4>
       <form
         className="flex flex-col sm:flex-row sm:justify-start gap-2"
-        onSubmit={() => {
+        onSubmit={(e) => {
+          e.preventDefault()
           handleAddStaff()
         }}
       >

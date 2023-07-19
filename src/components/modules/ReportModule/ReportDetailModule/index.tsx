@@ -125,7 +125,7 @@ export const ReportDetailModule: React.FC = () => {
                 </div>
                 {data ? (
                   <p>
-                    {formatter.formatDateTimeWIB(new Date(data.reported_date))}
+                    {formatter.formatDateTime(new Date(data.reported_date))}
                   </p>
                 ) : (
                   <Skeleton />
