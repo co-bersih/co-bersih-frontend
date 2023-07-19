@@ -26,4 +26,5 @@ export interface UserInterface {
   bio: string
   profileImage: string
   dateJoined: Date
+  is_admin?: boolean
 }
