@@ -83,14 +83,19 @@ export const VerifKegiatanAdminMenu: React.FC = () => {
         <tbody>
           {events?.map((event, idx) => (
             <tr key={idx}>
-              <td><p>{event.name}</p></td>
+              <td>
+                <p>{event.name}</p>
+              </td>
               <td>
                 <Link
                   href={`/profile/${event.host.id}`}
                   className="flex gap-x-1 md:gap-x-2 w-fit mx-auto hover:underline items-center"
                 >
                   <p>{event.host.name}</p>
-                  <External size={'min-w-[12px] max-w-[12px] min-h-[12px] max-h-[12px]'} fill="black" />
+                  <External
+                    size={'min-w-[12px] max-w-[12px] min-h-[12px] max-h-[12px]'}
+                    fill="black"
+                  />
                 </Link>
               </td>
               <td>
@@ -99,7 +104,10 @@ export const VerifKegiatanAdminMenu: React.FC = () => {
                   className="flex gap-x-2 w-fit mx-auto hover:underline items-center"
                 >
                   <p>Lihat Detail</p>
-                  <External size={'min-w-[12px] max-w-[12px] min-h-[12px] max-h-[12px]'} fill="black" />
+                  <External
+                    size={'min-w-[12px] max-w-[12px] min-h-[12px] max-h-[12px]'}
+                    fill="black"
+                  />
                 </Link>
               </td>
               <td>
@@ -133,7 +141,7 @@ export const VerifKegiatanAdminMenu: React.FC = () => {
           fetchUnverifiedEvents((page?.current || 0) + 1)
         }}
         totalPages={Math.ceil(page?.count! / 10) || 1}
-        className='mx-auto mt-4'
+        className="mx-auto mt-4"
       />
     </>
   )
