@@ -40,12 +40,24 @@ export const CreateEventModule: React.FC = () => {
   const router = useRouter()
   const { tokens, user, loading: authLoading } = useAuthContext()
   const [isGettingLocation, setIsGettingLocation] = useState<boolean>(false)
+  const [reportId, setReportId] = useState<string | null>(null)
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((geo) => {
-      setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
-    })
-  }, [])
+    const { query } = router
+    const queryLat = Array.isArray(query.lat) ? query.lat[0] : query.lat
+    const queryLng = Array.isArray(query.lng) ? query.lng[0] : query.lng
+    const queryReportId = Array.isArray(query.reportId)
+      ? query.reportId[0]
+      : query.reportId
+    if (queryLat && queryLng && queryReportId) {
+      setLoc({ lat: parseFloat(queryLat), lng: parseFloat(queryLng) })
+      setReportId(queryReportId)
+    } else {
+      navigator.geolocation.getCurrentPosition((geo) => {
+        setLoc({ lat: geo.coords.latitude, lng: geo.coords.longitude })
+      })
+    }
+  }, [router])
 
   const onSubmit = async (data: CreateEventForm) => {
     setIsLoading(true)
@@ -75,8 +87,32 @@ export const CreateEventModule: React.FC = () => {
     axios
       .post(`${cfg.API}/api/v1/events/`, formData, options)
       .then((res) => {
-        toast.success('Anda berhasil membuat event.')
-        router.push(`/events/${res.data.id}`)
+        if (reportId) {
+          axios
+            .delete(`${cfg.API}/api/v1/reports/${reportId}/`, options)
+            .then((res) => {
+              toast.success('Anda berhasil mengajukan kegiatan dari laporan.')
+              router.push(`/events/${res.data.id}`)
+            })
+            .catch((err) => {
+              console.log(err.response.data)
+              if (err.response?.status === 401) {
+                toast.error('Mohon untuk me-refresh halaman ini.')
+              } else if (err.response.data.errors.length > 0) {
+                toast.error(
+                  `${err.response.data.errors[0].attr} error: ${err.response.data.errors[0].detail}`
+                )
+              } else {
+                toast.error('Telah terjadi kesalahan.')
+              }
+            })
+            .finally(() => {
+              setIsLoading(false)
+            })
+        } else {
+          toast.success('Anda berhasil membuat kegiatan.')
+          router.push(`/events/${res.data.id}`)
+        }
       })
       .catch((err) => {
         console.log(err.response.data)
@@ -120,10 +156,20 @@ export const CreateEventModule: React.FC = () => {
     <>
       <ToastContainer />
       <div className="flex flex-col bg-white relative px-4 sm:px-12 md:px-32 lg:px-40 pt-24 pb-8">
-        <Breadcrumb className="mb-4">
-          <Breadcrumb.Item href="/events">Kegiatan</Breadcrumb.Item>
-          <Breadcrumb.Item href={`/events`}>Buat Kegiatan</Breadcrumb.Item>
-        </Breadcrumb>
+        {reportId ? (
+          <Breadcrumb className="mb-4">
+            <Breadcrumb.Item href="/events">Laporan</Breadcrumb.Item>
+            <Breadcrumb.Item href={`/reports/${reportId}`}>
+              Detail Laporan
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>Ajukan Kegiatan dari Laporan</Breadcrumb.Item>
+          </Breadcrumb>
+        ) : (
+          <Breadcrumb className="mb-4">
+            <Breadcrumb.Item href="/events">Kegiatan</Breadcrumb.Item>
+            <Breadcrumb.Item>Buat Kegiatan</Breadcrumb.Item>
+          </Breadcrumb>
+        )}
         <div className="relative min-h-screen flex flex-col items-center lg:rounded-b-[150px] md:rounded-b-[100px] rounded-b-[25px]">
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <h2>Buat Kegiatan</h2>

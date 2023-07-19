@@ -44,7 +44,9 @@ export const ReportDetailModule: React.FC = () => {
     if (!loading && !user) {
       setIsLoginGuardModal(true)
     } else {
-      router.replace('/events/new')
+      router.replace(
+        `/events/new?lat=${data?.latitude}&lng=${data?.longitude}&reportId=${data?.id}`
+      )
     }
   }
 

@@ -19,6 +19,7 @@ import {
 } from 'react-icons/ai'
 import { LoginGuardModal } from '../../AuthModule/module-elements/LoginGuardModal'
 import { Breadcrumb } from 'flowbite-react'
+import { BiSolidExit } from 'react-icons/bi'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -32,6 +33,7 @@ export const EventDetailModule: React.FC = () => {
   const { id } = router.query
   const { user, tokens, loading } = useAuthContext()
   const [isLoginGuardModal, setIsLoginGuardModal] = useState<boolean>(false)
+  const [isJoined, setIsJoined] = useState<boolean>(false)
 
   useEffect(() => {
     if (id) {
@@ -42,7 +44,7 @@ export const EventDetailModule: React.FC = () => {
         })
         .catch((err) => console.log(err))
     }
-  }, [id])
+  }, [id, isJoined])
 
   useEffect(() => {
     if (!data || !data?.end_date) {
@@ -61,18 +63,12 @@ export const EventDetailModule: React.FC = () => {
         .then((response) => {
           const statusCode = response.request.status
           if (statusCode === 200) {
-            console.log('Pengguna telah bergabung dengan acara')
-          } else if (statusCode === 404) {
-            console.log('Pengguna belum bergabung dengan acara')
-          } else {
-            console.log('Permintaan gagal dengan status kode:', statusCode)
+            setIsJoined(true)
           }
         })
-        .catch((error) => {
-          console.log('Terjadi kesalahan:', error)
-        })
+        .catch((error) => {})
     }
-  }, [user, id])
+  }, [user, id, isJoined])
 
   function handleJoin() {
     if (!loading && !user) {
@@ -93,6 +89,7 @@ export const EventDetailModule: React.FC = () => {
           toast.success('Berhasil bergabung dalam kegiatan!', {
             position: toast.POSITION.TOP_CENTER,
           })
+          setIsJoined(true)
         })
         .catch((error) => {
           console.log(error.response.data)
@@ -101,6 +98,32 @@ export const EventDetailModule: React.FC = () => {
           })
         })
     }
+  }
+
+  function handleLeave() {
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${cfg.API}/api/v1/events/${id}/leave/`,
+      headers: {
+        Authorization: `Bearer ${tokens?.access}`,
+      },
+    }
+
+    axios
+      .request(config)
+      .then((response) => {
+        toast.success('Berhasil keluar dari kegiatan!', {
+          position: toast.POSITION.TOP_CENTER,
+        })
+        router.push('/events')
+      })
+      .catch((error) => {
+        console.log(error.response.data)
+        toast.error('Gagal keluar, silakan coba lagi.', {
+          position: toast.POSITION.TOP_CENTER,
+        })
+      })
   }
 
   function handleSupport() {
@@ -230,6 +253,21 @@ export const EventDetailModule: React.FC = () => {
               (data?.host?.id === user?.id ||
                 data?.staffs?.includes(user.email)) ? (
                 <></>
+              ) : isJoined ? (
+                <Button
+                  variant={'solid'}
+                  rightIcon={
+                    <BiSolidExit
+                      size={'18'}
+                      fill={data && tipMessage === '' ? 'white' : '#ACACAC'}
+                    />
+                  }
+                  className="py-[0.4rem] text-red-50 bg-red-800"
+                  disabled={!data || tipMessage !== ''}
+                  onClick={handleLeave}
+                >
+                  <h4>Keluar</h4>
+                </Button>
               ) : (
                 <div className="flex flex-col sm:flex-row justify-center gap-y-2 gap-x-[4%]">
                   <Button
