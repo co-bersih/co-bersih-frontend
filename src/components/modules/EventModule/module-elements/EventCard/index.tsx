@@ -45,7 +45,7 @@ const EventCard: React.FC<IEvent> = (event) => {
             <Calendar size={''} />
             <p>
               Dimulai pada{' '}
-              {formatter.formatDateTimeWIB(new Date(event.start_date))}
+              {formatter.formatDateTime(new Date(event.start_date))}
               {/* -{' '}
             {formatter.formatDateTimeWIB(event.end_date)} */}
             </p>

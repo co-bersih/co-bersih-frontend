@@ -51,7 +51,7 @@ export const CreateEventModule: React.FC = () => {
     setIsLoading(true)
 
     data.start_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS)
-    data.end_date.setTime(data.start_date.getTime() + 7 * cfg.HOURS)
+    data.end_date.setTime(data.end_date.getTime() + 7 * cfg.HOURS)
 
     data.latitude = loc?.lat || 0
     data.longitude = loc?.lng || 0
@@ -178,7 +178,9 @@ export const CreateEventModule: React.FC = () => {
               </div>
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Mulai</h4>
-                <p className="text-xs font-extralight">Timezone: GMT+7 (WIB)</p>
+                <p className="text-xs font-extralight">
+                  Menggunakan timezone setempat
+                </p>
               </div>
               <div className="w-full col-span-3">
                 <TextInput
@@ -197,7 +199,9 @@ export const CreateEventModule: React.FC = () => {
               </div>
               <div className="col-span-2">
                 <h4>Tanggal & Waktu Selesai</h4>
-                <p className="text-xs font-extralight">Timezone: GMT+7 (WIB)</p>
+                <p className="text-xs font-extralight">
+                  Menggunakan timezone setempat
+                </p>
               </div>
               <div className="w-full col-span-3">
                 <TextInput
