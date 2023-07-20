@@ -40,6 +40,7 @@ export const CreateEventModule: React.FC = () => {
   const router = useRouter()
   const { tokens, user, loading: authLoading } = useAuthContext()
   const [isGettingLocation, setIsGettingLocation] = useState<boolean>(false)
+  const [createFromReport, setCreateFromReport] = useState<boolean>(false)
   const [reportId, setReportId] = useState<string | null>(null)
 
   useEffect(() => {
@@ -50,6 +51,7 @@ export const CreateEventModule: React.FC = () => {
       ? query.reportId[0]
       : query.reportId
     if (queryLat && queryLng && queryReportId) {
+      setCreateFromReport(true)
       setLoc({ lat: parseFloat(queryLat), lng: parseFloat(queryLng) })
       setReportId(queryReportId)
     } else {
@@ -76,6 +78,9 @@ export const CreateEventModule: React.FC = () => {
     formData.append('image', data.image[0])
     formData.append('latitude', String(data.latitude))
     formData.append('longitude', String(data.longitude))
+    if (createFromReport) {
+      formData.append('report_ref_id', String(reportId))
+    }
 
     const options: AxiosRequestConfig = {
       headers: {
@@ -83,32 +88,14 @@ export const CreateEventModule: React.FC = () => {
         'Content-Type': 'multipart/form-data',
       },
     }
-
+    console.log(formData)
+    console.log(createFromReport)
     axios
       .post(`${cfg.API}/api/v1/events/`, formData, options)
       .then((res) => {
-        if (reportId) {
-          axios
-            .delete(`${cfg.API}/api/v1/reports/${reportId}/`, options)
-            .then((res) => {
-              toast.success('Anda berhasil mengajukan kegiatan dari laporan.')
-              router.push(`/events/${res.data.id}`)
-            })
-            .catch((err) => {
-              console.log(err.response.data)
-              if (err.response?.status === 401) {
-                toast.error('Mohon untuk me-refresh halaman ini.')
-              } else if (err.response.data.errors.length > 0) {
-                toast.error(
-                  `${err.response.data.errors[0].attr} error: ${err.response.data.errors[0].detail}`
-                )
-              } else {
-                toast.error('Telah terjadi kesalahan.')
-              }
-            })
-            .finally(() => {
-              setIsLoading(false)
-            })
+        if (createFromReport) {
+          toast.success('Anda berhasil membuat kegiatan dari laporan.')
+          router.push(`/events/${res.data.id}`)
         } else {
           toast.success('Anda berhasil membuat kegiatan.')
           router.push(`/events/${res.data.id}`)
@@ -286,17 +273,6 @@ export const CreateEventModule: React.FC = () => {
                   </p>
                   <input hidden {...register('latitude')} value={loc.lat} />
                   <input hidden {...register('longitude')} value={loc.lng} />
-                  <div className="flex w-full justify-end">
-                    <Button
-                      variant={'ghost'}
-                      className="bg-[#CFE4A5] hover:bg-[#CFE4A5]/80 text-black hover:text-black/80 w-fit justify-end mt-2"
-                      rightIcon={<MdLocationOn />}
-                      onClick={handleGetLocation}
-                      disabled={isGettingLocation}
-                    >
-                      <h4>Ambil Dari Lokasi Saya</h4>
-                    </Button>
-                  </div>
                   <div className="flex w-full justify-end">
                     <Button
                       variant={'ghost'}

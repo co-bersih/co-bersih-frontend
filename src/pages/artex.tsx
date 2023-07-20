@@ -1,7 +1,7 @@
-import { Button, FilterButton, Toggle } from '@elements'
+import { Button, FilterButton, Toggle, TutorialWindow } from '@elements'
 import { TextInput } from 'flowbite-react'
 import { useState } from 'react'
-import { AiOutlineSearch } from 'react-icons/ai'
+import { AiOutlineQuestionCircle, AiOutlineSearch } from 'react-icons/ai'
 import { RiGroupFill, RiHome2Line, RiTreasureMapFill } from 'react-icons/ri'
 
 export default function Artex() {
@@ -9,6 +9,8 @@ export default function Artex() {
 
   const [searchValue, setSearchValue] = useState('')
   const [toggleValue, setToggleValue] = useState(0)
+  const [isTutorialWindowDisplayed, setIsTutorialWindowDisplayed] =
+    useState<boolean>(false)
 
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -82,6 +84,18 @@ export default function Artex() {
           </span>
         </div>
       </form>
+
+      <Button
+        variant={'primary'}
+        rightIcon={<AiOutlineQuestionCircle />}
+        onClick={() => setIsTutorialWindowDisplayed(true)}
+      >
+        Tutorial
+      </Button>
+      <TutorialWindow
+        showModal={isTutorialWindowDisplayed}
+        onClose={() => setIsTutorialWindowDisplayed(false)}
+      />
 
       {/* Filter Button */}
       <FilterButton
