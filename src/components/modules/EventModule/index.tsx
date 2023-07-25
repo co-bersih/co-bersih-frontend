@@ -40,7 +40,8 @@ export const EventModule: React.FC = () => {
   const [pages, setPages] = useState<Pages>({})
   const [minimumZoom, setMinimumZoom] = useState<number>(12)
   const [toggleValue, setToggleValue] = useState(0)
-  const [searchValue, setSearchValue] = useState('')
+  const [searchEventValue, setSearchEventValue] = useState('')
+  const [searchReportValue, setSearchReportValue] = useState('')
 
   const [isLoginGuardModal, setIsLoginGuardModal] = useState<boolean>(false)
   const [isReportModal, setIsReportModal] = useState<boolean>(false)
@@ -81,6 +82,10 @@ export const EventModule: React.FC = () => {
         setReportsData(res.data.results)
       })
       .catch((err) => console.log(err))
+  }
+
+  const fetchNearestReports = (params: any) => {
+    fetchReports(params)
   }
 
   const fetchMappedEvents = (params: any) => {
@@ -144,25 +149,48 @@ export const EventModule: React.FC = () => {
     }
   }
 
-  const handleSearchInputChange = (
+  // Search Event
+  const handleSearchEventInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSearchValue(event.target.value)
+    setSearchEventValue(event.target.value)
   }
 
-  const handleSearchInputSubmit = (
+  const handleSearchEventInputSubmit = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === 'Enter') {
       event.preventDefault()
-      const params = { search: searchValue }
+      const params = { search: searchEventValue }
       fetchPagedEvents(params)
     }
   }
 
-  const handleSearchIconClick = () => {
-    const params = { search: searchValue }
+  const handleSearchEventIconClick = () => {
+    const params = { search: searchEventValue }
     fetchPagedEvents(params)
+  }
+
+  // Search Report
+  const handleSearchReportInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchReportValue(event.target.value)
+  }
+
+  const handleSearchReportInputSubmit = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      const params = { search: searchReportValue }
+      fetchPagedReports(params)
+    }
+  }
+
+  const handleSearchReportIconClick = () => {
+    const params = { search: searchReportValue }
+    fetchPagedReports(params)
   }
 
   const handleClickCreateEvent = () => {
@@ -274,13 +302,13 @@ export const EventModule: React.FC = () => {
                     type="text"
                     placeholder="Cari kegiatan ..."
                     className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
-                    value={searchValue}
-                    onChange={handleSearchInputChange}
-                    onKeyDown={handleSearchInputSubmit}
+                    value={searchEventValue}
+                    onChange={handleSearchEventInputChange}
+                    onKeyDown={handleSearchEventInputSubmit}
                   />
                   <span
                     className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
-                    onClick={handleSearchIconClick}
+                    onClick={handleSearchEventIconClick}
                   >
                     <AiOutlineSearch color="black" size="18" />
                   </span>
@@ -294,7 +322,7 @@ export const EventModule: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center w-full">
                 {eventsData.map((event, idx) => (
                   <EventCard {...event} key={idx} />
                 ))}
@@ -319,12 +347,13 @@ export const EventModule: React.FC = () => {
                       type="text"
                       placeholder="Cari laporan ..."
                       className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
-                      value={searchValue}
-                      onChange={handleSearchInputChange}
+                      value={searchReportValue}
+                      onChange={handleSearchReportInputChange}
+                      onKeyDown={handleSearchReportInputSubmit}
                     />
                     <span
                       className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
-                      onClick={handleSearchIconClick}
+                      onClick={handleSearchReportIconClick}
                     >
                       <AiOutlineSearch color="black" size="18" />
                     </span>
@@ -339,7 +368,7 @@ export const EventModule: React.FC = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center w-full">
                 {reportsData.map((report, idx) => (
                   <ReportCard {...report} key={idx} />
                 ))}
