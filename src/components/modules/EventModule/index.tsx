@@ -35,6 +35,9 @@ export const EventModule: React.FC = () => {
   const [reportsData, setReportsData] = useState<IReport[]>([])
   const [mapReportsData, setMapReportsData] = useState<IReport[]>()
   const [reportEventsData, setReportEventsData] = useState<IReport[]>()
+  const [defaultEvents, setDefaultEvents] = useState<boolean>(false)
+  const [defaultReports, setDefaultReports] = useState<boolean>(false)
+
   // other states
   const [loc, setLoc] = useState<LatLngLiteral | undefined>(dummyLoc)
   const [pages, setPages] = useState<Pages>({})
@@ -43,6 +46,7 @@ export const EventModule: React.FC = () => {
   const [searchEventValue, setSearchEventValue] = useState('')
   const [searchReportValue, setSearchReportValue] = useState('')
 
+  // for modal state
   const [isLoginGuardModal, setIsLoginGuardModal] = useState<boolean>(false)
   const [isReportModal, setIsReportModal] = useState<boolean>(false)
 
@@ -65,6 +69,7 @@ export const EventModule: React.FC = () => {
           previous: res.data.previous,
           current: prev.current,
         }))
+        console.log(res)
         setEventsData(res.data.results)
       })
       .catch((err) => console.log(err))
@@ -79,13 +84,44 @@ export const EventModule: React.FC = () => {
           previous: res.data.previous,
           current: prev.current,
         }))
+        console.log(res.data.results)
         setReportsData(res.data.results)
       })
       .catch((err) => console.log(err))
   }
 
-  const fetchNearestReports = (params: any) => {
-    fetchReports(params)
+  const fetchNearestEvents = () => {
+    navigator.geolocation.getCurrentPosition((geo) => {
+      const lat = geo.coords.latitude
+      const lon = geo.coords.longitude
+      const params = { ordering: 'distance', lat, lon }
+      fetchPagedEvents(params)
+    })
+  }
+
+  const fetchNearestReports = () => {
+    navigator.geolocation.getCurrentPosition(
+      (geo) => {
+        const lat = geo.coords.latitude
+        const lon = geo.coords.longitude
+        const params = { ordering: 'distance', lat, lon }
+        fetchReports(params)
+          .then((res) => {
+            setPages((prev) => ({
+              count: res.data.count,
+              next: res.data.next,
+              previous: res.data.previous,
+              current: prev.current,
+            }))
+            console.log(res)
+            setReportsData(res.data)
+          })
+          .catch((err) => console.log(err))
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
   }
 
   const fetchMappedEvents = (params: any) => {
@@ -215,7 +251,9 @@ export const EventModule: React.FC = () => {
     const params = { page: pages.current }
     fetchPagedEvents(params)
     fetchPagedReports(params)
-  }, [pages.current, tokens])
+    setDefaultEvents(false)
+    setDefaultReports(false)
+  }, [pages.current, tokens, defaultEvents, defaultReports])
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((geo) => {
@@ -317,8 +355,10 @@ export const EventModule: React.FC = () => {
                   className="h-full"
                   childrenL={<h4>Terbaru</h4>}
                   rightIconL={<MdNewReleases color="white" size={18} />}
+                  onClickL={() => setDefaultEvents(!defaultEvents)}
                   childrenR={<h4>Terdekat</h4>}
                   rightIconR={<RiTreasureMapFill color="white" size={18} />}
+                  onClickR={fetchNearestEvents}
                 />
               </div>
 
@@ -363,8 +403,10 @@ export const EventModule: React.FC = () => {
                   className="h-full"
                   childrenL={<h4>Terbaru</h4>}
                   rightIconL={<MdNewReleases color="white" size={18} />}
+                  onClickL={() => setDefaultReports(!defaultReports)}
                   childrenR={<h4>Terdekat</h4>}
                   rightIconR={<RiTreasureMapFill color="white" size={18} />}
+                  onClickR={fetchNearestReports}
                 />
               </div>
 
