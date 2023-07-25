@@ -19,9 +19,9 @@ export const EventDashboardModule: React.FC = () => {
   const router = useRouter()
   const { id } = router.query
 
-  const [tab, setTab] = useState<DashboardTabs>(DashboardTabs.staff)
   const [data, setData] = useState<IEvent>()
   const { tokens, loading: authLoading, user } = useAuthContext()
+  const [tab, setTab] = useState<DashboardTabs>()
 
   function fetchEvent() {
     axios
@@ -46,6 +46,11 @@ export const EventDashboardModule: React.FC = () => {
     ) {
       toast.error('Anda tidak memiliki akses ke halaman tersebut.')
       router.push('/events')
+    }
+    if (data && data.host && data.host.id && user && user.id) {
+      setTab(
+        data.host.id === user.id ? DashboardTabs.staff : DashboardTabs.token
+      )
     }
   }, [data])
 
@@ -76,14 +81,19 @@ export const EventDashboardModule: React.FC = () => {
             >
               Participants
             </Button> */}
-            <Button
-              variant={tab === DashboardTabs.staff ? 'greeny' : 'primary'}
-              onClick={() => {
-                setTab(DashboardTabs.staff)
-              }}
-            >
-              Staff
-            </Button>
+            {data?.host.id === user?.id ? (
+              <Button
+                variant={tab === DashboardTabs.staff ? 'greeny' : 'primary'}
+                onClick={() => {
+                  setTab(DashboardTabs.staff)
+                }}
+              >
+                Staff
+              </Button>
+            ) : (
+              <></>
+            )}
+
             <Button
               variant={tab === DashboardTabs.token ? 'greeny' : 'primary'}
               onClick={() => {
