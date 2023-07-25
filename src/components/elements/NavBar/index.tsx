@@ -70,6 +70,15 @@ export const NavBar: React.FC = () => {
                 <h4>Profil Anda</h4>
               </Dropdown.Item>
             </Navbar.Link>
+            {user.is_admin ? (
+              <Navbar.Link href={`/admin`}>
+                <Dropdown.Item>
+                  <h4>Dashboard Admin</h4>
+                </Dropdown.Item>
+              </Navbar.Link>
+            ) : (
+              <></>
+            )}
             <Navbar.Link>
               <button
                 className="w-full"

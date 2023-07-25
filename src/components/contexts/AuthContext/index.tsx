@@ -59,6 +59,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         bio: userData.bio,
         profileImage: userData.profile_image_url,
         dateJoined: userData.date_joined,
+        is_admin: userData.is_admin,
       }
 
       setUser(user)

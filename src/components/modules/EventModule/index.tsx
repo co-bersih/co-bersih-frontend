@@ -48,7 +48,7 @@ export const EventModule: React.FC = () => {
   // data fetching
 
   const fetchEvents = (params: any) => {
-    return axios.get(`${cfg.API}/api/v1/events/`, { params })
+    return axios.get(`${cfg.API}/api/v1/events/?is_verified=True`, { params })
   }
 
   const fetchReports = (params: any) => {
