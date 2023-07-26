@@ -247,7 +247,7 @@ export const MyProfileModule: React.FC = () => {
               <h3>Belum ada laporan yang diselenggarakan!</h3>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center w-full">
               {reportsData?.map((report, idx) => (
                 <ReportCard {...report} key={idx} />
               ))}
