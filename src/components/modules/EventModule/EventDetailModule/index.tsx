@@ -248,6 +248,15 @@ export const EventDetailModule: React.FC = () => {
                   <Skeleton />
                 )}
               </div>
+              <div
+                className="bg-paleGreen rounded-2xl justify-between flex flex-row w-full p-3 px-5 items-center hover:bg-gradient-to-r from-lightGreen via-paleGreen to-lightGreen shiny cursor-pointer"
+                onClick={() => router.push(`/forum/${id}`)}
+              >
+                <h3>Forum Kegiatan</h3>
+                <div className="bg-coral rounded-full p-3 w-12 h-12 flex items-center justify-center">
+                  <h3>3</h3>
+                </div>
+              </div>
               <hr />
               <br />
               {user?.email &&
