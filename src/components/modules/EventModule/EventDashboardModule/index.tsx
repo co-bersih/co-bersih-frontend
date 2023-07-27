@@ -49,6 +49,11 @@ export const EventDashboardModule: React.FC = () => {
       toast.error('Anda tidak memiliki akses ke halaman tersebut.')
       router.push('/events')
     }
+    if (data && data.host && data.host.id && user && user.id) {
+      setTab(
+        data.host.id === user.id ? DashboardTabs.staff : DashboardTabs.token
+      )
+    }
   }, [data])
 
   return (

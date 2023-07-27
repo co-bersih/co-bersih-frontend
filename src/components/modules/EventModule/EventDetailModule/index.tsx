@@ -146,47 +146,40 @@ export const EventDetailModule: React.FC = () => {
             </Breadcrumb.Item>
           </Breadcrumb>
           <div className="flex ml-auto gap-x-2">
-            {data?.host.email === user?.email ? (
-              <div className="flex ml-auto gap-x-2">
-                {data?.host.email === user?.email ? (
-                  <Button
-                    variant="primary"
-                    className="ml-auto px-4"
-                    onClick={() => {
-                      router.push(`/events/${id}/edit`)
-                    }}
-                    rightIcon={
-                      <AiOutlineEdit size="20" className="cursor-pointer" />
-                    }
-                  >
-                    Edit
-                  </Button>
-                ) : (
-                  <></>
-                )}
-                {user?.email && data?.staffs?.includes(user.email) ? (
-                  <Button
-                    variant="primary"
-                    className="ml-auto px-4"
-                    onClick={() => {
-                      router.push(`/events/${id}/dashboard`)
-                    }}
-                    rightIcon={
-                      <AiOutlineDashboard
-                        size="20"
-                        className="cursor-pointer"
-                      />
-                    }
-                  >
-                    Dashboard
-                  </Button>
-                ) : (
-                  <></>
-                )}
-              </div>
-            ) : (
-              <></>
-            )}
+            <div className="flex ml-auto gap-x-2">
+              {data?.host.email === user?.email ? (
+                <Button
+                  variant="primary"
+                  className="ml-auto px-4"
+                  onClick={() => {
+                    router.push(`/events/${id}/edit`)
+                  }}
+                  rightIcon={
+                    <AiOutlineEdit size="20" className="cursor-pointer" />
+                  }
+                >
+                  Edit
+                </Button>
+              ) : (
+                <></>
+              )}
+              {user?.email && data?.staffs?.includes(user.email) ? (
+                <Button
+                  variant="primary"
+                  className="ml-auto px-4"
+                  onClick={() => {
+                    router.push(`/events/${id}/dashboard`)
+                  }}
+                  rightIcon={
+                    <AiOutlineDashboard size="20" className="cursor-pointer" />
+                  }
+                >
+                  Dashboard
+                </Button>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
 
           {data ? <h2>{data?.name}</h2> : <Skeleton />}
@@ -254,6 +247,15 @@ export const EventDetailModule: React.FC = () => {
                 ) : (
                   <Skeleton />
                 )}
+              </div>
+              <div
+                className="bg-paleGreen rounded-2xl justify-between flex flex-row w-full p-3 px-5 items-center hover:bg-gradient-to-r from-lightGreen via-paleGreen to-lightGreen shiny cursor-pointer"
+                onClick={() => router.push(`/forum/${id}`)}
+              >
+                <h3>Forum Kegiatan</h3>
+                <div className="bg-coral rounded-full p-3 w-12 h-12 flex items-center justify-center">
+                  <h3>3</h3>
+                </div>
               </div>
               <hr />
               <br />

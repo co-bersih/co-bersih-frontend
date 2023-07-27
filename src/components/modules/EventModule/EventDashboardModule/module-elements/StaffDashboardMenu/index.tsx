@@ -17,6 +17,10 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
   const { tokens } = useAuthContext()
 
   function handleAddStaff() {
+    if (staffs?.includes(textInput)) {
+      toast.error('Staf sudah pernah ditambahkan')
+      return
+    }
     const body = {
       staff_email: textInput,
     }
@@ -87,7 +91,7 @@ export const StaffDashboardMenu: React.FC<IEvent> = (event) => {
     <>
       <h3 className="mb-4">Atur Staf (Hanya untuk Host)</h3>
       <h4>Staf Aktif</h4>
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {staffs?.map((staff, i) => (
           <p
             key={i}

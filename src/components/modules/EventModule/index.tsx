@@ -35,13 +35,18 @@ export const EventModule: React.FC = () => {
   const [reportsData, setReportsData] = useState<IReport[]>([])
   const [mapReportsData, setMapReportsData] = useState<IReport[]>()
   const [reportEventsData, setReportEventsData] = useState<IReport[]>()
+  const [defaultEvents, setDefaultEvents] = useState<boolean>(false)
+  const [defaultReports, setDefaultReports] = useState<boolean>(false)
+
   // other states
   const [loc, setLoc] = useState<LatLngLiteral | undefined>(dummyLoc)
   const [pages, setPages] = useState<Pages>({})
   const [minimumZoom, setMinimumZoom] = useState<number>(12)
   const [toggleValue, setToggleValue] = useState(0)
-  const [searchValue, setSearchValue] = useState('')
+  const [searchEventValue, setSearchEventValue] = useState('')
+  const [searchReportValue, setSearchReportValue] = useState('')
 
+  // for modal state
   const [isLoginGuardModal, setIsLoginGuardModal] = useState<boolean>(false)
   const [isReportModal, setIsReportModal] = useState<boolean>(false)
 
@@ -64,6 +69,7 @@ export const EventModule: React.FC = () => {
           previous: res.data.previous,
           current: prev.current,
         }))
+        console.log(res)
         setEventsData(res.data.results)
       })
       .catch((err) => console.log(err))
@@ -78,9 +84,44 @@ export const EventModule: React.FC = () => {
           previous: res.data.previous,
           current: prev.current,
         }))
+        console.log(res.data.results)
         setReportsData(res.data.results)
       })
       .catch((err) => console.log(err))
+  }
+
+  const fetchNearestEvents = () => {
+    navigator.geolocation.getCurrentPosition((geo) => {
+      const lat = geo.coords.latitude
+      const lon = geo.coords.longitude
+      const params = { ordering: 'distance', lat, lon }
+      fetchPagedEvents(params)
+    })
+  }
+
+  const fetchNearestReports = () => {
+    navigator.geolocation.getCurrentPosition(
+      (geo) => {
+        const lat = geo.coords.latitude
+        const lon = geo.coords.longitude
+        const params = { ordering: 'distance', lat, lon }
+        fetchReports(params)
+          .then((res) => {
+            setPages((prev) => ({
+              count: res.data.count,
+              next: res.data.next,
+              previous: res.data.previous,
+              current: prev.current,
+            }))
+            console.log(res)
+            setReportsData(res.data)
+          })
+          .catch((err) => console.log(err))
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
   }
 
   const fetchMappedEvents = (params: any) => {
@@ -144,25 +185,48 @@ export const EventModule: React.FC = () => {
     }
   }
 
-  const handleSearchInputChange = (
+  // Search Event
+  const handleSearchEventInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSearchValue(event.target.value)
+    setSearchEventValue(event.target.value)
   }
 
-  const handleSearchInputSubmit = (
+  const handleSearchEventInputSubmit = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.key === 'Enter') {
       event.preventDefault()
-      const params = { search: searchValue }
+      const params = { search: searchEventValue }
       fetchPagedEvents(params)
     }
   }
 
-  const handleSearchIconClick = () => {
-    const params = { search: searchValue }
+  const handleSearchEventIconClick = () => {
+    const params = { search: searchEventValue }
     fetchPagedEvents(params)
+  }
+
+  // Search Report
+  const handleSearchReportInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchReportValue(event.target.value)
+  }
+
+  const handleSearchReportInputSubmit = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      const params = { search: searchReportValue }
+      fetchPagedReports(params)
+    }
+  }
+
+  const handleSearchReportIconClick = () => {
+    const params = { search: searchReportValue }
+    fetchPagedReports(params)
   }
 
   const handleClickCreateEvent = () => {
@@ -187,7 +251,9 @@ export const EventModule: React.FC = () => {
     const params = { page: pages.current }
     fetchPagedEvents(params)
     fetchPagedReports(params)
-  }, [pages.current, tokens])
+    setDefaultEvents(false)
+    setDefaultReports(false)
+  }, [pages.current, tokens, defaultEvents, defaultReports])
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((geo) => {
@@ -274,13 +340,13 @@ export const EventModule: React.FC = () => {
                     type="text"
                     placeholder="Cari kegiatan ..."
                     className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
-                    value={searchValue}
-                    onChange={handleSearchInputChange}
-                    onKeyDown={handleSearchInputSubmit}
+                    value={searchEventValue}
+                    onChange={handleSearchEventInputChange}
+                    onKeyDown={handleSearchEventInputSubmit}
                   />
                   <span
                     className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
-                    onClick={handleSearchIconClick}
+                    onClick={handleSearchEventIconClick}
                   >
                     <AiOutlineSearch color="black" size="18" />
                   </span>
@@ -289,12 +355,14 @@ export const EventModule: React.FC = () => {
                   className="h-full"
                   childrenL={<h4>Terbaru</h4>}
                   rightIconL={<MdNewReleases color="white" size={18} />}
+                  onClickL={() => setDefaultEvents(!defaultEvents)}
                   childrenR={<h4>Terdekat</h4>}
                   rightIconR={<RiTreasureMapFill color="white" size={18} />}
+                  onClickR={fetchNearestEvents}
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center w-full">
                 {eventsData.map((event, idx) => (
                   <EventCard {...event} key={idx} />
                 ))}
@@ -319,12 +387,13 @@ export const EventModule: React.FC = () => {
                       type="text"
                       placeholder="Cari laporan ..."
                       className="w-full rounded-full bg-transparent border-transparent focus:border-transparent focus:ring-0 lg:text-[14px] text-[13px]"
-                      value={searchValue}
-                      onChange={handleSearchInputChange}
+                      value={searchReportValue}
+                      onChange={handleSearchReportInputChange}
+                      onKeyDown={handleSearchReportInputSubmit}
                     />
                     <span
                       className="stroke-current bg-mintGreen p-2 justify-center flex rounded-full mr-1 cursor-pointer"
-                      onClick={handleSearchIconClick}
+                      onClick={handleSearchReportIconClick}
                     >
                       <AiOutlineSearch color="black" size="18" />
                     </span>
@@ -334,12 +403,14 @@ export const EventModule: React.FC = () => {
                   className="h-full"
                   childrenL={<h4>Terbaru</h4>}
                   rightIconL={<MdNewReleases color="white" size={18} />}
+                  onClickL={() => setDefaultReports(!defaultReports)}
                   childrenR={<h4>Terdekat</h4>}
                   rightIconR={<RiTreasureMapFill color="white" size={18} />}
+                  onClickR={fetchNearestReports}
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center w-full">
                 {reportsData.map((report, idx) => (
                   <ReportCard {...report} key={idx} />
                 ))}
