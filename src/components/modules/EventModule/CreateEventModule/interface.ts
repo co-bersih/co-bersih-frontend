@@ -7,4 +7,6 @@ export interface CreateEventForm {
   longitude: number
   start_date: Date
   end_date: Date
+  bank_code?: string
+  account_number?: string
 }

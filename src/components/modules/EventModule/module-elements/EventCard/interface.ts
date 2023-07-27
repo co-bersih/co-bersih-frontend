@@ -22,6 +22,8 @@ interface IEvent {
   is_verified: boolean
   staffs?: string[]
   support_ids: string[]
+  payment_url?: string
+  total_donation?: number
 }
 
 export default IEvent

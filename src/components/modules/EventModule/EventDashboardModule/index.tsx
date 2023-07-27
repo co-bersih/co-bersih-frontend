@@ -113,8 +113,16 @@ export const EventDashboardModule: React.FC = () => {
             {/* token */}
             {tab === DashboardTabs.token ? <TokenDashboardMenu /> : <></>}
 
-            {/* saldo */}
-            {tab === DashboardTabs.saldo ? <SaldoDashboardMenu /> : <></>}
+            {/* saldo / donasi */}
+            {tab === DashboardTabs.saldo ? (
+              data ? (
+                <SaldoDashboardMenu {...data} />
+              ) : (
+                <Spinner />
+              )
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>
