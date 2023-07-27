@@ -86,7 +86,7 @@ export const EventModule: React.FC = () => {
   const fetchMappedEvents = (params: any) => {
     fetchEvents(params)
       .then((res) => {
-        addToMapEventsData(res.data.results)
+        addToMapEventsData(res.data)
       })
       .catch((err) => console.log(err))
   }
@@ -94,7 +94,7 @@ export const EventModule: React.FC = () => {
   const fetchMappedReports = (params: any) => {
     fetchReports(params)
       .then((res) => {
-        addToMapReportsData(res.data.results)
+        addToMapReportsData(res.data)
       })
       .catch((err) => console.log(err))
   }
