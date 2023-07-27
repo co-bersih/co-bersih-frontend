@@ -52,7 +52,7 @@ export const ForumModule: React.FC = () => {
 
   return (
     <>
-      <div className="overflow-x-hidden relative h-screen px-3 sm:px-8 md:px-32 lg:px-32 pt-20 pb-8 flex flex-row gap-4 items-center justify-center">
+      <div className="overflow-x-hidden relative h-screen px-3 sm:px-8 md:px-32 lg:px-32 pt-20 pb-8 flex flex-row gap-4 justify-center">
         <div className="flex flex-col h-full space-y-5">
           <Breadcrumb className="mr-auto">
             <Breadcrumb.Item href="/events">Kegiatan</Breadcrumb.Item>
