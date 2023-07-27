@@ -24,4 +24,8 @@ export namespace formatter {
 
     return date.toLocaleString('en-US', options)
   }
+
+  export const formatMoney = function (value: number): string {
+    return `Rp ${value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`
+  }
 }

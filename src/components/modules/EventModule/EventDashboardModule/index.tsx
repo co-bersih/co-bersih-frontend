@@ -14,14 +14,16 @@ import { cfg } from 'src/config'
 import { useRouter } from 'next/router'
 import { Breadcrumb, Spinner } from 'flowbite-react'
 import { BreadcrumbItem } from 'flowbite-react/lib/esm/components/Breadcrumb/BreadcrumbItem'
+import { BiLock } from 'react-icons/bi'
+import { SaldoDashboardMenu } from './module-elements/SaldoMenu'
 
 export const EventDashboardModule: React.FC = () => {
   const router = useRouter()
   const { id } = router.query
 
+  const [tab, setTab] = useState<DashboardTabs>(DashboardTabs.token)
   const [data, setData] = useState<IEvent>()
   const { tokens, loading: authLoading, user } = useAuthContext()
-  const [tab, setTab] = useState<DashboardTabs>()
 
   function fetchEvent() {
     axios
@@ -71,29 +73,26 @@ export const EventDashboardModule: React.FC = () => {
           {/* sidebar */}
           <div className="border border-black p-4 rounded-xl flex flex-col gap-y-4">
             <h2>Dashboard Kegiatan</h2>
-            {/* <Button
-              variant={
-                tab === DashboardTabs.participants ? 'greeny' : 'primary'
-              }
+            <Button
+              variant={tab === DashboardTabs.staff ? 'greeny' : 'primary'}
               onClick={() => {
-                setTab(DashboardTabs.participants)
+                setTab(DashboardTabs.staff)
               }}
+              disabled={data?.host.id !== user?.id}
+              rightIcon={data?.host.id !== user?.id ? <BiLock /> : undefined}
             >
-              Participants
-            </Button> */}
-            {data?.host.id === user?.id ? (
-              <Button
-                variant={tab === DashboardTabs.staff ? 'greeny' : 'primary'}
-                onClick={() => {
-                  setTab(DashboardTabs.staff)
-                }}
-              >
-                Staff
-              </Button>
-            ) : (
-              <></>
-            )}
-
+              Staff
+            </Button>
+            <Button
+              variant={tab === DashboardTabs.saldo ? 'greeny' : 'primary'}
+              onClick={() => {
+                setTab(DashboardTabs.saldo)
+              }}
+              disabled={data?.host.id !== user?.id}
+              rightIcon={data?.host.id !== user?.id ? <BiLock /> : undefined}
+            >
+              Donasi
+            </Button>
             <Button
               variant={tab === DashboardTabs.token ? 'greeny' : 'primary'}
               onClick={() => {
@@ -104,13 +103,8 @@ export const EventDashboardModule: React.FC = () => {
             </Button>
           </div>
 
-          {/* sidebar */}
           <div className="rounded-xl bg-neutral-50 w-full p-4">
-            {/* {tab === DashboardTabs.participants ? (
-              data ? <ParticipantDashboardMenu {...data} /> : <Spinner />
-            ) : (
-              <></>
-            )} */}
+            {/* staff */}
             {tab === DashboardTabs.staff ? (
               data ? (
                 <StaffDashboardMenu {...data} />
@@ -120,7 +114,20 @@ export const EventDashboardModule: React.FC = () => {
             ) : (
               <></>
             )}
+
+            {/* token */}
             {tab === DashboardTabs.token ? <TokenDashboardMenu /> : <></>}
+
+            {/* saldo / donasi */}
+            {tab === DashboardTabs.saldo ? (
+              data ? (
+                <SaldoDashboardMenu {...data} />
+              ) : (
+                <Spinner />
+              )
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>

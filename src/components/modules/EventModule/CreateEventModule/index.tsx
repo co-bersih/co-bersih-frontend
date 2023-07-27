@@ -22,6 +22,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 import { formatter } from '@utils'
 import { MdLocationOn } from 'react-icons/md'
+import { BANK_CODE_MAPPING } from './constant'
 
 const DynamicMap = dynamic(() => import('src/components/elements/Map'), {
   ssr: false,
@@ -78,6 +79,9 @@ export const CreateEventModule: React.FC = () => {
     formData.append('image', data.image[0])
     formData.append('latitude', String(data.latitude))
     formData.append('longitude', String(data.longitude))
+    data.bank_code && formData.append('bank_code', data.bank_code)
+    data.account_number &&
+      formData.append('account_number', data.account_number)
     if (createFromReport) {
       formData.append('report_ref_id', String(reportId))
     }
@@ -88,8 +92,6 @@ export const CreateEventModule: React.FC = () => {
         'Content-Type': 'multipart/form-data',
       },
     }
-    console.log(formData)
-    console.log(createFromReport)
     axios
       .post(`${cfg.API}/api/v1/events/`, formData, options)
       .then((res) => {
@@ -291,6 +293,36 @@ export const CreateEventModule: React.FC = () => {
                   lokasi tersebut.
                 </p>
               )}
+
+              <div className="col-span-2">
+                <h4>Tipe Bank</h4>
+              </div>
+              <select
+                className="w-full col-span-3 rounded-lg border border-gray-300 bg-gray-50 text-sm"
+                {...register('bank_code', {
+                  required: 'select one option',
+                })}
+              >
+                {Object.keys(BANK_CODE_MAPPING).map((code, i) => (
+                  <option key={i} value={code}>
+                    {BANK_CODE_MAPPING[code]}
+                  </option>
+                ))}
+              </select>
+              <div className="col-span-2">
+                <h4>Nomor Akun</h4>
+                <p className="text-xs font-extralight">
+                  Diperlukan untuk menarik donasi pengguna.
+                </p>
+              </div>
+              <TextInput
+                className="w-full col-span-3"
+                {...register('account_number', {
+                  required: 'Kegiatan harus terasosiasi dengan akun bank',
+                  maxLength: 100,
+                  minLength: 1,
+                })}
+              />
 
               <div className="flex col-span-5 w-[100%] mx-auto justify-end gap-x-4">
                 <Button
