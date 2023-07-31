@@ -130,7 +130,7 @@ export const EventDetailModule: React.FC = () => {
     if (!loading && !user) {
       setIsLoginGuardModal(true)
     } else {
-      // Todo
+      window.open(`https://${data?.payment_url!}`, '_blank')
     }
   }
 

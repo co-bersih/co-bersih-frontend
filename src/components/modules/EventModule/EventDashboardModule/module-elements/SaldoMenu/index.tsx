@@ -47,11 +47,30 @@ export const SaldoDashboardMenu: React.FC<IEvent> = (event) => {
   }
 
   function handleWithdraw() {
-    // TODO
     setLoading(true)
-    alert('withdraw')
 
-    // affter success, setSaldo(0)
+    axios
+      .post(
+        `${cfg.API}/api/v1/events/${id}/disbursement/`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${tokens?.access}` },
+        }
+      )
+      .then((res) => {
+        console.log(res.data)
+        setSaldo(0)
+        toast.success('Saldo berhasil ditarik ke akun bank terkait')
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.error(
+          err.response.data.errors[0].detail || 'Saldo tidak bisa ditarik'
+        )
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   const onSubmit = async (data: BankAccount) => {
